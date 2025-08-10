@@ -1,0 +1,44 @@
+cmake_minimum_required(VERSION 3.20)
+
+set(CMAKE_GENERATOR_PLATFORM x64)
+project(Gallus)
+
+set(RELEASE "Release")
+set(DEBUG "Debug")
+
+set(CMAKE_CONFIGURATION_TYPES "${RELEASE};${DEBUG}" CACHE STRING "" FORCE)
+
+# Define linker flags for different configurations
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG" CACHE STRING "Debug linker flags" FORCE)
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/OPT:REF /OPT:ICF" CACHE STRING "Release linker flags" FORCE)
+
+set(CMAKE_BUILD_TYPE Debug)
+
+# Set the Linker Debug flag for /DEBUG
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /DEBUG")
+
+# These are shared on ALL configurations. Rapidjson gives errors if we do not include this and TINYGLTF uses stb_image but we do not need it.
+set(PREDEFINITIONS_SHARED "IMGUI_DEFINE_MATH_OPERATORS;RAPIDJSON_NOMEMBERITERATORCLASS;TINYGLTF_NO_INCLUDE_STB_IMAGE;TINYGLTF_NO_STB_IMAGE;TINYGLTF_NO_STB_IMAGE_WRITE;")
+
+set(PREDEFINITIONS_GAME "IMGUI_DISABLE;")
+
+# These are specific configuration-based predefinitions.
+set(PREDEFINITIONS_DEBUG_SHARED "_DEBUG;" ${PREDEFINITIONS_SHARED})
+set(PREDEFINITIONS_RELEASE_SHARED "NDEBUG;" ${PREDEFINITIONS_SHARED})
+
+# These are shared on ALL the Editor configurations.
+set(PREDEFINITIONS_EDITOR_SHARED "_EDITOR;" ${PREDEFINITIONS_SHARED})
+
+# Editor inherits from their respective configuration and the shared predefinitions.
+set(PREDEFINITIONS_EDITOR_DEBUG ${PREDEFINITIONS_EDITOR_SHARED} ${PREDEFINITIONS_DEBUG_SHARED} "_RENDER_TEX")
+set(PREDEFINITIONS_EDITOR_RELEASE ${PREDEFINITIONS_EDITOR_SHARED} ${PREDEFINITIONS_RELEASE_SHARED} "_RENDER_TEX")
+
+set(PREDEFINITIONS_GAME_DEBUG ${PREDEFINITIONS_DEBUG_SHARED} ${PREDEFINITIONS_GAME})
+set(PREDEFINITIONS_GAME_RELEASE ${PREDEFINITIONS_RELEASE_SHARED} ${PREDEFINITIONS_GAME})
+
+include(engine/engine.cmake)
+include(game_common/game_common.cmake)
+include(editor/editor.cmake)
+include(game/game.cmake)
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
