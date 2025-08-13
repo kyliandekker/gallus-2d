@@ -42,7 +42,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 # Include directories
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}/engine/src
-    ${CMAKE_SOURCE_DIR}/game_common/src
+    ${CMAKE_SOURCE_DIR}/game_shared/src
     ${CMAKE_SOURCE_DIR}/game/src
     ${CMAKE_SOURCE_DIR}/external
 )

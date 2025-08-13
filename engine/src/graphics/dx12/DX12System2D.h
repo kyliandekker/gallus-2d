@@ -15,11 +15,14 @@
 #endif // IMGUI_DISABLE
 
 #include "core/Event.h"
+#include "Camera.h"
+
+#include "gameplay/systems/components/MeshComponent.h"
 
 #undef min
 #undef max
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -29,14 +32,23 @@ namespace tool
 		}
 		namespace dx12
 		{
-			/// Whether DX12 makes a full log of creating devices, resources, etc (spam).
-			#define LOG_DX12 1
+/// Whether DX12 makes a full log of creating devices, resources, etc (spam).
+#define LOG_DX12 1
 
 			inline const uint8_t g_iBufferCount = 3; /// Number of swap chain buffers.
 			inline bool g_bVSync = false; /// Whether V-Sync is enabled.
 
 			class CommandQueue;
 			class CommandList;
+			class Texture;
+
+			// Root parameters for the game.
+			enum RootParameters
+			{
+				CBV = 0,                // ConstantBuffer<ModelViewProjection> ModelViewProjectionCB : register(b0);
+				TEX_SRV = 1,            // Texture2D texture0 : register(t0);
+				NumRootParameters = 2
+			};
 
 			//-----------------------------------------------------------------------------
 			// DX12System2D
@@ -44,7 +56,7 @@ namespace tool
 			/// <summary>
 			/// Represents a DirectX 12 rendering window, managing device resources, rendering, and synchronization. Only basic 2D rendering.
 			/// </summary>
-			class DX12BaseSystem : public core::ThreadedSystem
+			class DX12System2D : public core::ThreadedSystem
 			{
 			public:
 				/// <summary>
@@ -123,7 +135,7 @@ namespace tool
 				/// This method blocks the CPU until the GPU has finished processing all commands up to this point. 
 				/// It is useful for synchronization, resource cleanup, or preparing for device destruction.
 				/// </remarks>
-				virtual void Flush();
+				void Flush();
 
 				/// <summary>
 				/// Resizes the window.
@@ -147,8 +159,9 @@ namespace tool
 				/// <summary>
 				/// Retrieves the current render target view.
 				/// </summary>
+				/// <param name="a_bUseRenderTexture">Whether to use the render texture instead of regular rtv.</param>
 				/// <returns>Handle to the render target view.</returns>
-				virtual D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentRenderTargetView();
+				D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentRenderTargetView(bool a_bUseRenderTexture);
 			public:
 				std::mutex m_RenderMutex;
 
@@ -166,14 +179,14 @@ namespace tool
 				/// <summary>
 				/// Renders the editor UI to the screen.
 				/// </summary>
-				virtual void RenderUI(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle);
+				void RenderUI(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle);
 #endif // IMGUI_DISABLE
 
 				/// <summary>
 				/// Renders the DX12 stuff to the screen.
 				/// </summary>
-				virtual void Render3D(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle);
-				
+				void Render3D(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle);
+
 				/// <summary>
 				/// PResents everything to the DX12 render loop.
 				/// </summary>
@@ -206,6 +219,15 @@ namespace tool
 					return m_pDevice;
 				};
 
+				/// <summary>
+				/// Retrieves the DirectX 12 root signature.
+				/// </summary>
+				/// <returns>ComPtr to the ID3D12RootSignature.</returns>
+				Microsoft::WRL::ComPtr<ID3D12RootSignature>& GetRootSignature()
+				{
+					return m_pRootSignature;
+				};
+
 #ifndef IMGUI_DISABLE
 				/// <summary>
 				/// Retrieves the imgui window.
@@ -222,28 +244,38 @@ namespace tool
 				/// </summary>
 				/// <param name="a_Type">The type of command queue such as direct, copy, etc.</param>
 				/// <returns>Reference to the CommandQueue.</returns>
-				virtual std::shared_ptr<CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE a_Type = D3D12_COMMAND_LIST_TYPE_DIRECT);
+				std::shared_ptr<CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE a_Type = D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 				/// <summary>
 				/// Updates the render target views (RTVs) for the back buffers.
 				/// </summary>
 				void UpdateRenderTargetViews();
 
-				SimpleEvent<DX12BaseSystem&> m_eOnInitialize;
+#ifdef _EDITOR
+				std::shared_ptr<Texture> GetRenderTexture();
+#endif // _EDITOR
+
+				SimpleEvent<DX12System2D&> m_eOnInitialize;
 				SimpleEvent<std::shared_ptr<dx12::CommandList>> m_eOnRender;
 				SimpleEvent<const glm::ivec2&, const glm::ivec2&> m_eOnResize;
 			protected:
-				virtual bool CreateCommandQueues();
-				virtual bool CreateViews();
-				virtual bool BeforeInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList);
-				virtual bool AfterInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList);
+				bool CreateCommandQueues();
+				bool CreateViews();
+				bool CreateRootSignature();
+				bool BeforeInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList);
+				bool AfterInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList);
 
-				virtual void AfterResize(const glm::ivec2& a_vSize);
+#ifdef _EDITOR
+				void CreateRenderTexture(const glm::ivec2& a_vSize);
+#endif // _EDITOR
+
+				void AfterResize(const glm::ivec2& a_vSize);
 
 				Microsoft::WRL::ComPtr<IDXGIAdapter4> m_pAdapter = nullptr;
 				Microsoft::WRL::ComPtr<ID3D12Device2> m_pDevice = nullptr;
 
 				std::shared_ptr<CommandQueue> m_pDirectCommandQueue = nullptr;
+				std::shared_ptr<CommandQueue> m_pCopyCommandQueue = nullptr;
 
 				HWND m_hWnd = nullptr;
 				win32::Window* m_pWindow = nullptr;
@@ -254,18 +286,28 @@ namespace tool
 					m_SRV,
 					m_RTV;
 
-				Microsoft::WRL::ComPtr<IDXGISwapChain4> m_pSwapChain;
+				Microsoft::WRL::ComPtr<ID3D12RootSignature> m_pRootSignature = nullptr;
+
+				Microsoft::WRL::ComPtr<IDXGISwapChain4> m_pSwapChain = nullptr;
 				Microsoft::WRL::ComPtr<ID3D12Resource> m_BackBuffers[g_iBufferCount];
 
 				UINT m_iCurrentBackBufferIndex = 0;
 
 				bool m_bIsTearingSupported = false;
 
+				D3D12_VIEWPORT m_Viewport;
+				D3D12_RECT m_ScissorRect;
 				glm::ivec2 m_vSize = { 1920, 1080 };
-
 #ifndef IMGUI_DISABLE
 				imgui::ImGuiWindow m_ImGuiWindow;
 #endif // IMGUI_DISABLE
+#ifdef _EDITOR
+				std::shared_ptr<Texture> m_pRenderTexture = nullptr;
+#endif // _EDITOR
+
+				gameplay::MeshComponent m_MeshComponent;
+
+				Camera m_Camera;
 			};
 		}
 	}

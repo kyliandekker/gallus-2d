@@ -2,7 +2,7 @@
 
 #include "DX12PCH.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

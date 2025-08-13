@@ -6,7 +6,7 @@
 
 #include "core/DataStream.h"
 
-namespace tool
+namespace gallus
 {
 	namespace file
 	{

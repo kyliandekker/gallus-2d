@@ -2,7 +2,7 @@
 
 #include "logger/Logger.h"
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{

@@ -42,7 +42,7 @@ target_compile_definitions(editor PRIVATE
 # Include directories
 target_include_directories(editor PUBLIC
     ${CMAKE_SOURCE_DIR}/engine/src
-    ${CMAKE_SOURCE_DIR}/game_common/src
+    ${CMAKE_SOURCE_DIR}/game_shared/src
     ${CMAKE_SOURCE_DIR}/editor/src
     ${CMAKE_SOURCE_DIR}/external
 )
@@ -59,10 +59,10 @@ set_target_properties(editor PROPERTIES
 )
 
 target_link_libraries(editor PRIVATE
-    Shcore.lib dxgi.lib d3d12.lib d3dcompiler.lib dxguid.lib Shlwapi.lib engine.lib game_common.lib
+    Shcore.lib dxgi.lib d3d12.lib d3dcompiler.lib dxguid.lib Shlwapi.lib engine.lib game_shared.lib
 )
 target_link_libraries(editor PRIVATE engine)
-target_link_libraries(editor PRIVATE game_common)
+target_link_libraries(editor PRIVATE game_shared)
 target_link_directories(editor PRIVATE
     "${CMAKE_SOURCE_DIR}/../$<CONFIG>"
 )
@@ -94,3 +94,8 @@ if(MSVC)
     # Set the Linker Debug flag for /DEBUG (for Debug configurations)
     set_property(TARGET editor APPEND_STRING PROPERTY LINK_OPTIONS "/DEBUG")
 endif()
+
+add_custom_command(TARGET editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying data from ${CMAKE_SOURCE_DIR}/data/ to $<TARGET_FILE_DIR:editor>/data"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data $<TARGET_FILE_DIR:editor>/data
+)

@@ -3,7 +3,7 @@
 #include "core/Tool.h"
 #include "editor/EditorSettings.h"
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{

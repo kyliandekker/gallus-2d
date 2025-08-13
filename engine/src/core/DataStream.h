@@ -14,7 +14,7 @@
 #define SEEK_END 2
 #endif
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{

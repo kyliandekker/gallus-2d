@@ -22,7 +22,7 @@
 #define JSON_WINDOW_POSITION_X_VAR "x"
 #define JSON_WINDOW_POSITION_Y_VAR "y"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

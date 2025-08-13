@@ -2,7 +2,7 @@
 
 #ifndef IMGUI_DISABLE
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

@@ -7,7 +7,7 @@
 #include <string>
 #include <imgui/imgui.h>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

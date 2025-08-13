@@ -3,10 +3,12 @@
 #include <string>
 #include <rapidjson/document.h>
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{
+/// Whether DX12 makes a full log of creating devices, resources, etc (spam).
+#define LOG_SETTINGS 0
 		//-----------------------------------------------------------------------------
 		// Settings
 		//-----------------------------------------------------------------------------

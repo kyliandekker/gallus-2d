@@ -6,7 +6,7 @@
 #include <queue>    // For std::queue
 #include <memory>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

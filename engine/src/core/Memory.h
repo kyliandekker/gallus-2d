@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{

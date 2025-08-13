@@ -10,7 +10,7 @@
 
 #define CATEGORY_LOGGER "LOGGER"
 
-namespace tool
+namespace gallus
 {
 	namespace logger
 	{
@@ -71,25 +71,25 @@ namespace tool
 		bool Logger::InitThreadWorker()
 		{
 			// Terminal/Console initialization for debug builds.
-		#ifdef _DEBUG
+#ifdef _DEBUG
 			AllocConsole();
 			freopen_s(&s_pConsole, "CONOUT$", "w", stdout);
 
 			// Enable virtual terminal processing (for ANSI escape codes, if needed)
-			HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+			const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 			DWORD dwMode = 0;
 			GetConsoleMode(hOut, &dwMode);
 			dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 			SetConsoleMode(hOut, dwMode);
 
 			// Set console screen buffer size to avoid wrapping issues
-			COORD coord = { 80, 300 };  // Width: 80, Height: 500
+			const COORD coord = { 80, 300 };  // Width: 80, Height: 500
 			SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 
 			// Optionally adjust console window size
-			HWND consoleWindow = GetConsoleWindow();
+			const HWND consoleWindow = GetConsoleWindow();
 			MoveWindow(consoleWindow, 100, 100, 800, 600, TRUE);
-		#endif // _DEBUG
+#endif // _DEBUG
 
 			time_t time_t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 			struct tm buf;
@@ -116,13 +116,13 @@ namespace tool
 		//-----------------------------------------------------------------------------------------------------
 		void Logger::Finalize()
 		{
-		#ifdef _DEBUG
+#ifdef _DEBUG
 			if (s_pConsole)
 			{
 				fclose(s_pConsole);
 				s_pConsole = nullptr;
 			}
-		#endif // _DEBUG
+#endif // _DEBUG
 			if (s_pLogFile)
 			{
 				fclose(s_pLogFile);
@@ -169,6 +169,7 @@ namespace tool
 			// This is a loop because this makes it so that it will display all messages before destruction.
 			while (!m_Messages.empty())
 			{
+				std::scoped_lock lock(m_MessagesMutex);
 				const LoggerMessage lm = m_Messages.front();
 				m_Messages.pop();
 
@@ -237,7 +238,7 @@ namespace tool
 		//-----------------------------------------------------------------------------------------------------
 		void Logger::PrintMessage(LogSeverity a_Severity, const char* a_sCategory, const char* a_sMessage, const char* a_sFile, int a_iLine)
 		{
-			std::string fileName = a_sFile;
+			const std::string fileName = a_sFile;
 
 			std::scoped_lock lock(m_MessagesMutex);
 			m_Messages.push(LoggerMessage(a_sMessage, a_sCategory, fileName, a_iLine, a_Severity, std::chrono::system_clock::now()));

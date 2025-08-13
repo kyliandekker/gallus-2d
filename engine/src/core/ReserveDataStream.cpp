@@ -5,12 +5,12 @@
 
 #include "Memory.h"
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{
 		//-----------------------------------------------------------------------------
-		// DataStream
+		// ReserveDataStream
 		//-----------------------------------------------------------------------------
 		ReserveDataStream::ReserveDataStream(size_t a_iSize) : DataStream(a_iSize), m_iReservedSize(a_iSize)
 		{}
@@ -48,7 +48,7 @@ namespace tool
 		//-----------------------------------------------------------------------------------------------------
 		bool ReserveDataStream::Write(void const* a_pData, size_t a_iSize)
 		{
-			size_t size = m_iSize;
+			const size_t size = m_iSize;
 			if (m_iPos == m_iReservedSize || m_iPos + a_iSize > m_iReservedSize)
 			{
 				Reallocate(a_iSize);
@@ -95,8 +95,12 @@ namespace tool
 			{
 				return;
 			}
-			size_t newReservedSize = m_iSize + (a_iExtraSize * 2000);
+			const size_t newReservedSize = m_iSize + (a_iExtraSize * 2000);
 			void* newData = malloc(newReservedSize);
+			if (!newData)
+			{
+				return;
+			}
 			memcpy(newData, m_pData, m_iSize);
 
 			if (m_pData)

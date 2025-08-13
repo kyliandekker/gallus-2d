@@ -44,7 +44,7 @@
 //  2018-06-08: DirectX12: Use draw_data->DisplayPos and draw_data->DisplaySize to setup projection matrix and clipping rectangle (to ease support for future multi-viewport).
 //  2018-02-22: Merged into master with all Win32 code synchronized to other examples.
 
-#include "graphics/dx12/DX12BaseSystem.h"
+#include "graphics/dx12/DX12System2D.h"
 #include "graphics/dx12/DX12PCH.h"
 #include "graphics/dx12/CommandList.h"
 #include "graphics/dx12/CommandQueue.h"
@@ -873,7 +873,7 @@ static void ImGui_ImplDX12_CreateWindow(ImGuiViewport* viewport)
 	queue_desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 	queue_desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 
-	auto CQueue = tool::core::TOOL->GetDX12().GetCommandQueue();
+	auto CQueue = gallus::core::TOOL->GetDX12().GetCommandQueue();
 	vd->CommandQueue = CQueue->GetCommandQueue().Get();
 	HRESULT res = 0;
 

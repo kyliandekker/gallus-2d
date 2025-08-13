@@ -1,4 +1,5 @@
 #ifndef IMGUI_DISABLE
+#ifdef _EDITOR
 
 #include "graphics/imgui/windows/ConsoleWindow.h"
 
@@ -9,7 +10,7 @@
 #include "core/EditorTool.h"
 #include "utils/string_extensions.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -59,7 +60,7 @@ namespace tool
 				//-----------------------------------------------------------------------------------------------------
 				void ConsoleWindow::Render()
 				{
-					tool::editor::EditorSettings& editorSettings = core::EDITOR_TOOL->GetEditorSettings();
+					gallus::editor::EditorSettings& editorSettings = core::EDITOR_TOOL->GetEditorSettings();
 
 					// Filter messages if need be.
 					if (m_NeedsRefresh)
@@ -332,4 +333,5 @@ namespace tool
 	}
 }
 
+#endif // _EDITOR
 #endif // IMGUI_DISABLE

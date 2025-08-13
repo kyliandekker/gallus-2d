@@ -6,7 +6,7 @@
 #include <condition_variable>
 #include <future>
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{

@@ -1,10 +1,10 @@
 #include "CommandList.h"
 
 #include "core/Tool.h" 
-#include "graphics/dx12/DX12BaseSystem.h"
+#include "graphics/dx12/DX12System2D.h"
 #include "logger/Logger.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -38,10 +38,10 @@ namespace tool
 				size_t a_iNumElements, size_t a_iElementSize, const void* a_pBufferData,
 				D3D12_RESOURCE_FLAGS a_Flags)
 			{
-				size_t bufferSize = a_iNumElements * a_iElementSize;
+				const size_t bufferSize = a_iNumElements * a_iElementSize;
 
-				CD3DX12_HEAP_PROPERTIES defaultHeaptype = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-				CD3DX12_RESOURCE_DESC buffer = CD3DX12_RESOURCE_DESC::Buffer(bufferSize, a_Flags);
+				const CD3DX12_HEAP_PROPERTIES defaultHeaptype = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+				const CD3DX12_RESOURCE_DESC buffer = CD3DX12_RESOURCE_DESC::Buffer(bufferSize, a_Flags);
 
 				// Create a committed resource for the GPU resource in a default heap.
 				Microsoft::WRL::ComPtr<ID3D12Device2>& device = core::TOOL->GetDX12().GetDevice();
@@ -60,8 +60,8 @@ namespace tool
 				// Create an committed resource for the upload.
 				if (a_pBufferData)
 				{
-					CD3DX12_HEAP_PROPERTIES uploadHeaptype = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-					CD3DX12_RESOURCE_DESC buff = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
+					const CD3DX12_HEAP_PROPERTIES uploadHeaptype = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+					const CD3DX12_RESOURCE_DESC buff = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 					Microsoft::WRL::ComPtr<ID3D12Device2>& device = core::TOOL->GetDX12().GetDevice();
 					if (FAILED(device->CreateCommittedResource(
 						&uploadHeaptype,

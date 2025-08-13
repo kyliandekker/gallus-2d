@@ -3,22 +3,12 @@
 #include "logger/Logger.h"
 #include <glm/vec2.hpp>
 
-#include "graphics/win32/Window.h"
-#include "graphics/dx12/DX12BaseSystem.h"
-
-namespace tool
+namespace gallus
 {
 	namespace core
 	{
 #define CATEGORY_TOOL "TOOL"
-
-	Tool::~Tool()
-	{
-		delete m_pWindow;
-		delete m_pDX12;
-	}
-
-	//-----------------------------------------------------------------------------
+		//-----------------------------------------------------------------------------
 		// Tool
 		//-----------------------------------------------------------------------------
 		bool Tool::Initialize(HINSTANCE a_hInstance, const std::string& a_sName)
@@ -34,23 +24,15 @@ namespace tool
 
 			LOG(LOGSEVERITY_INFO, CATEGORY_TOOL, "Initializing tool.");
 
-			// Create window if user did not provide derived class.
-			if (!m_pWindow)
-			{
-				m_pWindow = new graphics::win32::Window();
-			}
-
 			// We initialize the window first and set the size and title after it has been created.
-			m_pWindow->OnQuit() += std::bind(&Tool::Shutdown, this);
-			m_pWindow->Initialize(true, a_hInstance);
-			m_pWindow->SetTitle(a_sName);
+			m_Window.OnQuit() += std::bind(&Tool::Shutdown, this);
+			m_Window.Initialize(true, a_hInstance);
+			m_Window.SetTitle(a_sName);
 
-			// Create dx12 if user did not provide derived class.
-			if (!m_pDX12)
-			{
-				m_pDX12 = new graphics::dx12::DX12BaseSystem();
-			}
-			m_pDX12->Initialize(true, m_pWindow->GetHWnd(), m_pWindow->GetRealSize(), m_pWindow);
+			const glm::ivec2 size = m_Window.GetRealSize();
+			m_DX12.Initialize(true, m_Window.GetHWnd(), size, &m_Window);
+
+			m_ECS.Initialize();
 
 			System::Initialize();
 
@@ -77,9 +59,11 @@ namespace tool
 		{
 			LOG(LOGSEVERITY_INFO, CATEGORY_TOOL, "Destroying engine.");
 
-			m_pDX12->Destroy();
+			m_ECS.Destroy();
 
-			m_pWindow->Destroy();
+			m_DX12.Destroy();
+
+			m_Window.Destroy();
 
 			// Destroy the logger last so we can see possible error messages from other systems.
 			logger::LOGGER.Destroy();
@@ -94,14 +78,27 @@ namespace tool
 		}
 
 		//-----------------------------------------------------------------------------------------------------
-		graphics::win32::Window& Tool::GetWindow()
+		ResourceAtlas& Tool::GetResourceAtlas()
 		{
-			return *m_pWindow;
+			return m_ResourceAtlas;
 		}
 
-		graphics::dx12::DX12BaseSystem& Tool::GetDX12()
+		//-----------------------------------------------------------------------------------------------------
+		graphics::win32::Window& Tool::GetWindow()
 		{
-			return *m_pDX12;
+			return m_Window;
+		}
+
+		//-----------------------------------------------------------------------------------------------------
+		graphics::dx12::DX12System2D& Tool::GetDX12()
+		{
+			return m_DX12;
+		}
+
+		//-----------------------------------------------------------------------------------------------------
+		gameplay::EntityComponentSystem& Tool::GetECS()
+		{
+			return m_ECS;
 		}
 
 		//-----------------------------------------------------------------------------------------------------

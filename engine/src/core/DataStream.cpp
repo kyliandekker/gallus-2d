@@ -4,7 +4,7 @@
 
 #include "Memory.h"
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{

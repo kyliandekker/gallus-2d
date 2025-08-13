@@ -13,7 +13,7 @@
 #undef CreateWindow
 #endif
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

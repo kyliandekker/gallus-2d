@@ -1,20 +1,26 @@
-#include "DX12BaseSystem.h"
+#include "DX12System2D.h"
 
 #include "logger/Logger.h"
 #include "graphics/win32/Window.h"
 #include "CommandQueue.h"
 #include "CommandList.h"
+#include "core/Tool.h"
 
-namespace tool
+#include "Shader.h"
+#include "Texture.h"
+#include "Mesh.h"
+#include "gameplay/systems/MeshSystem.h"
+
+namespace gallus
 {
 	namespace graphics
 	{
 		namespace dx12
 		{
 			//-----------------------------------------------------------------------------
-			// DX12BaseSystem
+			// DX12System2D
 			//-----------------------------------------------------------------------------
-			bool DX12BaseSystem::Initialize(bool a_bWait, HWND a_hWnd, const glm::ivec2& a_vSize, win32::Window* a_pWindow)
+			bool DX12System2D::Initialize(bool a_bWait, HWND a_hWnd, const glm::ivec2& a_vSize, win32::Window* a_pWindow)
 			{
 				m_vSize = a_vSize;
 				m_hWnd = a_hWnd;
@@ -25,16 +31,16 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::Destroy()
+			bool DX12System2D::Destroy()
 			{
 				LOG(LOGSEVERITY_INFO, LOG_CATEGORY_DX12, "Destroying dx12 system.");
 				return ThreadedSystem::Destroy();
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::InitThreadWorker()
+			bool DX12System2D::InitThreadWorker()
 			{
-#if _DEBUGs
+#if _DEBUG
 				// Always enable the debug layer before doing anything DX12 related
 				// so all possible errors generated while creating DX12 objects
 				// are caught by the debug layer.
@@ -51,7 +57,7 @@ namespace tool
 				{
 					debugController1->SetEnableGPUBasedValidation(TRUE);
 				}
-#endif // _DEBUGs
+#endif // _DEBUG
 				// Get the adapter.
 				if (!GetAdapter(false))
 				{
@@ -105,6 +111,19 @@ namespace tool
 
 				m_bIsTearingSupported = CheckTearingSupport();
 
+#ifdef _EDITOR
+				m_Viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, 1920.0f, 1080.0f);
+				m_ScissorRect = CD3DX12_RECT(0, 0, 1920.0f, 1080.0f);
+
+				m_Camera.Init(1920.0f, 1080.0f);
+#else
+				m_Viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, static_cast<float>(m_vSize.x), static_cast<float>(m_vSize.y));
+				m_ScissorRect = CD3DX12_RECT(0, 0, static_cast<float>(m_vSize.x), static_cast<float>(m_vSize.y));
+
+				m_Camera.Init(m_vSize.x, m_vSize.y);
+#endif // _EDITOR
+				m_Camera.GetTransform().SetPosition({ 0.0f, 0.0f });
+
 				if (!DirectX::XMVerifyCPUSupport())
 				{
 					LOG(LOGSEVERITY_ERROR, LOG_CATEGORY_DX12, "Failed verifying DirectX Math support.");
@@ -134,8 +153,22 @@ namespace tool
 				LOG(LOGSEVERITY_INFO_SUCCESS, LOG_CATEGORY_DX12, "Created views.");
 #endif // LOG_DX!2
 
+				if (!CreateRootSignature())
+				{
+					LOG(LOGSEVERITY_ERROR, LOG_CATEGORY_DX12, "Failed creating root signature.");
+					return false;
+				}
+#if LOG_DX12 == 1
+				LOG(LOGSEVERITY_INFO_SUCCESS, LOG_CATEGORY_DX12, "Created root signature.");
+#endif // LOG_DX!2
+
+				// Get the direct command queue.
 				std::shared_ptr<CommandQueue> dCommandQueue = GetCommandQueue();
 				std::shared_ptr<CommandList> dCommandList = dCommandQueue->GetCommandList();
+
+				// Get the copy command queue.
+				std::shared_ptr<CommandQueue> cCommandQueue = GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
+				std::shared_ptr<CommandList> cCommandList = cCommandQueue->GetCommandList();
 
 				// Used for creating stuff like root signature, etc.
 				if (!BeforeInitialize(dCommandQueue, dCommandList))
@@ -143,6 +176,10 @@ namespace tool
 					LOG(LOGSEVERITY_ERROR, LOG_CATEGORY_DX12, "Failed before initialization could succeed.");
 					return false;
 				}
+
+#ifdef _EDITOR
+				CreateRenderTexture(m_vSize);
+#endif // _EDITOR
 
 				m_eOnInitialize(*this);
 #ifndef IMGUI_DISABLE
@@ -154,11 +191,34 @@ namespace tool
 					return false;
 				}
 
+				std::shared_ptr<Texture> texture = core::TOOL->GetResourceAtlas().LoadTexture("tex_missing.png", cCommandList); // Default texture.
+				texture->SetResourceCategory(core::EngineResourceCategory::Missing);
+				texture->SetIsDestroyable(false);
+
+				std::shared_ptr<Shader> shader = core::TOOL->GetResourceAtlas().LoadShader("vertexShader.hlsl", "pixelShader.hlsl"); // Default shader.
+				shader->SetResourceCategory(core::EngineResourceCategory::Missing);
+				shader->SetIsDestroyable(false);
+
+				std::shared_ptr<Mesh> mesh = core::TOOL->GetResourceAtlas().LoadMesh("generic_mesh", cCommandList); // Default mesh.
+				mesh->SetResourceCategory(core::EngineResourceCategory::Missing);
+				mesh->SetIsDestroyable(false);
+
+				uint64_t fenceValue = cCommandQueue->ExecuteCommandList(cCommandList);
+				cCommandQueue->WaitForFenceValue(fenceValue);
+
+				m_MeshComponent.Init();
+				m_MeshComponent.SetTexture(texture);
+				m_MeshComponent.SetShader(shader);
+				m_MeshComponent.SetMesh(mesh);
+
 				UpdateRenderTargetViews();
 #ifndef IMGUI_DISABLE
 				m_ImGuiWindow.OnRenderTargetCreated(dCommandList);
 #endif // IMGUI_DISABLE
-				auto fenceValue = dCommandQueue->ExecuteCommandList(dCommandList);
+
+				core::TOOL->GetResourceAtlas().TransitionResources(dCommandList);
+
+				fenceValue = dCommandQueue->ExecuteCommandList(dCommandList);
 				dCommandQueue->WaitForFenceValue(fenceValue);
 
 				LOG(LOGSEVERITY_SUCCESS, LOG_CATEGORY_DX12, "Initialized dx12 system.");
@@ -167,13 +227,13 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::GetAdapter(bool a_bUseWarp)
+			bool DX12System2D::GetAdapter(bool a_bUseWarp)
 			{
 				Microsoft::WRL::ComPtr<IDXGIFactory4> dxgiFactory;
 				UINT createFactoryFlags = 0;
-#if defined(_DEBUGs)
-				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUGs;
-#endif // _DEBUGs
+#if defined(_DEBUG)
+				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
+#endif // _DEBUG
 
 				if (FAILED(CreateDXGIFactory2(createFactoryFlags, IID_PPV_ARGS(&dxgiFactory))))
 				{
@@ -229,7 +289,7 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::CreateDevice()
+			bool DX12System2D::CreateDevice()
 			{
 				if (FAILED(D3D12CreateDevice(m_pAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_pDevice))))
 				{
@@ -239,7 +299,7 @@ namespace tool
 				//    NAME_D3D12_OBJECT(d3d12Device2);
 
 				// Enable debug messages in debug mode.
-#ifdef _DEBUGs
+#ifdef _DEBUG
 				Microsoft::WRL::ComPtr<ID3D12InfoQueue> pInfoQueue;
 				if (SUCCEEDED(m_pDevice.As(&pInfoQueue)))
 				{
@@ -277,13 +337,13 @@ namespace tool
 						return false;
 					}
 				}
-#endif // _DEBUGs
+#endif // _DEBUG
 
 				return true;
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::CheckTearingSupport()
+			bool DX12System2D::CheckTearingSupport()
 			{
 				BOOL allowTearing = FALSE;
 
@@ -306,13 +366,13 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::CreateSwapChain()
+			bool DX12System2D::CreateSwapChain()
 			{
 				Microsoft::WRL::ComPtr<IDXGIFactory4> dxgiFactory4;
 				UINT createFactoryFlags = 0;
-#ifdef _DEBUGs
-				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUGs;
-#endif // _DEBUGs
+#ifdef _DEBUG
+				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
+#endif // _DEBUG
 
 				if (FAILED(CreateDXGIFactory2(createFactoryFlags, IID_PPV_ARGS(&dxgiFactory4))))
 				{
@@ -371,9 +431,13 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::CreateRTV()
+			void DX12System2D::CreateRTV()
 			{
 				size_t numBuffers = g_iBufferCount;
+
+#ifdef _EDITOR
+				numBuffers++;
+#endif // _EDITOR
 
 				D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
 				rtvHeapDesc.NumDescriptors = static_cast<UINT>(numBuffers);
@@ -383,7 +447,7 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::CreateSRV()
+			void DX12System2D::CreateSRV()
 			{
 				D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
 				srvHeapDesc.NumDescriptors = 100;  // Adjust based on how many textures you need
@@ -393,7 +457,7 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::Finalize()
+			void DX12System2D::Finalize()
 			{
 				std::lock_guard<std::mutex> lock(m_RenderMutex);
 #ifndef IMGUI_DISABLE
@@ -406,15 +470,25 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::Flush()
+			void DX12System2D::Flush()
 			{
 				m_pDirectCommandQueue->Flush();
+				m_pCopyCommandQueue->Flush();
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::UpdateRenderTargetViews()
+			void DX12System2D::UpdateRenderTargetViews()
 			{
 				CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTV.GetCPUDescriptorHandleForHeapStart());
+
+#ifdef _EDITOR
+				// Create RTV for custom render target texture
+				if (m_pRenderTexture->GetResource())
+				{
+					m_pDevice->CreateRenderTargetView(m_pRenderTexture->GetResource().Get(), nullptr, rtvHandle);
+				}
+				rtvHandle.Offset(m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+#endif // _EDITOR
 
 				for (int i = 0; i < g_iBufferCount; ++i)
 				{
@@ -434,15 +508,24 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::CreateCommandQueues()
+#ifdef _EDITOR
+			std::shared_ptr<Texture> DX12System2D::GetRenderTexture()
+			{
+				return m_pRenderTexture;
+			}
+#endif // _EDITOR
+
+			//-----------------------------------------------------------------------------------------------------
+			bool DX12System2D::CreateCommandQueues()
 			{
 				m_pDirectCommandQueue = std::make_shared<CommandQueue>(D3D12_COMMAND_LIST_TYPE_DIRECT);
+				m_pCopyCommandQueue = std::make_shared<CommandQueue>(D3D12_COMMAND_LIST_TYPE_COPY);
 
 				return true;
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::CreateViews()
+			bool DX12System2D::CreateViews()
 			{
 				CreateRTV();
 				CreateSRV();
@@ -451,23 +534,97 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::BeforeInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
+			bool DX12System2D::CreateRootSignature()
+			{
+				// Define descriptor ranges
+				CD3DX12_DESCRIPTOR_RANGE1 descriptorRanges[1]{};
+
+				// SRV for the texture at register t0
+				descriptorRanges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+
+				// Define root parameters
+				CD3DX12_ROOT_PARAMETER1 rootParameters[RootParameters::NumRootParameters]{};
+
+				// CBV at register b0 (Model-View-Projection Matrix)
+				rootParameters[RootParameters::CBV].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+
+				// Texture SRV at register t0 (binds a texture)
+				rootParameters[RootParameters::TEX_SRV].InitAsDescriptorTable(1, &descriptorRanges[0], D3D12_SHADER_VISIBILITY_PIXEL);
+
+				// Define static sampler at register s0 (replaces the removed descriptor table sampler)
+				const CD3DX12_STATIC_SAMPLER_DESC staticSamplers[] = {
+					CD3DX12_STATIC_SAMPLER_DESC(
+						0,  // Register s0
+						D3D12_FILTER_MIN_MAG_MIP_POINT,  // Bilinear filtering
+						D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+						D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+						D3D12_TEXTURE_ADDRESS_MODE_WRAP
+					)
+				};
+
+				// Define root signature flags
+				const D3D12_ROOT_SIGNATURE_FLAGS rootSignatureFlags =
+					D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+					D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+					D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+					D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+
+				// Create root signature descriptor
+				CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSignatureDescription;
+				rootSignatureDescription.Init_1_1(
+					_countof(rootParameters), rootParameters,
+					_countof(staticSamplers), staticSamplers, // Use static samplers
+					rootSignatureFlags
+				);
+
+				// Serialize the root signature
+				Microsoft::WRL::ComPtr<ID3DBlob> rootSignatureBlob;
+				Microsoft::WRL::ComPtr<ID3DBlob> errorBlob;
+				const HRESULT hr = D3DX12SerializeVersionedRootSignature(
+					&rootSignatureDescription,
+					D3D_ROOT_SIGNATURE_VERSION_1_1,
+					&rootSignatureBlob,
+					&errorBlob
+				);
+
+				if (FAILED(hr))
+				{
+					std::string errorMessage(static_cast<const char*>(errorBlob->GetBufferPointer()), errorBlob->GetBufferSize());
+					LOGF(LOGSEVERITY_ERROR, LOG_CATEGORY_DX12, "Failed serializing root signature: \"%s\".", errorMessage.c_str());
+					return false;
+				}
+
+				// Create the root signature
+				if (FAILED(m_pDevice->CreateRootSignature(0,
+					rootSignatureBlob->GetBufferPointer(),
+					rootSignatureBlob->GetBufferSize(),
+					IID_PPV_ARGS(&m_pRootSignature))))
+				{
+					LOG(LOGSEVERITY_ERROR, LOG_CATEGORY_DX12, "Failed creating root signature.");
+					return false;
+				}
+
+				return true;
+			}
+
+			//-----------------------------------------------------------------------------------------------------
+			bool DX12System2D::BeforeInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
 			{
 				return true;
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			bool DX12BaseSystem::AfterInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
+			bool DX12System2D::AfterInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
 			{
 				return true;
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::AfterResize(const glm::ivec2& a_vSize)
+			void DX12System2D::AfterResize(const glm::ivec2& a_vSize)
 			{}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::Resize(const glm::ivec2& a_vPos, const glm::ivec2& a_vSize)
+			void DX12System2D::Resize(const glm::ivec2& a_vPos, const glm::ivec2& a_vSize)
 			{
 				if (a_vSize.x == 0 || a_vSize.y == 0)
 				{
@@ -504,52 +661,100 @@ namespace tool
 				UpdateRenderTargetViews();
 
 				m_eOnResize(a_vPos, a_vSize);
-#ifndef IMGUI_DISABLE
+#ifdef _EDITOR
 				m_ImGuiWindow.Resize(a_vPos, a_vSize);
-#endif // IMGUI_DISABLE
+				m_Viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, 1920.0f, 1080.0f);
+				m_ScissorRect = CD3DX12_RECT(0, 0, 1920.0f, 1080.0f);
+#else
+				m_Viewport = CD3DX12_VIEWPORT(0.0f, 0.0f, static_cast<float>(a_vSize.x), static_cast<float>(a_vSize.y));
+				m_ScissorRect = CD3DX12_RECT(0, 0, static_cast<float>(a_vSize.x), static_cast<float>(a_vSize.y));
+				m_Camera.Init(a_vSize.x, a_vSize.y);
+#endif // _EDITOR
 
 				m_vSize = glm::vec2(a_vSize.x, a_vSize.y);
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			const Microsoft::WRL::ComPtr<ID3D12Resource>& DX12BaseSystem::GetCurrentBackBuffer() const
+			const Microsoft::WRL::ComPtr<ID3D12Resource>& DX12System2D::GetCurrentBackBuffer() const
 			{
 				return m_BackBuffers[m_iCurrentBackBufferIndex];
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			UINT DX12BaseSystem::GetCurrentBackBufferIndex() const
+			UINT DX12System2D::GetCurrentBackBufferIndex() const
 			{
 				return m_iCurrentBackBufferIndex;
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			D3D12_CPU_DESCRIPTOR_HANDLE DX12BaseSystem::GetCurrentRenderTargetView()
+			D3D12_CPU_DESCRIPTOR_HANDLE DX12System2D::GetCurrentRenderTargetView(bool a_bUseRenderTexture)
 			{
 				size_t backBufferStart = 0;
+
+#ifdef _EDITOR
+				if (a_bUseRenderTexture && m_pRenderTexture->IsValid())
+				{
+					return m_RTV.GetCPUHandle(0);
+				}
+				backBufferStart++;
+#endif // _EDITOR
+
 				return m_RTV.GetCPUHandle(backBufferStart + m_iCurrentBackBufferIndex);
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::Loop()
+			void DX12System2D::Loop()
 			{
+				if (!m_bInitialized.load())
+				{
+					return;
+				}
+
 				ProcessWindowEvents();
 
 				std::shared_ptr<CommandQueue> commandQueue = GetCommandQueue(D3D12_COMMAND_LIST_TYPE_DIRECT);
 				std::shared_ptr<CommandList> commandList = commandQueue->GetCommandList();
 
-				D3D12_CPU_DESCRIPTOR_HANDLE rtv = GetCurrentRenderTargetView();
+				UINT currentBackBufferIndex = GetCurrentBackBufferIndex();
+				const Microsoft::WRL::ComPtr<ID3D12Resource>& backBuffer = GetCurrentBackBuffer();
 
-				Render3D(commandQueue, commandList, rtv);
-#ifndef IMGUI_DISABLE
+				commandList->TransitionResource(backBuffer,
+					D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+				const FLOAT clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+#ifdef _EDITOR
+				commandList->TransitionResource(m_pRenderTexture->GetResource(),
+					D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+					D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+				D3D12_CPU_DESCRIPTOR_HANDLE editorRtv = GetCurrentRenderTargetView(true);
+				commandList->GetCommandList()->ClearRenderTargetView(editorRtv, clearColor, 0, nullptr);
+#endif // _EDITOR
+				D3D12_CPU_DESCRIPTOR_HANDLE rtv = GetCurrentRenderTargetView(false);
+				commandList->GetCommandList()->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
+
+				//------------------------------------------
+				// RENDER GAME
+				//------------------------------------------
+				Render3D(commandQueue, commandList, editorRtv);
+
+				//------------------------------------------
+				// EDITOR ONLY
+				//------------------------------------------
+#ifdef _EDITOR
+				// Transition back to SRV for ImGui usage
+				commandList->TransitionResource(m_pRenderTexture->GetResource(),
+					D3D12_RESOURCE_STATE_RENDER_TARGET,
+					D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+
 				RenderUI(commandQueue, commandList, rtv);
-#endif // IMGUI_DISABLE
+#endif // _EDITOR
 
 				Present(commandQueue, commandList);
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::ProcessWindowEvents()
+			void DX12System2D::ProcessWindowEvents()
 			{
 				std::lock_guard<std::mutex> lock(m_RenderMutex);
 
@@ -574,37 +779,42 @@ namespace tool
 
 			//-----------------------------------------------------------------------------------------------------
 #ifndef IMGUI_DISABLE
-			void DX12BaseSystem::RenderUI(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle)
+			void DX12System2D::RenderUI(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle)
 			{
-				FLOAT clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-				a_pCommandList->GetCommandList()->ClearRenderTargetView(a_RTVHandle, clearColor, 0, nullptr);
+				a_pCommandList->GetCommandList()->OMSetRenderTargets(1, &a_RTVHandle, FALSE, nullptr);
 
 				m_ImGuiWindow.Render(a_pCommandList);
 			}
 #endif // IMGUI_DISABLE
 
-			void DX12BaseSystem::Render3D(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle)
+			//-----------------------------------------------------------------------------------------------------
+			void DX12System2D::Render3D(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle)
 			{
-				UINT currentBackBufferIndex = GetCurrentBackBufferIndex();
-				const Microsoft::WRL::ComPtr<ID3D12Resource>& backBuffer = GetCurrentBackBuffer();
+				core::TOOL->GetResourceAtlas().TransitionResources(a_pCommandList);
 
-				a_pCommandList->TransitionResource(backBuffer,
-					D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-
-				FLOAT clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-				a_pCommandList->GetCommandList()->ClearRenderTargetView(a_RTVHandle, clearColor, 0, nullptr);
 				a_pCommandList->GetCommandList()->OMSetRenderTargets(1, &a_RTVHandle, FALSE, nullptr);
+
+				a_pCommandList->GetCommandList()->SetGraphicsRootSignature(m_pRootSignature.Get());
+
+				a_pCommandList->GetCommandList()->RSSetViewports(1, &m_Viewport);
+				a_pCommandList->GetCommandList()->RSSetScissorRects(1, &m_ScissorRect);
 
 				ID3D12DescriptorHeap* descriptorHeaps[] = { m_SRV.GetHeap().Get() };
 				a_pCommandList->GetCommandList()->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+
+				// TODO: RENDER LOOP.
+				for (auto& pair : core::TOOL->GetECS().GetSystem<gameplay::MeshSystem>().GetComponents())
+				{
+					pair.second.Render(a_pCommandList, pair.first, m_Camera);
+				}
 
 				m_eOnRender(a_pCommandList);
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			void DX12BaseSystem::Present(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
+			void DX12System2D::Present(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
 			{
-				UINT currentBackBufferIndex = GetCurrentBackBufferIndex();
+				const UINT currentBackBufferIndex = GetCurrentBackBufferIndex();
 				const Microsoft::WRL::ComPtr<ID3D12Resource>& backBuffer = GetCurrentBackBuffer();
 
 				// Present
@@ -613,8 +823,8 @@ namespace tool
 
 					m_aFenceValues[currentBackBufferIndex] = a_pCommandQueue->ExecuteCommandList(a_pCommandList);
 
-					UINT syncInterval = g_bVSync ? 1 : 0;
-					UINT presentFlags = m_bIsTearingSupported && !g_bVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
+					const UINT syncInterval = g_bVSync ? 1 : 0;
+					const UINT presentFlags = m_bIsTearingSupported && !g_bVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
 					if (FAILED(m_pSwapChain->Present(syncInterval, presentFlags)))
 					{
 						LOG(LOGSEVERITY_ERROR, LOG_CATEGORY_DX12, "Failed presenting.");
@@ -627,7 +837,7 @@ namespace tool
 			}
 
 			//-----------------------------------------------------------------------------------------------------
-			std::shared_ptr<CommandQueue> DX12BaseSystem::GetCommandQueue(D3D12_COMMAND_LIST_TYPE a_Type)
+			std::shared_ptr<CommandQueue> DX12System2D::GetCommandQueue(D3D12_COMMAND_LIST_TYPE a_Type)
 			{
 				std::shared_ptr<CommandQueue> commandQueue = nullptr;
 				switch (a_Type)
@@ -635,6 +845,11 @@ namespace tool
 					case D3D12_COMMAND_LIST_TYPE_DIRECT:
 					{
 						commandQueue = m_pDirectCommandQueue;
+						break;
+					}
+					case D3D12_COMMAND_LIST_TYPE_COPY:
+					{
+						commandQueue = m_pCopyCommandQueue;
 						break;
 					}
 					default:
@@ -645,6 +860,30 @@ namespace tool
 
 				return commandQueue;
 			}
+
+			//-----------------------------------------------------------------------------------------------------
+#ifdef _EDITOR
+			void DX12System2D::CreateRenderTexture(const glm::ivec2& a_vSize)
+			{
+				if (m_pRenderTexture && m_pRenderTexture->GetResource())
+				{
+					m_pRenderTexture->Destroy();
+				}
+
+				D3D12_RESOURCE_DESC texDesc = {};
+				texDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+				texDesc.Width = a_vSize.x;
+				texDesc.Height = a_vSize.y;
+				texDesc.DepthOrArraySize = 1;
+				texDesc.MipLevels = 1;
+				texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+				texDesc.SampleDesc.Count = 1;
+				texDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+				texDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
+				m_pRenderTexture = core::TOOL->GetResourceAtlas().LoadTextureByDescription("RenderTexture", texDesc);
+			}
+#endif // _EDITOR
 		}
 	}
 }

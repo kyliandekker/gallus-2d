@@ -1,6 +1,6 @@
 #include "EngineResource.h"
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{
@@ -36,7 +36,7 @@ namespace tool
 		//-----------------------------------------------------------------------------
 		// EngineResource
 		//-----------------------------------------------------------------------------
-		EngineResource::EngineResource(const std::wstring& a_sName) : m_sName(a_sName)
+		EngineResource::EngineResource(const std::string& a_sName) : m_sName(a_sName)
 		{}
 
 		//-----------------------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ namespace tool
 		}
 
 		//-----------------------------------------------------------------------------------------------------
-		const std::wstring& EngineResource::GetName() const
+		const std::string& EngineResource::GetName() const
 		{
 			return m_sName;
 		}

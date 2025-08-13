@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 
-namespace tool
+namespace gallus
 {
 	//-----------------------------------------------------------------------------
 	// Event

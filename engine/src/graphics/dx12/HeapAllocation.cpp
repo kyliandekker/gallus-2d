@@ -1,10 +1,10 @@
 #include "HeapAllocation.h"
 
 #include "core/Tool.h" 
-#include "graphics/dx12/DX12BaseSystem.h"
+#include "graphics/dx12/DX12System2D.h"
 #include "logger/Logger.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

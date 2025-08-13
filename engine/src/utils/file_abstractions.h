@@ -13,7 +13,7 @@
 
 namespace fs = std::filesystem;
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{

@@ -2,12 +2,12 @@
 
 #include "DataStream.h"
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{
 		//-----------------------------------------------------------------------------
-		// DataStream
+		// ReserveDataStream
 		//-----------------------------------------------------------------------------
 		/// <summary>
 		/// Represents a generic container for raw data, providing utility functions and automatic cleanup

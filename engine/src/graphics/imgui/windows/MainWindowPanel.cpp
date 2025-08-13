@@ -6,7 +6,7 @@
 #include <imgui/imgui_internal.h>
 #include <imgui/imgui_helpers.h>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

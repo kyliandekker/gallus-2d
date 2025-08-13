@@ -1,22 +1,17 @@
+#pragma once
+
 #include "System.h"
 
 #include <wtypes.h>
 
 #include "utils/file_abstractions.h"
+#include "core/ResourceAtlas.h"
+#include "graphics/dx12/DX12System2D.h"
+#include "graphics/win32/Window.h"
+#include "gameplay/EntityComponentSystem.h"
 
-namespace tool
+namespace gallus
 {
-	namespace graphics
-	{
-		namespace win32
-		{
-			class Window;
-		}
-		namespace dx12
-		{
-			class DX12BaseSystem;
-		}
-	}
 	namespace core
 	{
 		//-----------------------------------------------------------------------------
@@ -29,8 +24,6 @@ namespace tool
 		{
 		public:
 			Tool() = default;
-
-			virtual ~Tool();
 
 			/// <summary>
 			/// Initializes the engine and all necessary subsystems with the specified parameters.
@@ -52,6 +45,12 @@ namespace tool
 			void Shutdown();
 
 			/// <summary>
+			/// Retrieves the resource atlas.
+			/// </summary>
+			/// <returns>Reference to the resource atlas.</returns>
+			ResourceAtlas& GetResourceAtlas();
+
+			/// <summary>
 			/// Retrieves the window.
 			/// </summary>
 			/// <returns>Reference to the window.</returns>
@@ -61,16 +60,13 @@ namespace tool
 			/// Retrieves the dx12 system.
 			/// </summary>
 			/// <returns>Reference to the dx12 system.</returns>
-			graphics::dx12::DX12BaseSystem& GetDX12();
+			graphics::dx12::DX12System2D& GetDX12();
 
 			/// <summary>
-			/// Sets the dx12 system.
+			/// Retrieves the ecs.
 			/// </summary>
-			template<typename T>
-			void SetDX12System()
-			{
-				m_pDX12 = new T();
-			}
+			/// <returns>Reference to the ecs.</returns>
+			gameplay::EntityComponentSystem& GetECS();
 
 			/// <summary>
 			/// Retrieves the save directory of the program.
@@ -96,8 +92,10 @@ namespace tool
 			/// </summary>
 			void Loop();
 		private:
-			graphics::win32::Window* m_pWindow = nullptr;
-			graphics::dx12::DX12BaseSystem* m_pDX12 = nullptr;
+			ResourceAtlas m_ResourceAtlas;
+			graphics::win32::Window m_Window;
+			graphics::dx12::DX12System2D m_DX12;
+			gameplay::EntityComponentSystem m_ECS;
 
 			std::filesystem::path m_sSaveDirectory;
 		};

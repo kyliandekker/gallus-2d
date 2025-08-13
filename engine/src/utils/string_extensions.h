@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace tool
+namespace gallus
 {
 	namespace string_extensions
 	{

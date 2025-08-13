@@ -4,7 +4,7 @@
 
 #include "BaseWindow.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

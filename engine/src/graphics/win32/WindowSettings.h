@@ -4,7 +4,7 @@
 
 #include <glm/vec2.hpp>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

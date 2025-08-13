@@ -2,7 +2,7 @@
 
 #include "core/Settings.h"
 
-namespace tool
+namespace gallus
 {
 	namespace editor
 	{

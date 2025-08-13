@@ -9,7 +9,7 @@
 #include "../ImGuiWindow.h"
 #include "core/Tool.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -40,7 +40,7 @@ namespace tool
 			bool BaseWindow::WindowBegin()
 			{
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(m_Window.GetIconFont()->FontSize, m_Window.GetIconFont()->FontSize));
-				bool b = ImGui::Begin(ImGui::IMGUI_FORMAT_ID(m_sName, WINDOW_ID, string_extensions::StringToUpper(m_sWindowID)).c_str(), &m_bEnabled, m_Flags);
+				const bool b = ImGui::Begin(ImGui::IMGUI_FORMAT_ID(m_sName, WINDOW_ID, string_extensions::StringToUpper(m_sWindowID)).c_str(), &m_bEnabled, m_Flags);
 				return b;
 			}
 

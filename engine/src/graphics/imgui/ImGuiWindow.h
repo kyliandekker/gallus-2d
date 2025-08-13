@@ -12,13 +12,13 @@
 #include <glm/vec2.hpp>
 #include <string>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
 		namespace dx12
 		{
-			class DX12BaseSystem;
+			class DX12System2D;
 			class CommandList;
 			class Texture;
 		}
@@ -90,6 +90,8 @@ namespace tool
 				/// Called when the render target is cleaned.
 				/// </summary>
 				void OnRenderTargetCleaned();
+
+				void UpdateMouseCursor();
 			public:
 				void Render(std::shared_ptr<dx12::CommandList> a_pCommandList);
 
@@ -171,7 +173,7 @@ namespace tool
 
 				std::vector<BaseWindow*> m_aWindows;
 
-				friend dx12::DX12BaseSystem;
+				friend dx12::DX12System2D;
 			};
 		}
 	}

@@ -10,7 +10,7 @@
 #include "utils/file_abstractions.h"
 #include "logger/Logger.h"
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{
@@ -26,7 +26,7 @@ namespace tool
 		bool Settings::Load()
 		{
 			DataStream data;
-			fs::path path = tool::core::TOOL->GetSaveDirectory().generic_string() + "/" + m_sFileName;
+			const fs::path path = TOOL->GetSaveDirectory().generic_string() + "/" + m_sFileName;
 
 			if (!file::LoadFile(path, data))
 			{
@@ -48,7 +48,9 @@ namespace tool
 				return false;
 			}
 
+#if LOG_SETTINGS == 1
 			LOGF(LOGSEVERITY_SUCCESS, LOG_CATEGORY_CORE, "Loaded settings: \"%s\".", path.filename().generic_string().c_str());
+#endif
 
 			return true;
 		}
@@ -69,7 +71,7 @@ namespace tool
 			rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 			document.Accept(writer);
 
-			fs::path path = tool::core::TOOL->GetSaveDirectory().generic_string() + "/" + m_sFileName;
+			const fs::path path = TOOL->GetSaveDirectory().generic_string() + "/" + m_sFileName;
 			file::CreateDirectory(path.parent_path());
 			if (!file::SaveFile(path, core::Data(buffer.GetString(), buffer.GetSize())))
 			{
@@ -77,7 +79,9 @@ namespace tool
 				return false;
 			}
 
+#if LOG_SETTINGS == 1
 			LOGF(LOGSEVERITY_SUCCESS, LOG_CATEGORY_CORE, "Saved settings: \"%s\".", path.generic_string().c_str());
+#endif
 
 			return true;
 		}

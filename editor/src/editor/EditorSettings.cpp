@@ -20,7 +20,7 @@
 #define JSON_USE_LIGHTING_VAR "useLighting"
 #define JSON_USE_GRID_VAR "useGrid"
 
-namespace tool
+namespace gallus
 {
     namespace editor
     {

@@ -3,7 +3,7 @@
 #include <string>
 #include <filesystem>
 
-namespace tool
+namespace gallus
 {
 	namespace core
 	{
@@ -44,7 +44,7 @@ namespace tool
 			/// Constructs an engine resource with a given name.
 			/// </summary>
 			/// <param name="a_sName">Name of the resource.</param>
-			EngineResource(const std::wstring& a_sName);
+			EngineResource(const std::string& a_sName);
 
 			/// <summary>
 			/// Returns whether the resource is a valid resource.
@@ -92,7 +92,7 @@ namespace tool
 			/// Returns the name of the resource.
 			/// </summary>
 			/// <returns>Name of the resource.</returns>
-			const std::wstring& GetName() const;
+			const std::string& GetName() const;
 
 			/// <summary>
 			/// Returns the path of the resource.
@@ -105,7 +105,7 @@ namespace tool
 			EngineResourceCategory m_ResourceCategory = EngineResourceCategory::Game;
 			ResourceType m_ResourceType = ResourceType::ResourceType_Unknown;
 
-			std::wstring m_sName;
+			std::string m_sName;
 			std::filesystem::path m_Path;
 
 			friend class ResourceAtlas;

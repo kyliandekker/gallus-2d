@@ -1,6 +1,6 @@
 #include "EditorTool.h"
 
-namespace tool
+namespace gallus
 {
     namespace core
     {

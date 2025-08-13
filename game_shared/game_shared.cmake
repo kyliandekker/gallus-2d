@@ -1,7 +1,7 @@
-project(game_common)
+project(game_shared)
 
-file(GLOB_RECURSE HEADERS ${CMAKE_SOURCE_DIR}/game_common/src/*.h)
-file(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/game_common/src/*.cpp)
+file(GLOB_RECURSE HEADERS ${CMAKE_SOURCE_DIR}/game_shared/src/*.h)
+file(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/game_shared/src/*.cpp)
 
 set(IMGUI
     ${CMAKE_SOURCE_DIR}/external/imgui/imgui.cpp
@@ -28,7 +28,7 @@ add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES} ${DX12} ${TINY_GLTF})
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}/engine/src
-    ${CMAKE_SOURCE_DIR}/game_common/src
+    ${CMAKE_SOURCE_DIR}/game_shared/src
     ${CMAKE_SOURCE_DIR}/external
 )
 

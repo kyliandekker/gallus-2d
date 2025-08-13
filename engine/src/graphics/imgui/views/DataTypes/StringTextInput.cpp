@@ -9,7 +9,7 @@
 #include "graphics/imgui/ImGuiWindow.h"
 #include "graphics/imgui/font_icon.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

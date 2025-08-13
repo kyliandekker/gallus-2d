@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -162,7 +162,7 @@ namespace tool
 				RECT rect;
 				GetClientRect(m_hWnd, &rect);
 
-				glm::ivec2 size = glm::ivec2(rect.right - rect.left, rect.bottom - rect.top);
+				const glm::ivec2 size = glm::ivec2(rect.right - rect.left, rect.bottom - rect.top);
 				return size;
 			}
 
@@ -178,14 +178,12 @@ namespace tool
 			//-----------------------------------------------------------------------------------------------------
 			void Window::SetSize(const glm::ivec2& a_vSize)
 			{
-				RECT rect;
-				// Get the current window position and size
-				GetWindowRect(m_hWnd, &rect);
+				RECT rc = { 0, 0, a_vSize.x, a_vSize.y };
+				AdjustWindowRectEx(&rc, GetWindowLong(m_hWnd, GWL_STYLE), FALSE, GetWindowLong(m_hWnd, GWL_EXSTYLE));
 
-				// Adjust the window rectangle to account for the window's non-client area (borders, title bar, etc.)
-				AdjustWindowRect(&rect, GetWindowLong(m_hWnd, GWL_STYLE), FALSE);
+				const glm::ivec2 totalSize(rc.right - rc.left, rc.bottom - rc.top);
 
-				ChangeSize(GetPosition(), a_vSize);
+				ChangeSize(GetPosition(), totalSize);
 			}
 
 			//-----------------------------------------------------------------------------------------------------

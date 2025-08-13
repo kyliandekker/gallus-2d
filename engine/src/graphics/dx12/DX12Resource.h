@@ -7,7 +7,7 @@
 #include <string>
 #include <filesystem>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -32,13 +32,13 @@ namespace tool
 				/// </summary>
 				/// <param name="a_ResourceDesc">Resource description.</param>
 				/// <param name="a_sName">Name of the resource.</param>
-				DX12Resource(const D3D12_RESOURCE_DESC& a_ResourceDesc, const std::wstring& a_sName);
+				DX12Resource(const D3D12_RESOURCE_DESC& a_ResourceDesc, const std::string& a_sName);
 
 				/// <summary>
 				/// Constructs a dx12 resource with a given name.
 				/// </summary>
 				/// <param name="a_sName">Name of the resource.</param>
-				DX12Resource(const std::wstring& a_sName);
+				DX12Resource(const std::string& a_sName);
 				virtual ~DX12Resource();
 
 				/// <summary>
@@ -49,7 +49,7 @@ namespace tool
 				/// <param name="a_Heap">Heap property options.</param>
 				/// <param name="a_ResourceState">Resource state it will transition into.</param>
 				/// <param name="a_pOptimizedClearValue">Clear value of the resource.</param>
-				bool CreateResource(const D3D12_RESOURCE_DESC& a_ResourceDesc, const std::wstring& a_sName, const D3D12_HEAP_PROPERTIES& a_Heap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), const D3D12_RESOURCE_STATES a_ResourceState = D3D12_RESOURCE_STATE_COMMON, const D3D12_CLEAR_VALUE* a_pOptimizedClearValue = nullptr);
+				bool CreateResource(const D3D12_RESOURCE_DESC& a_ResourceDesc, const std::string& a_sName, const D3D12_HEAP_PROPERTIES& a_Heap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), const D3D12_RESOURCE_STATES a_ResourceState = D3D12_RESOURCE_STATE_COMMON, const D3D12_CLEAR_VALUE* a_pOptimizedClearValue = nullptr);
 
 				/// <summary>
 				/// Returns whether the resource is a valid resource.
@@ -96,6 +96,7 @@ namespace tool
 			protected:
 				D3D12_FEATURE_DATA_FORMAT_SUPPORT m_FormatSupport{};
 				Microsoft::WRL::ComPtr<ID3D12Resource> m_pResource = nullptr;
+				std::wstring m_wsName;
 
 				friend class ResourceAtlas;
 			};

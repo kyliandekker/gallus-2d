@@ -12,7 +12,7 @@
 #include "font_icon.h"
 
 #include "graphics/win32/Window.h"
-#include "graphics/dx12/DX12BaseSystem.h"
+#include "graphics/dx12/DX12System2D.h"
 #include "graphics/dx12/CommandQueue.h"
 #include "graphics/dx12/CommandList.h"
 #include "windows/BaseWindow.h"
@@ -20,7 +20,7 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -83,7 +83,7 @@ namespace tool
 			//-----------------------------------------------------------------------------------------------------
 			bool ImGuiWindow::CreateContextDX12()
 			{
-				dx12::DX12BaseSystem& dx12window = core::TOOL->GetDX12();
+				dx12::DX12System2D& dx12window = core::TOOL->GetDX12();
 				m_SrvIndex = dx12window.GetSRV().Allocate();
 
 				if (!ImGui_ImplDX12_Init(dx12window.GetDevice().Get(), dx12::g_iBufferCount,
@@ -110,7 +110,7 @@ namespace tool
 				(void) io;
 
 				// On Windows 8.1+:
-				UINT dpi = GetDpiForWindow(tool::core::TOOL->GetWindow().GetHWnd()); // returns DPI, e.g., 96, 120, 144
+				UINT dpi = GetDpiForWindow(core::TOOL->GetWindow().GetHWnd()); // returns DPI, e.g., 96, 120, 144
 				float dp = dpi / 96.0f; // 96 is the default DPI (100%)
 
 				m_FontSize *= dp;
@@ -161,6 +161,27 @@ namespace tool
 				ImVec4* colors = style.Colors;
 
 				SetOwnDark(style, colors);
+
+				style.WindowBorderSize = 1;
+				style.WindowRounding = 0;
+				style.WindowPadding = ImVec2(0, 0);
+				style.ItemInnerSpacing = ImVec2(0, 0);
+				style.TouchExtraPadding = ImVec2(0.00f, 0.00f);
+				style.IndentSpacing = 25;
+				style.ScrollbarSize = 15;
+				style.GrabMinSize = 10;
+				style.TabRounding = 8;
+				style.TabBorderSize = 1;
+				style.PopupBorderSize = 1;
+				style.FrameBorderSize = 1;
+				style.ChildBorderSize = 1;
+				style.ChildRounding = 0;
+				style.FrameRounding = 0;
+				style.PopupRounding = 0;
+				style.ScrollbarRounding = 8;
+				style.GrabRounding = 8;
+				style.LogSliderDeadzone = 4;
+				style.FramePadding = ImVec2(0, 0);
 			}
 
 			//-----------------------------------------------------------------------------------------------------
@@ -207,7 +228,7 @@ namespace tool
 
 				ImGui::PushFont(m_IconFontM);
 
-				ImGuiIO& io = ImGui::GetIO();
+				const ImGuiIO& io = ImGui::GetIO();
 
 				if (!m_aWindows.empty())
 				{
@@ -218,12 +239,54 @@ namespace tool
 					}
 				}
 
+				UpdateMouseCursor();
+
 				ImGui::PopFont();
 
 				ImGui::EndFrame();
 				ImGui::Render();
 
 				ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), a_pCommandList->GetCommandList().Get());
+			}
+
+			void ImGuiWindow::UpdateMouseCursor()
+			{
+				if (ImGui::IsAnyItemHovered())
+				{
+					// Set the cursor to a hand pointer
+					if (ImGui::GetMouseCursor() == ImGuiMouseCursor_Arrow)
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+					}
+
+					ImGuiIO& io = ImGui::GetIO();
+					ImGuiMouseCursor imgui_cursor = ImGui::GetMouseCursor();
+					if (io.MouseDrawCursor || imgui_cursor == ImGuiMouseCursor_None)
+					{
+						::SetCursor(NULL);
+					}
+					else
+					{
+						// Map ImGui cursor types to Win32 system cursors
+						LPTSTR win32_cursor = IDC_ARROW; // Default arrow
+
+						switch (imgui_cursor)
+						{
+							case ImGuiMouseCursor_TextInput:    win32_cursor = IDC_IBEAM; break;
+							case ImGuiMouseCursor_ResizeAll:    win32_cursor = IDC_SIZEALL; break;
+							case ImGuiMouseCursor_ResizeNS:     win32_cursor = IDC_SIZENS; break;
+							case ImGuiMouseCursor_ResizeEW:     win32_cursor = IDC_SIZEWE; break;
+							case ImGuiMouseCursor_ResizeNESW:   win32_cursor = IDC_SIZENESW; break;
+							case ImGuiMouseCursor_ResizeNWSE:   win32_cursor = IDC_SIZENWSE; break;
+							case ImGuiMouseCursor_Hand:         win32_cursor = IDC_HAND; break;
+							case ImGuiMouseCursor_NotAllowed:   win32_cursor = IDC_NO; break;
+							default:                            win32_cursor = IDC_ARROW; break;
+						}
+
+						// Set the system cursor using Win32 API
+						::SetCursor(LoadCursor(NULL, win32_cursor));
+					}
+				}
 			}
 
 			//-----------------------------------------------------------------------------------------------------

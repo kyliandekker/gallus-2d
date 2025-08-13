@@ -12,7 +12,7 @@
 #include "core/Event.h"
 #include "utils/file_abstractions.h"
 
-namespace tool
+namespace gallus
 {
 	// Category defines
 	#define LOG_CATEGORY_MEMORY "MEMORY"
@@ -86,7 +86,7 @@ namespace tool
 
 	namespace logger
 	{
-		#define ASSERT_LEVEL LogSeverity::LOGSEVERITY_ERROR
+		#define ASSERT_LEVEL LogSeverity::LOGSEVERITY_ASSERT
 
 		/// 0 = full path, 1 = filename, 2 = stem, 3 = parent path + filename
 		#define LOG_SHORT_FILENAMES 3

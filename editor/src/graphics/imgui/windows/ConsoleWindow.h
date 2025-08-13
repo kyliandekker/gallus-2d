@@ -1,6 +1,7 @@
 #pragma once
 
 #ifndef IMGUI_DISABLE
+#ifdef _EDITOR
 
 #include "graphics/imgui/windows/BaseWindow.h"
 
@@ -10,7 +11,7 @@
 #include "logger/Logger.h"
 #include "graphics/imgui/views/DataTypes/StringTextInput.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
@@ -25,6 +26,9 @@ namespace tool
 				/// <summary>
 				/// A window that displays and manages the logger messages of the project.
 				/// </summary>
+				//-----------------------------------------------------------------------------
+				// ConsoleWindow
+				//-----------------------------------------------------------------------------
 				class ConsoleWindow : public BaseWindow
 				{
 				public:
@@ -84,4 +88,5 @@ namespace tool
 	}
 }
 
+#endif // _EDITOR
 #endif // IMGUI_DISABLE

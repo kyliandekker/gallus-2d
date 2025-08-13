@@ -5,7 +5,7 @@
 #include <vector>
 #include <mutex>
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{

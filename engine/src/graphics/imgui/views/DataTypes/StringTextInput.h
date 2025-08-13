@@ -9,7 +9,7 @@
 
 #include "core/Data.h"
 
-namespace tool
+namespace gallus
 {
 	namespace graphics
 	{
