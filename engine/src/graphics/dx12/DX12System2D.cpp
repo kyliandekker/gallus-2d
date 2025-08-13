@@ -191,7 +191,7 @@ namespace gallus
 					return false;
 				}
 
-				std::shared_ptr<Texture> texture = core::TOOL->GetResourceAtlas().LoadTexture("tex_layton.png", cCommandList); // Default texture.
+				std::shared_ptr<Texture> texture = core::TOOL->GetResourceAtlas().LoadTexture("tex_missing.png", cCommandList); // Default texture.
 				texture->SetResourceCategory(core::EngineResourceCategory::Missing);
 				texture->SetIsDestroyable(false);
 
