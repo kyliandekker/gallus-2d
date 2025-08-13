@@ -240,6 +240,7 @@ namespace gallus
 				return m_EventQueue;
 			}
 
+			//-----------------------------------------------------------------------------------------------------
 			void Window::SaveSettings()
 			{
 				m_WindowSettings.SetPosition(GetPosition());

@@ -62,7 +62,7 @@ namespace gallus
 				/// <returns>True if the settings were saved successfully, otherwise false.</returns>
 				bool SaveVars(rapidjson::Document& a_Document, rapidjson::Document::AllocatorType& a_Allocator) const;
 
-				glm::ivec2 m_vSize; /// The window size.
+				glm::ivec2 m_vSize = { 400, 400 }; /// The window size.
 				glm::ivec2 m_vPosition; /// The window position.
 			};
 		}
