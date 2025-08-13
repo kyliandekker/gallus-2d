@@ -6,6 +6,7 @@
 #include "utils/file_abstractions.h"
 #include "core/Tool.h"
 #include "resource.h"
+#include "gameplay/systems/MeshSystem.h"
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
@@ -27,6 +28,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
 	gallus::core::TOOL->SetSaveDirectory(saveDirPath);
 
 	gallus::core::TOOL->Initialize(hInstance, name);
+
+	auto entityId = gallus::core::TOOL->GetECS().CreateEntity("New Sprite");
+	gallus::gameplay::MeshComponent* meshComp = reinterpret_cast<gallus::gameplay::MeshComponent*>(gallus::core::TOOL->GetECS().GetSystem<gallus::gameplay::MeshSystem>().CreateBaseComponent(entityId));
+	meshComp->SetMesh(gallus::core::TOOL->GetResourceAtlas().GetDefaultMesh());
+	meshComp->SetShader(gallus::core::TOOL->GetResourceAtlas().GetDefaultShader());
+	meshComp->SetTexture(gallus::core::TOOL->GetResourceAtlas().GetDefaultTexture());
 
 	// Load icons.
 	HICON hIconLarge = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));

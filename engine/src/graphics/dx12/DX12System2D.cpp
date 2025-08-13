@@ -736,7 +736,7 @@ namespace gallus
 				//------------------------------------------
 				// RENDER GAME
 				//------------------------------------------
-				Render3D(commandQueue, commandList, editorRtv);
+				Render3D(commandQueue, commandList, rtv);
 
 				//------------------------------------------
 				// EDITOR ONLY
