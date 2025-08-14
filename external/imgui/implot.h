@@ -47,9 +47,9 @@
 #pragma once
 #include "imgui.h"
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Macros and Defines
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Define attributes of all API symbols declarations (e.g. for DLL under Windows)
 // Using ImPlot via a shared library is not recommended, because we don't guarantee
@@ -68,9 +68,9 @@
 // Macro for templated plotting functions; keeps header clean.
 #define IMPLOT_TMP template <typename T> IMPLOT_API
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Enums and Types
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Forward declarations
 struct ImPlotContext;             // ImPlot context (opaque struct, see implot_internal.h)
@@ -575,9 +575,9 @@ struct ImPlotInputMap {
     IMPLOT_API ImPlotInputMap();
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Callbacks
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Callback signature for axis tick label formatter.
 typedef int (*ImPlotFormatter)(double value, char* buff, int size, void* user_data);
@@ -590,9 +590,9 @@ typedef double (*ImPlotTransform)(double value, void* user_data);
 
 namespace ImPlot {
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Contexts
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Creates a new ImPlot context. Call this after ImGui::CreateContext.
 IMPLOT_API ImPlotContext* CreateContext();
@@ -609,9 +609,9 @@ IMPLOT_API void SetCurrentContext(ImPlotContext* ctx);
 // See GImGui documentation in imgui.cpp for more details.
 IMPLOT_API void SetImGuiContext(ImGuiContext* ctx);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Begin/End Plot
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Starts a 2D plotting context. If this function returns true, EndPlot() MUST
 // be called! You are encouraged to use the following convention:
@@ -635,9 +635,9 @@ IMPLOT_API bool BeginPlot(const char* title_id, const ImVec2& size=ImVec2(-1,0),
 // of an if statement conditioned on BeginPlot(). See example above.
 IMPLOT_API void EndPlot();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Begin/End Subplots
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Starts a subdivided plotting context. If the function returns true,
 // EndSubplots() MUST be called! Call BeginPlot/EndPlot AT MOST [rows*cols]
@@ -697,9 +697,9 @@ IMPLOT_API bool BeginSubplots(const char* title_id,
 // of an if statement conditioned on BeginSublots(). See example above.
 IMPLOT_API void EndSubplots();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Setup
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // The following API allows you to setup and customize various aspects of the
 // current plot. The functions should be called immediately after BeginPlot
@@ -763,9 +763,9 @@ IMPLOT_API void SetupMouseText(ImPlotLocation location, ImPlotMouseTextFlags fla
 // Note that calling this function is OPTIONAL; it will be called by the first subsequent setup-locking API call.
 IMPLOT_API void SetupFinish();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] SetNext
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Though you should default to the `Setup` API above, there are some scenarios
 // where (re)configuring a plot or axis before `BeginPlot` is needed (e.g. if
@@ -798,9 +798,9 @@ IMPLOT_API void SetNextAxesLimits(double x_min, double x_max, double y_min, doub
 // Sets all upcoming axes to auto fit to their data.
 IMPLOT_API void SetNextAxesToFit();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Plot Items
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // The main plotting API is provied below. Call these functions between
 // Begin/EndPlot and after any Setup API calls. Each plots data on the current
@@ -917,9 +917,9 @@ IMPLOT_API void PlotText(const char* text, double x, double y, const ImVec2& pix
 // Plots a dummy item (i.e. adds a legend entry colored by ImPlotCol_Line)
 IMPLOT_API void PlotDummy(const char* label_id, ImPlotDummyFlags flags=0);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Plot Tools
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // The following can be used to render interactive elements and/or annotations.
 // Like the item plotting functions above, they apply to the current x and y
@@ -949,9 +949,9 @@ IMPLOT_API void TagY(double y, const ImVec4& col, bool round = false);
 IMPLOT_API void TagY(double y, const ImVec4& col, const char* fmt, ...)           IM_FMTARGS(3);
 IMPLOT_API void TagYV(double y, const ImVec4& col, const char* fmt, va_list args) IM_FMTLIST(3);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Plot Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Select which axis/axes will be used for subsequent plot elements.
 IMPLOT_API void SetAxis(ImAxis axis);
@@ -1004,9 +1004,9 @@ IMPLOT_API bool BeginAlignedPlots(const char* group_id, bool vertical = true);
 // Only call EndAlignedPlots() if BeginAlignedPlots() returns true!
 IMPLOT_API void EndAlignedPlots();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Legend Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Begin a popup for a legend entry.
 IMPLOT_API bool BeginLegendPopup(const char* label_id, ImGuiMouseButton mouse_button=1);
@@ -1015,9 +1015,9 @@ IMPLOT_API void EndLegendPopup();
 // Returns true if a plot item legend entry is hovered.
 IMPLOT_API bool IsLegendEntryHovered(const char* label_id);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Drag and Drop
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Turns the current plot's plotting area into a drag and drop target. Don't forget to call EndDragDropTarget!
 IMPLOT_API bool BeginDragDropTargetPlot();
@@ -1040,9 +1040,9 @@ IMPLOT_API bool BeginDragDropSourceItem(const char* label_id, ImGuiDragDropFlags
 // Ends a drag and drop source (currently just an alias for ImGui::EndDragDropSource).
 IMPLOT_API void EndDragDropSource();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Styling
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Styling colors in ImPlot works similarly to styling colors in ImGui, but
 // with one important difference. Like ImGui, all style colors are stored in an
@@ -1126,9 +1126,9 @@ IMPLOT_API const char* GetStyleColorName(ImPlotCol idx);
 // Returns the null terminated string name for an ImPlotMarker.
 IMPLOT_API const char* GetMarkerName(ImPlotMarker idx);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Colormaps
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Item styling is based on colormaps when the relevant ImPlotCol_XXX is set to
 // IMPLOT_AUTO_COL (default). Several built-in colormaps are available. You can
@@ -1192,9 +1192,9 @@ IMPLOT_API bool ColormapButton(const char* label, const ImVec2& size = ImVec2(0,
 // need this function, but it is available for applications that require runtime colormap swaps (e.g. Heatmaps demo).
 IMPLOT_API void BustColorCache(const char* plot_title_id = nullptr);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Input Mapping
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Provides access to input mapping structure for permanant modifications to controls for pan, select, etc.
 IMPLOT_API ImPlotInputMap& GetInputMap();
@@ -1204,9 +1204,9 @@ IMPLOT_API void MapInputDefault(ImPlotInputMap* dst = nullptr);
 // Reverse input mapping: pan = RMB drag, box select = LMB drag, fit = LMB double click, context menu = RMB click, zoom = scroll.
 IMPLOT_API void MapInputReverse(ImPlotInputMap* dst = nullptr);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Miscellaneous
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Render icons similar to those that appear in legends (nifty for data lists).
 IMPLOT_API void ItemIcon(const ImVec4& col);
@@ -1233,18 +1233,18 @@ IMPLOT_API void ShowUserGuide();
 // Shows ImPlot metrics/debug information window.
 IMPLOT_API void ShowMetricsWindow(bool* p_popen = nullptr);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Demo
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Shows the ImPlot demo window (add implot_demo.cpp to your sources!)
 IMPLOT_API void ShowDemoWindow(bool* p_open = nullptr);
 
 }  // namespace ImPlot
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Obsolete API
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // The following functions will be removed! Keep your copy of implot up to date!
 // Occasionally set '#define IMPLOT_DISABLE_OBSOLETE_FUNCTIONS' to stay ahead.

@@ -22,9 +22,9 @@ namespace gallus
 {
 	namespace gameplay
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// MeshComponent
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void MeshComponent::Init()
 		{
 			m_pShader = core::TOOL->GetResourceAtlas().GetDefaultShader();
@@ -32,25 +32,25 @@ namespace gallus
 			m_pMesh = core::TOOL->GetResourceAtlas().GetDefaultMesh();
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void MeshComponent::SetMesh(std::shared_ptr<graphics::dx12::Mesh> a_pMesh)
 		{
 			m_pMesh = a_pMesh;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void MeshComponent::SetShader(std::shared_ptr<graphics::dx12::Shader> a_pShader)
 		{
 			m_pShader = a_pShader;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void MeshComponent::SetTexture(std::shared_ptr<graphics::dx12::Texture> a_pTexture)
 		{
 			m_pTexture = a_pTexture;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void MeshComponent::Render(std::shared_ptr<graphics::dx12::CommandList> a_pCommandList, const EntityID& a_EntityID, const graphics::dx12::Camera& a_Camera)
 		{
 			const DirectX::XMMATRIX viewMatrix = a_Camera.GetViewMatrix();
@@ -89,7 +89,7 @@ namespace gallus
 			}
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void MeshComponent::Serialize(rapidjson::Value& a_Document, rapidjson::Document::AllocatorType& a_Allocator) const
 		{
 			if (!a_Document.IsObject())
@@ -128,7 +128,7 @@ namespace gallus
 			);
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void MeshComponent::Deserialize(const rapidjson::Value& a_Document, rapidjson::Document::AllocatorType& a_Allocator)
 		{
 			if (!a_Document.IsObject())

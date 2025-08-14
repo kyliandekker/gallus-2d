@@ -3748,7 +3748,7 @@ interface ID3D12CommandQueue
     D3D12_COMMAND_QUEUE_DESC GetDesc();
 }
 
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 // The system LUID struct isn't defined in wtypes, so we repeat it here just
 // for the MIDL compiler.
 cpp_quote("#ifdef __midl")
@@ -6476,7 +6476,7 @@ interface ID3D12GBVDiagnostics
     void GBVReserved1();
 }
 
-//----------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 // Old types which are still supported by the runtime for app-compat
 
 cpp_quote("#endif /* WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP | WINAPI_PARTITION_GAMES) */")

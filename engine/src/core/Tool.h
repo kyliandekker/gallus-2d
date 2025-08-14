@@ -14,9 +14,9 @@ namespace gallus
 {
 	namespace core
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// Tool
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Main tool that manages all systems in the program, like initialization, startup, update and shutdown.
 		/// </summary>
@@ -38,11 +38,6 @@ namespace gallus
 			/// </summary>
 			/// <returns>True if the destruction is successful, otherwise false.</returns>
 			virtual bool Destroy() override;
-
-			/// <summary>
-			/// Shuts down the engine.
-			/// </summary>
-			void Shutdown();
 
 			/// <summary>
 			/// Retrieves the resource atlas.
@@ -86,11 +81,6 @@ namespace gallus
 				m_sSaveDirectory = a_sSaveDirectory;
 				file::CreateDirectory(a_sSaveDirectory);
 			}
-
-			/// <summary>
-			/// Main loop of the program.
-			/// </summary>
-			void Loop();
 		private:
 			ResourceAtlas m_ResourceAtlas;
 			graphics::win32::Window m_Window;

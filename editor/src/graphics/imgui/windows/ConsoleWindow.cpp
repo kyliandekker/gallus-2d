@@ -18,9 +18,9 @@ namespace gallus
 		{
 			namespace editor
 			{
-				//-----------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				// ConsoleWindow
-				//-----------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				ConsoleWindow::ConsoleWindow(ImGuiWindow& a_Window) : BaseWindow(a_Window, ImGuiWindowFlags_NoCollapse, std::string(font::ICON_CONSOLE) + " Console", "Console"), m_SearchBar(a_Window)
 				{
 					m_SearchBar.Initialize("");
@@ -29,7 +29,7 @@ namespace gallus
 					logger::LOGGER.OnMessageLogged() += std::bind(&ConsoleWindow::LoggerCallback, this, std::placeholders::_1);
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				ConsoleWindow::~ConsoleWindow()
 				{}
 
@@ -57,7 +57,7 @@ namespace gallus
 					ImGui::ConvertColorsRgba(255, 110, 220, 255),
 				};
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				void ConsoleWindow::Render()
 				{
 					gallus::editor::EditorSettings& editorSettings = core::EDITOR_TOOL->GetEditorSettings();
@@ -296,26 +296,26 @@ namespace gallus
 					ImGui::EndChild();
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				bool ConsoleWindow::Initialize()
 				{
 					return BaseWindow::Initialize();
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				bool ConsoleWindow::Destroy()
 				{
 					logger::LOGGER.OnMessageLogged() -= std::bind(&ConsoleWindow::LoggerCallback, this, std::placeholders::_1);
 					return BaseWindow::Destroy();
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				void ConsoleWindow::Clear()
 				{
 
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				void ConsoleWindow::AddMessage(const logger::LoggerMessage& a_Message)
 				{
 					std::lock_guard<std::mutex> lock(MESSAGE_MUTEX);
@@ -323,7 +323,7 @@ namespace gallus
 					m_NeedsRefresh = true;
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				void ConsoleWindow::LoggerCallback(const logger::LoggerMessage& a_Message)
 				{
 					AddMessage(a_Message);

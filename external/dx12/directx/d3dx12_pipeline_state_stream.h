@@ -15,11 +15,11 @@
 #include "d3d12.h"
 #include "d3dx12_core.h"
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Pipeline State Stream Helpers
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Stream Subobjects, i.e. elements of a stream
 
 struct DefaultSampleMask { operator UINT() noexcept { return UINT_MAX; } };
@@ -82,7 +82,7 @@ typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< UINT,                          
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< D3D12_CACHED_PIPELINE_STATE,        D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_CACHED_PSO>                        CD3DX12_PIPELINE_STATE_STREAM_CACHED_PSO;
 typedef CD3DX12_PIPELINE_STATE_STREAM_SUBOBJECT< CD3DX12_VIEW_INSTANCING_DESC,       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_VIEW_INSTANCING, CD3DX12_DEFAULT>  CD3DX12_PIPELINE_STATE_STREAM_VIEW_INSTANCING;
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Stream Parser Helpers
 
 struct ID3DX12PipelineParserCallbacks

@@ -14,9 +14,9 @@ namespace gallus
 {
 	namespace logger
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// LoggerMessage
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		LoggerMessage::LoggerMessage(const std::string& a_sRawMessage, const std::string& a_sCategory, const fs::path& a_Location, uint32_t a_iLine, LogSeverity a_Severity, const std::chrono::system_clock::time_point& a_Time) :
 			m_sRawMessage(a_sRawMessage),
 			m_sCategory(a_sCategory),
@@ -26,37 +26,37 @@ namespace gallus
 			m_Time(a_Time)
 		{}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const std::string& LoggerMessage::GetRawMessage() const
 		{
 			return m_sRawMessage;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const fs::path& LoggerMessage::GetLocation() const
 		{
 			return m_Location;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		uint32_t LoggerMessage::GetLine() const
 		{
 			return m_iLine;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const std::string& LoggerMessage::GetCategory() const
 		{
 			return m_sCategory;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		LogSeverity LoggerMessage::GetSeverity() const
 		{
 			return m_Severity;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const std::chrono::system_clock::time_point& LoggerMessage::GetTime() const
 		{
 			return m_Time;
@@ -65,9 +65,9 @@ namespace gallus
 		FILE* s_pConsole = nullptr;
 		FILE* s_pLogFile = nullptr;
 
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// Logger
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool Logger::InitThreadWorker()
 		{
 			// Terminal/Console initialization for debug builds.
@@ -113,7 +113,7 @@ namespace gallus
 			return true;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void Logger::Finalize()
 		{
 #ifdef _DEBUG
@@ -153,7 +153,7 @@ namespace gallus
 			COLOR_PINK, // AWESOME
 		};
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		Logger::~Logger()
 		{
 			if (s_pLogFile)
@@ -163,7 +163,7 @@ namespace gallus
 			}
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void Logger::Loop()
 		{
 			// This is a loop because this makes it so that it will display all messages before destruction.
@@ -207,20 +207,20 @@ namespace gallus
 			}
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool Logger::Destroy()
 		{
 			LOG(LOGSEVERITY_INFO, CATEGORY_LOGGER, "Destroying logger.");
 			return ThreadedSystem::Destroy();
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void Logger::Log(LogSeverity a_Severity, const char* a_sCategory, const char* a_sMessage, const char* a_sFile, int a_iLine)
 		{
 			PrintMessage(a_Severity, a_sCategory, a_sMessage, a_sFile, a_iLine);
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void Logger::LogF(LogSeverity a_Severity, const char* a_sCategory, const char* a_sMessage, const char* a_sFile, int a_iLine, ...)
 		{
 			va_list va_format_list;
@@ -235,7 +235,7 @@ namespace gallus
 			free(formatted_message);
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void Logger::PrintMessage(LogSeverity a_Severity, const char* a_sCategory, const char* a_sMessage, const char* a_sFile, int a_iLine)
 		{
 			const std::string fileName = a_sFile;
@@ -246,13 +246,13 @@ namespace gallus
 			WakeUp();
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		SimpleEvent<LoggerMessage>& Logger::OnMessageLogged()
 		{
 			return m_eOnMessageLogged;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool Logger::Sleep() const
 		{
 			std::scoped_lock lock(m_MessagesMutex);

@@ -10,15 +10,15 @@ namespace gallus
 	{
 		namespace dx12
 		{
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			// CommandList
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList2>& CommandList::GetCommandList()
 			{
 				return m_pCommandList;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool CommandList::CreateCommandList(Microsoft::WRL::ComPtr<ID3D12CommandAllocator>& a_pAllocator, D3D12_COMMAND_LIST_TYPE a_CommandListType)
 			{
 				Microsoft::WRL::ComPtr<ID3D12Device2>& device = core::TOOL->GetDX12().GetDevice();
@@ -31,7 +31,7 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void CommandList::UpdateBufferResource(
 				ID3D12Resource** a_pDestinationResource,
 				ID3D12Resource** a_pIntermediateResource,
@@ -86,7 +86,7 @@ namespace gallus
 				}
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void CommandList::TransitionResource(Microsoft::WRL::ComPtr<ID3D12Resource> a_pResource, D3D12_RESOURCE_STATES a_BeforeState, D3D12_RESOURCE_STATES a_AfterState)
 			{
 				CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(

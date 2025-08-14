@@ -15,18 +15,20 @@
 namespace gallus
 {
 	// Category defines
-	#define LOG_CATEGORY_MEMORY "MEMORY"
-	#define LOG_CATEGORY_CORE "CORE"
-	#define LOG_CATEGORY_ENGINE "ENGINE"
-	#define LOG_CATEGORY_INPUT "INPUT"
-	#define LOG_CATEGORY_WINDOW "WINDOW"
-	#define LOG_CATEGORY_LOGGER "LOGGER"
-	#define LOG_CATEGORY_DX12 "DX12"
-	#define LOG_CATEGORY_EDITOR "EDITOR"
-	#define LOG_CATEGORY_ECS "ECS"
-	#define LOG_CATEGORY_TEST "TEST"
+#define LOG_CATEGORY_MEMORY "MEMORY"
+#define LOG_CATEGORY_CORE "CORE"
+#define LOG_CATEGORY_ENGINE "ENGINE"
+#define LOG_CATEGORY_GAME "GAME"
+#define LOG_CATEGORY_INPUT "INPUT"
+#define LOG_CATEGORY_WINDOW "WINDOW"
+#define LOG_CATEGORY_LOGGER "LOGGER"
+#define LOG_CATEGORY_DX12 "DX12"
+#define LOG_CATEGORY_EDITOR "EDITOR"
+#define LOG_CATEGORY_ECS "ECS"
+#define LOG_CATEGORY_TEST "TEST"
 
-	// NOTE: This one is out of the other namespaces so they can be easily used in other classes.
+#define ASSERT_LEVEL gallus::LogSeverity::LOGSEVERITY_ASSERT
+// NOTE: This one is out of the other namespaces so they can be easily used in other classes.
 	typedef enum LogSeverity
 	{
 		LOGSEVERITY_ASSERT,
@@ -86,17 +88,15 @@ namespace gallus
 
 	namespace logger
 	{
-		#define ASSERT_LEVEL LogSeverity::LOGSEVERITY_ASSERT
+/// 0 = full path, 1 = filename, 2 = stem, 3 = parent path + filename
+#define LOG_SHORT_FILENAMES 3
 
-		/// 0 = full path, 1 = filename, 2 = stem, 3 = parent path + filename
-		#define LOG_SHORT_FILENAMES 3
-
-		//-----------------------------------------------------------------------------
-		// LoggerMessage
-		//-----------------------------------------------------------------------------
-		/// <summary>
-		/// Represents the logger message with variables for location, category and severity.
-		/// </summary>
+//---------------------------------------------------------------------
+// LoggerMessage
+//---------------------------------------------------------------------
+/// <summary>
+/// Represents the logger message with variables for location, category and severity.
+/// </summary>
 		class LoggerMessage
 		{
 		public:
@@ -146,9 +146,9 @@ namespace gallus
 			std::chrono::system_clock::time_point m_Time; /// The time the logging was done.
 		};
 
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// Logger
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Represents the logger system that outputs log messages to the console and a log file.
 		/// </summary>
@@ -222,14 +222,14 @@ namespace gallus
 			mutable std::mutex m_MessagesMutex; /// The mutex used for synchronization between the threads for stopping or initializing.
 			std::condition_variable m_MessageCondVar; /// Used for lazy thread.
 		};
-	inline extern Logger LOGGER = {};
+		inline extern Logger LOGGER = {};
 	}
 }
 
 // Messages should be like this: "STATUS ACTION", so "Created x" or "Failed creating x"
 #define LOGF(a_Severity, a_sCategory, a_sMessage, ...)\
 do{\
-	logger::LOGGER.LogF(a_Severity, a_sCategory, a_sMessage, __FILE__, __LINE__, __VA_ARGS__);\
+	gallus::logger::LOGGER.LogF(a_Severity, a_sCategory, a_sMessage, __FILE__, __LINE__, __VA_ARGS__);\
 	if (a_Severity <= ASSERT_LEVEL)\
 		assert(false);\
 } while (0)
@@ -237,17 +237,17 @@ do{\
 // Messages should be like this: "STATUS ACTION", so "Created x" or "Failed creating x"
 #define LOG(a_Severity, a_sCategory, a_sMessage)\
 do{\
-	logger::LOGGER.Log(a_Severity, a_sCategory, a_sMessage, __FILE__, __LINE__);\
+	gallus::logger::LOGGER.Log(a_Severity, a_sCategory, a_sMessage, __FILE__, __LINE__);\
 	if (a_Severity <= ASSERT_LEVEL)\
 		assert(false);\
 } while (0)
 
 #define TEST(a_sMessage)\
 do{\
-	logger::LOGGER.Log(LOGSEVERITY_TEST, LOG_CATEGORY_TEST, a_sMessage, __FILE__, __LINE__);\
+	gallus::logger::LOGGER.Log(LOGSEVERITY_TEST, LOG_CATEGORY_TEST, a_sMessage, __FILE__, __LINE__);\
 } while (0)
 
 #define TESTF(a_sMessage, ...)\
 do{\
-	logger::LOGGER.LogF(LOGSEVERITY_TEST, LOG_CATEGORY_TEST, a_sMessage, __FILE__, __LINE__, __VA_ARGS__);\
+	gallus::logger::LOGGER.LogF(LOGSEVERITY_TEST, LOG_CATEGORY_TEST, a_sMessage, __FILE__, __LINE__, __VA_ARGS__);\
 } while (0)

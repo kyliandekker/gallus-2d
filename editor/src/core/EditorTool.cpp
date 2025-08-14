@@ -2,26 +2,33 @@
 
 namespace gallus
 {
-    namespace core
-    {
-        EditorTool::EditorTool() : Tool::Tool(), m_EditorSettings("editorsettings.settings")
-        { }
-    //-----------------------------------------------------------------------------
-        // EditorTool
-        //-----------------------------------------------------------------------------
-        bool EditorTool::Initialize(HINSTANCE a_hInstance, const std::string& a_sName)
-        {
-            Tool::Initialize(a_hInstance, a_sName);
+	namespace core
+	{
+		//---------------------------------------------------------------------
+		// EditorTool
+		//---------------------------------------------------------------------
+		EditorTool::EditorTool() : Tool::Tool(), m_EditorSettings("editorsettings.settings")
+		{}
 
-            EDITOR_TOOL = this;
+		//---------------------------------------------------------------------
+		bool EditorTool::Initialize(HINSTANCE a_hInstance, const std::string& a_sName)
+		{
+			Tool::Initialize(a_hInstance, a_sName);
 
-            return true;
-        }
+			m_AssetDatabase.Initialize();
+			m_AssetDatabase.Scan();
 
-        //-----------------------------------------------------------------------------------------------------
-        bool EditorTool::Destroy()
-        {
-            return Tool::Destroy();
-        }
-    }
+			EDITOR_TOOL = this;
+
+			return true;
+		}
+
+		//---------------------------------------------------------------------
+		bool EditorTool::Destroy()
+		{
+			m_AssetDatabase.Destroy();
+
+			return Tool::Destroy();
+		}
+	}
 }

@@ -10,7 +10,7 @@ namespace gallus
 {
 	namespace file
 	{
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool genericFileOpen(fs::path& a_sPath, const IID a_Rclsid, FILEOPENDIALOGOPTIONS a_Options, const std::vector<COMDLG_FILTERSPEC>& a_aFilters = {})
 		{
 			CoInitialize(nullptr);
@@ -48,25 +48,25 @@ namespace gallus
 			return false;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool PickContainer(fs::path& a_sPath)
 		{
 			return genericFileOpen(a_sPath, CLSID_FileOpenDialog, FOS_PICKFOLDERS);
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool PickFile(fs::path& a_sPath, const std::vector<COMDLG_FILTERSPEC>& a_aFilters)
 		{
 			return genericFileOpen(a_sPath, CLSID_FileOpenDialog, 0, a_aFilters);
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool SaveFile(fs::path& a_sPath, const std::vector<COMDLG_FILTERSPEC>& a_aFilters)
 		{
 			return genericFileOpen(a_sPath, CLSID_FileSaveDialog, 0, a_aFilters);
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const fs::path GetAppDataPath()
 		{
 			PWSTR path_tmp;
@@ -79,20 +79,20 @@ namespace gallus
 			return path;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool CreateDirectory(const fs::path& a_Path)
 		{
 			return fs::create_directories(a_Path);
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool OpenInExplorer(const fs::path& a_Path)
 		{
 			ShellExecuteA(NULL, "open", fs::absolute(a_Path).string().c_str(), NULL, NULL, SW_SHOWDEFAULT);
 			return true;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool LoadFile(const fs::path& a_Path, core::Data& a_Data)
 		{
 			if (!fs::exists(a_Path))
@@ -119,7 +119,7 @@ namespace gallus
 			return true;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool SaveFile(const fs::path& a_Path, const core::DataStream& a_Data)
 		{
 			FILE* file = nullptr;

@@ -25,9 +25,9 @@ namespace gallus
 		constexpr uint32_t MAX_RESOURCES = 64;
 		constexpr uint32_t MISSING = 0;
 
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// ResourceAtlas
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		class ResourceAtlas
 		{
 		public:
@@ -57,10 +57,22 @@ namespace gallus
 			const std::vector<std::shared_ptr<graphics::dx12::Texture>>& GetTextures() const;
 			const std::vector<std::shared_ptr<graphics::dx12::Shader>>& GetShaders() const;
 			const std::vector<std::shared_ptr<graphics::dx12::Mesh>>& GetMeshes() const;
+
+			void SetResourceFolder(const std::string& a_sResourceFolder)
+			{
+				m_sResourceFolder = a_sResourceFolder;
+			}
+
+			const std::string& GetResourceFolder() const
+			{
+				return m_sResourceFolder;
+			}
 		private:
 			std::vector<std::shared_ptr<graphics::dx12::Texture>> m_aTextures;
 			std::vector<std::shared_ptr<graphics::dx12::Shader>> m_aShaders;
 			std::vector<std::shared_ptr<graphics::dx12::Mesh>> m_aMeshes;
+
+			std::string m_sResourceFolder;
 		};
 	}
 }

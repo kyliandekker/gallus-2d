@@ -787,42 +787,42 @@ constexpr D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FORMAT_DETAIL D3D12_PROPERTY_LAYOU
 
 const UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::s_NumFormats = (sizeof(D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::s_FormatDetail) / sizeof(D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FORMAT_DETAIL));
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetHighestDefinedFeatureLevel
 D3D_FEATURE_LEVEL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetHighestDefinedFeatureLevel() 
 {
     return D3D_FEATURE_LEVEL_12_2; 
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetNumFormats
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetNumFormats()
 {
     return s_NumFormats;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetFormatTable
 const D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FORMAT_DETAIL* D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormatTable()
 {
     return &s_FormatDetail[0];
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetFormatTable
 BOOL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::Opaque(DXGI_FORMAT Format)
 {
      return Format == DXGI_FORMAT_420_OPAQUE;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // FormatExists
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FormatExists(DXGI_FORMAT Format)
 {
     return GetFormat( Format) != (DXGI_FORMAT) -1 ? true : false;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetDetailTableIndex
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndex(DXGI_FORMAT  Format )
 {
@@ -835,7 +835,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndex(DXGI_FORMAT  Format
     return (UINT)-1;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // IsBlockCompressFormat - returns true if format is block compressed. This function is a helper function for GetBitsPerUnit and
 // if this function returns true then GetBitsPerUnit returns block size. 
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsBlockCompressFormat(DXGI_FORMAT Format)
@@ -845,7 +845,7 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsBlockCompressFormat(DXGI_FORMAT Forma
            (Format >= DXGI_FORMAT_BC6H_TYPELESS && Format <= DXGI_FORMAT_BC7_UNORM_SRGB);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetByteAlignment 
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetByteAlignment(DXGI_FORMAT Format)
 {
@@ -859,14 +859,14 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetByteAlignment(DXGI_FORMAT Format)
     return bits >> 3;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetBitsPerUnitThrow
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerUnitThrow(DXGI_FORMAT Format)
 {
     return s_FormatDetail[GetDetailTableIndexThrow( Format )].BitsPerUnit;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // FormatExistsInHeader
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FormatExistsInHeader(DXGI_FORMAT Format, bool bExternalHeader)
 {
@@ -881,7 +881,7 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FormatExistsInHeader(DXGI_FORMAT Format
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetName
 LPCSTR D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetName(DXGI_FORMAT Format, bool bHideInternalFormats)
 {
@@ -896,7 +896,7 @@ LPCSTR D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetName(DXGI_FORMAT Format, bool bHid
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // IsSRGBFormat
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsSRGBFormat(DXGI_FORMAT Format)
 {
@@ -1216,7 +1216,7 @@ HRESULT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::CalculateMinimumRowMajorSlicePitch(D
 
 
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetBitsPerUnit - returns bits per pixel unless format is a block compress format then it returns bits per block. 
 // use IsBlockCompressFormat() to determine if block size is returned.
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerUnit(DXGI_FORMAT Format)
@@ -1224,7 +1224,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerUnit(DXGI_FORMAT Format)
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].BitsPerUnit;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetWidthAlignment(DXGI_FORMAT Format)
 {
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].WidthAlignment;
@@ -1239,7 +1239,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDepthAlignment(DXGI_FORMAT Format)
 {
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].DepthAlignment;
 }
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetFormat
 DXGI_FORMAT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormat(SIZE_T Index)
 {
@@ -1250,7 +1250,7 @@ DXGI_FORMAT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormat(SIZE_T Index)
     return (DXGI_FORMAT)-1;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // CanBeCastEvenFullyTyped
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::CanBeCastEvenFullyTyped(DXGI_FORMAT Format, D3D_FEATURE_LEVEL fl)
 {
@@ -1278,7 +1278,7 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::CanBeCastEvenFullyTyped(DXGI_FORMAT For
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetFormatDetail
 const D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FORMAT_DETAIL* D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormatDetail( DXGI_FORMAT  Format )
 {
@@ -1291,7 +1291,7 @@ const D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FORMAT_DETAIL* D3D12_PROPERTY_LAYOUT_F
   return &s_FormatDetail[ Index ];
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetBitsPerStencil
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerStencil(DXGI_FORMAT  Format)
 {
@@ -1319,7 +1319,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerStencil(DXGI_FORMAT  Format)
     return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetFormatReturnTypes
 void    D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormatReturnTypes(
         DXGI_FORMAT                            Format,
@@ -1332,7 +1332,7 @@ void    D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormatReturnTypes(
     pInterpretations[D3D10_SB_4_COMPONENT_A] = s_FormatDetail[Index].ComponentInterpretation3;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetAddressingBitsPerAlignedSize
 UINT8 D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetAddressingBitsPerAlignedSize(DXGI_FORMAT Format)
 {
@@ -1354,7 +1354,7 @@ UINT8 D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetAddressingBitsPerAlignedSize(DXGI_F
     return addressBitsPerElement;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetNumComponentsInFormat
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetNumComponentsInFormat( DXGI_FORMAT  Format )
 {
@@ -1378,7 +1378,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetNumComponentsInFormat( DXGI_FORMAT  
     return n;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Sequential2AbsoluteComponentIndex
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::Sequential2AbsoluteComponentIndex( DXGI_FORMAT  Format, UINT SequentialComponentIndex)
 {
@@ -1406,7 +1406,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::Sequential2AbsoluteComponentIndex( DXGI
     return UINT(-1);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Depth Only Format
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::DepthOnlyFormat(DXGI_FORMAT Format)
 {
@@ -1420,7 +1420,7 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::DepthOnlyFormat(DXGI_FORMAT Format)
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::SupportsSamplerFeedback(DXGI_FORMAT Format)
 {
     switch (Format)
@@ -1433,35 +1433,35 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::SupportsSamplerFeedback(DXGI_FORMAT For
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetParentFormat
 DXGI_FORMAT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetParentFormat(DXGI_FORMAT Format)
 {
     return s_FormatDetail[Format].ParentFormat;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetFormatCastSet
 const DXGI_FORMAT* D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormatCastSet(DXGI_FORMAT Format)
 {
     return s_FormatDetail[Format].pDefaultFormatCastSet;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetTypeLevel
 D3D_FORMAT_TYPE_LEVEL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTypeLevel(DXGI_FORMAT Format)
 {
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].TypeLevel;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetLayout
 D3D_FORMAT_LAYOUT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetLayout(DXGI_FORMAT Format)
 {
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].Layout;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetComponentName
 D3D_FORMAT_COMPONENT_NAME D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetComponentName(DXGI_FORMAT Format, UINT AbsoluteComponentIndex)
 {
@@ -1476,7 +1476,7 @@ D3D_FORMAT_COMPONENT_NAME D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetComponentName(D
     }
     return name;
 }
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetBitsPerComponent
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerComponent(DXGI_FORMAT Format, UINT AbsoluteComponentIndex)
 {
@@ -1487,7 +1487,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetBitsPerComponent(DXGI_FORMAT Format,
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].BitsPerComponent[AbsoluteComponentIndex];
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetFormatComponentInterpretation
 D3D_FORMAT_COMPONENT_INTERPRETATION D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetFormatComponentInterpretation(DXGI_FORMAT Format, UINT AbsoluteComponentIndex)
 {
@@ -1504,28 +1504,28 @@ D3D_FORMAT_COMPONENT_INTERPRETATION D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetForma
     return interp;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Planar
 BOOL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::Planar(DXGI_FORMAT Format)
 {
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].bPlanar;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Non-opaque Planar
 BOOL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::NonOpaquePlanar(DXGI_FORMAT Format)
 {
     return Planar(Format) && !Opaque(Format);
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // YUV
 BOOL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::YUV(DXGI_FORMAT Format)
 {
     return s_FormatDetail[GetDetailTableIndexNoThrow( Format )].bYUV;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Format family supports stencil
 bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FamilySupportsStencil(DXGI_FORMAT Format)
 {
@@ -1539,7 +1539,7 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FamilySupportsStencil(DXGI_FORMAT Forma
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetDetailTableIndexThrow
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndexThrow(DXGI_FORMAT  Format)
 {
@@ -1551,7 +1551,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndexThrow(DXGI_FORMAT  F
     return Index;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetDetailTableIndexNoThrow
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndexNoThrow(DXGI_FORMAT  Format)
 {
@@ -1560,7 +1560,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndexNoThrow(DXGI_FORMAT 
     return Index;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetYCbCrChromaSubsampling
 void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetYCbCrChromaSubsampling(
     DXGI_FORMAT Format, 
@@ -1624,7 +1624,7 @@ void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetYCbCrChromaSubsampling(
     };
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Plane count for non-opaque planar formats
 UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::NonOpaquePlaneCount(DXGI_FORMAT Format)
 {
@@ -1637,7 +1637,7 @@ UINT D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::NonOpaquePlaneCount(DXGI_FORMAT Format)
     return (Format == DXGI_FORMAT_V208 || Format == DXGI_FORMAT_V408) ? 3 : 2;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetTileShape
 //
 // Retrieve 64K Tiled Resource tile shape
@@ -1807,7 +1807,7 @@ void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetTileShape(
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Get4KTileShape
 //
 // Retrieve 4K Tiled Resource tile shape
@@ -1982,7 +1982,7 @@ void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::Get4KTileShape(
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 // GetPlaneSliceFromViewFormat
 // Maps resource format + view format to a plane index for resource formats where the plane index can be inferred from this information.
 // For planar formats where the plane index is ambiguous given this information (examples: V208, V408), this function returns 0.
@@ -2052,7 +2052,7 @@ UINT8 D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetPlaneSliceFromViewFormat(
     return 0;
 }
 
-//----------------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetPlaneSubsampledSizeAndFormatForCopyableLayout(
     UINT PlaneSlice,
     DXGI_FORMAT Format, 
@@ -2230,7 +2230,7 @@ void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetPlaneSubsampledSizeAndFormatForCopya
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // GetPlaneCount
 UINT8 D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetPlaneCount(DXGI_FORMAT Format)
 {
@@ -2252,7 +2252,7 @@ UINT8 D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetPlaneCount(DXGI_FORMAT Format)
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetMipDimensions(UINT8 mipSlice, _Inout_ UINT64 *pWidth, _Inout_opt_ UINT64 *pHeight, _Inout_opt_ UINT64 *pDepth)
 {
     UINT denominator = (1 << mipSlice); // 2 ^ subresource
@@ -2273,27 +2273,27 @@ void D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetMipDimensions(UINT8 mipSlice, _Inout
     if(pDepth) *pDepth = mipDepth;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // DX9VertexOrIndexFormat
 BOOL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::DX9VertexOrIndexFormat(DXGI_FORMAT Format)
 {
     return s_FormatDetail[D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndexThrow( Format )].bDX9VertexOrIndexFormat;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // DX9TextureFormat
 BOOL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::DX9TextureFormat(DXGI_FORMAT Format)
 {
     return s_FormatDetail[D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndexThrow( Format )].bDX9TextureFormat;
 }
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // FloatNormTextureFormat
 BOOL D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FloatNormTextureFormat(DXGI_FORMAT Format)
 {
     return s_FormatDetail[D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::GetDetailTableIndexThrow( Format )].bFloatNormFormat;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // ValidCastToR32UAV
 //
 // D3D11 has a limitation on typed UAVs (e.g. Texture1D/2D/3D) whereby the only format that can be read is R32_*.  Lots of formats
@@ -2333,7 +2333,7 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::ValidCastToR32UAV(DXGI_FORMAT from, DXG
     return false;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // IsSupportedTextureDisplayableFormat
 //
 // List of formats associated with Feature_D3D1XDisplayable
@@ -2364,7 +2364,7 @@ bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::IsSupportedTextureDisplayableFormat
     }
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 bool  D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FloatAndNotFloatFormats(DXGI_FORMAT FormatA, DXGI_FORMAT FormatB)
 {
     UINT NumComponents = (std::min)(GetNumComponentsInFormat(FormatA), GetNumComponentsInFormat(FormatB));
@@ -2380,7 +2380,7 @@ bool  D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::FloatAndNotFloatFormats(DXGI_FORMAT Fo
     return false;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 bool  D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::SNORMAndUNORMFormats(DXGI_FORMAT FormatA, DXGI_FORMAT FormatB)
 {
     UINT NumComponents = (std::min)(GetNumComponentsInFormat(FormatA), GetNumComponentsInFormat(FormatB));
@@ -2397,7 +2397,7 @@ bool  D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::SNORMAndUNORMFormats(DXGI_FORMAT Forma
     return false;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Formats allowed by runtime for decode histogram.
  bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::DecodeHistogramAllowedForOutputFormatSupport(DXGI_FORMAT Format)
  {
@@ -2417,7 +2417,7 @@ bool  D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::SNORMAndUNORMFormats(DXGI_FORMAT Forma
      );
  }
 
-//---------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 // Formats allowed by runtime for decode histogram.  Scopes to tested formats.
  bool D3D12_PROPERTY_LAYOUT_FORMAT_TABLE::MotionEstimatorAllowedInputFormat(DXGI_FORMAT Format)
  {

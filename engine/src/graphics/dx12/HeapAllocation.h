@@ -11,9 +11,9 @@ namespace gallus
 	{
 		namespace dx12
 		{
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			// HeapAllocation
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			/// <summary>
 			/// Manages allocation of descriptor handles from a DirectX 12 descriptor heap.
 			/// Provides thread-safe allocation and deallocation, as well as access to handle offsets.

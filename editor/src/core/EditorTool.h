@@ -2,11 +2,15 @@
 
 #include "core/Tool.h"
 #include "editor/EditorSettings.h"
+#include "editor/AssetDatabase.h"
 
 namespace gallus
 {
 	namespace core
 	{
+		//---------------------------------------------------------------------
+		// EditorTool
+		//---------------------------------------------------------------------
 		class EditorTool : public Tool
 		{
 		public:
@@ -36,8 +40,18 @@ namespace gallus
 			{
 				return m_EditorSettings;
 			}
+
+			/// <summary>
+			/// Retrieves the asset database.
+			/// </summary>
+			/// <returns>Reference to the asset database.</returns>
+			editor::AssetDatabase& GetAssetDatabase()
+			{
+				return m_AssetDatabase;
+			}
 		private:
 			editor::EditorSettings m_EditorSettings;
+			editor::AssetDatabase m_AssetDatabase;
 		};
 		extern inline EditorTool* EDITOR_TOOL = nullptr;
 	}

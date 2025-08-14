@@ -849,11 +849,11 @@ void ImGui_ImplDX12_NewFrame()
 		ImGui_ImplDX12_CreateDeviceObjects();
 }
 
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 // MULTI-VIEWPORT / PLATFORM INTERFACE SUPPORT
 // This is an _advanced_ and _optional_ feature, allowing the backend to create and handle multiple viewports simultaneously.
 // If you are new to dear imgui or creating a new binding for dear imgui, it is recommended that you completely ignore this section first..
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 static void ImGui_ImplDX12_CreateWindow(ImGuiViewport* viewport)
 {
@@ -1089,6 +1089,6 @@ void ImGui_ImplDX12_ShutdownPlatformInterface()
 	ImGui::DestroyPlatformWindows();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #endif // #ifndef IMGUI_DISABLE

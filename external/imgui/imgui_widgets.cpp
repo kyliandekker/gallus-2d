@@ -439,7 +439,7 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 // this code is a little complex.
 // By far the most common path is interacting with the Mouse using the default ImGuiButtonFlags_PressedOnClickRelease button behavior.
 // See the series of events below and the corresponding state reported by dear imgui:
-//------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
 // with PressedOnClickRelease:             return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
 //   Frame N+0 (mouse is outside bb)        -             -                -               -                  -                    -
 //   Frame N+1 (mouse moves inside bb)      -             true             -               -                  -                    -
@@ -450,19 +450,19 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 //   Frame N+6 (mouse button is released)   true          true             -               -                  true                 -
 //   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
 //   Frame N+8 (mouse moves outside bb)     -             -                -               -                  -                    -
-//------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
 // with PressedOnClick:                    return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
 //   Frame N+2 (mouse button is down)       true          true             true            true               -                    true
 //   Frame N+3 (mouse button is down)       -             true             true            -                  -                    -
 //   Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
 //   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
-//------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
 // with PressedOnRelease:                  return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
 //   Frame N+2 (mouse button is down)       -             true             -               -                  -                    true
 //   Frame N+3 (mouse button is down)       -             true             -               -                  -                    -
 //   Frame N+6 (mouse button is released)   true          true             -               -                  -                    -
 //   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
-//------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
 // with PressedOnDoubleClick:              return-value  IsItemHovered()  IsItemActive()  IsItemActivated()  IsItemDeactivated()  IsItemClicked()
 //   Frame N+0 (mouse button is down)       -             true             -               -                  -                    true
 //   Frame N+1 (mouse button is down)       -             true             -               -                  -                    -
@@ -472,21 +472,21 @@ void ImGui::BulletTextV(const char* fmt, va_list args)
 //   Frame N+5 (mouse button is down)       -             true             true            -                  -                    -
 //   Frame N+6 (mouse button is released)   -             true             -               -                  true                 -
 //   Frame N+7 (mouse button is released)   -             true             -               -                  -                    -
-//------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
 // Note that some combinations are supported,
 // - PressedOnDragDropHold can generally be associated with any flag.
 // - PressedOnDoubleClick can be associated by PressedOnClickRelease/PressedOnRelease, in which case the second release event won't be reported.
-//------------------------------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
 // The behavior of the return-value changes when ImGuiItemFlags_ButtonRepeat is set:
 //                                         Repeat+                  Repeat+           Repeat+             Repeat+
 //                                         PressedOnClickRelease    PressedOnClick    PressedOnRelease    PressedOnDoubleClick
-//-------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------
 //   Frame N+0 (mouse button is down)       -                        true              -                   true
 //   ...                                    -                        -                 -                   -
 //   Frame N + RepeatDelay                  true                     true              -                   true
 //   ...                                    -                        -                 -                   -
 //   Frame N + RepeatDelay + RepeatRate*N   true                     true              -                   true
-//-------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------
 
 // - FIXME: For refactor we could output flags, incl mouse hovered vs nav keyboard vs nav triggered etc.
 //   And better standardize how widgets use 'GetColor32((held && hovered) ? ... : hovered ? ...)' vs 'GetColor32(held ? ... : hovered ? ...);'
@@ -7939,9 +7939,9 @@ void ImGui::MultiSelectItemFooter(ImGuiID id, bool* p_selected, bool* p_pressed)
             if (selected == false && !g.BoxSelectState.IsActive && !g.BoxSelectState.IsStarting && input_source == ImGuiInputSource_Mouse && g.IO.MouseClickedCount[0] == 1)
                 BoxSelectPreStartDrag(ms->BoxSelectId, item_data);
 
-        //----------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------
         // ACTION                      | Begin  | Pressed/Activated  | End
-        //----------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------
         // Keys Navigated:             | Clear  | Src=item, Sel=1               SetRange 1
         // Keys Navigated: Ctrl        | n/a    | n/a
         // Keys Navigated:      Shift  | n/a    | Dst=item, Sel=1,   => Clear + SetRange 1
@@ -7949,12 +7949,12 @@ void ImGui::MultiSelectItemFooter(ImGuiID id, bool* p_selected, bool* p_pressed)
         // Keys Activated:             | n/a    | Src=item, Sel=1    => Clear + SetRange 1
         // Keys Activated: Ctrl        | n/a    | Src=item, Sel=!Sel =>         SetSange 1
         // Keys Activated:      Shift  | n/a    | Dst=item, Sel=1    => Clear + SetSange 1
-        //----------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------
         // Mouse Pressed:              | n/a    | Src=item, Sel=1,   => Clear + SetRange 1
         // Mouse Pressed:  Ctrl        | n/a    | Src=item, Sel=!Sel =>         SetRange 1
         // Mouse Pressed:       Shift  | n/a    | Dst=item, Sel=1,   => Clear + SetRange 1
         // Mouse Pressed:  Ctrl+Shift  | n/a    | Dst=item, Sel=!Sel =>         SetRange Src-Dst
-        //----------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------
 
         if ((flags & ImGuiMultiSelectFlags_NoAutoClear) == 0)
         {

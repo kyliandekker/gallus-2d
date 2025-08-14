@@ -157,9 +157,9 @@ You can read releases logs https://github.com/epezent/implot/releases for more d
 ImPlotContext* GImPlot = nullptr;
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Struct Implementations
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImPlotInputMap::ImPlotInputMap() {
     ImPlot::MapInputDefault(this);
@@ -205,9 +205,9 @@ ImPlotStyle::ImPlotStyle() {
     UseISO8601       = false;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Style
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 namespace ImPlot {
 
@@ -329,9 +329,9 @@ static const ImPlotStyleVarInfo* GetPlotStyleVarInfo(ImPlotStyleVar idx) {
     return &GPlotStyleVarInfo[idx];
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Generic Helpers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void AddTextVertical(ImDrawList *DrawList, ImVec2 pos, ImU32 col, const char *text_begin, const char* text_end) {
     // the code below is based loosely on ImFont::RenderText
@@ -416,9 +416,9 @@ double NiceNum(double x, bool round) {
     return nf * ImPow(10.0, expv);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Context Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void SetImGuiContext(ImGuiContext* ctx) {
     ImGui::SetCurrentContext(ctx);
@@ -524,9 +524,9 @@ void ResetCtxForNextSubplot(ImPlotContext* ctx) {
     ctx->CurrentAlignmentV   = nullptr;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Plot Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImPlotPlot* GetPlot(const char* title) {
     ImGuiWindow*   Window = GImGui->CurrentWindow;
@@ -544,9 +544,9 @@ void BustPlotCache() {
     gp.Subplots.Clear();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Legend Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImVec2 GetLocationPos(const ImRect& outer_rect, const ImVec2& inner_size, ImPlotLocation loc, const ImVec2& pad) {
     ImVec2 pos;
@@ -685,9 +685,9 @@ bool ShowLegendEntries(ImPlotItemGroup& items, const ImRect& legend_bb, bool hov
     return hovered && !any_item_hovered;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Locators
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static const float TICK_FILL_X = 0.8f;
 static const float TICK_FILL_Y = 1.0f;
@@ -821,9 +821,9 @@ void AddTicksCustom(const double* values, const char* const labels[], int n, ImP
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Time Ticks and Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // this may not be thread safe?
 static const double TimeUnitSpans[ImPlotTimeUnit_COUNT] = {
@@ -1292,9 +1292,9 @@ void Locator_Time(ImPlotTicker& ticker, const ImPlotRange& range, float pixels, 
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Context Menu
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename F>
 bool DragFloat(const char*, F*, float, F, F) {
@@ -1564,9 +1564,9 @@ void ShowPlotContextMenu(ImPlotPlot& plot) {
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Axis Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static inline int AxisPrecision(const ImPlotAxis& axis) {
     const double range = axis.Ticker.TickCount() > 1 ? (axis.Ticker.Ticks[1].PlotPos - axis.Ticker.Ticks[0].PlotPos) : axis.Range.Size();
@@ -1754,9 +1754,9 @@ void PadAndDatumAxesY(ImPlotPlot& plot, float& pad_L, float& pad_R, ImPlotAlignm
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // RENDERING
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static inline void RenderGridLinesX(ImDrawList& DrawList, const ImPlotTicker& ticker, const ImRect& rect, ImU32 col_maj, ImU32 col_min, float size_maj, float size_min) {
     const float density   = ticker.TickCount() / rect.GetWidth();
@@ -1799,9 +1799,9 @@ static inline void RenderSelectionRect(ImDrawList& DrawList, const ImVec2& p_min
     DrawList.AddRect(p_min, p_max, col_bd);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Input Handling
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static const float MOUSE_CURSOR_DRAG_THRESHOLD = 5.0f;
 static const float BOX_SELECT_DRAG_THRESHOLD   = 4.0f;
@@ -2065,9 +2065,9 @@ bool UpdateInput(ImPlotPlot& plot) {
     return changed;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Next Plot Data (Legacy)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ApplyNextPlotData(ImAxis idx) {
     ImPlotContext& gp = *GImPlot;
@@ -2091,9 +2091,9 @@ void ApplyNextPlotData(ImAxis idx) {
     axis.RangeCond        = npd_rngc;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Setup
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void SetupAxis(ImAxis idx, const char* label, ImPlotAxisFlags flags) {
     ImPlotContext& gp = *GImPlot;
@@ -2301,9 +2301,9 @@ void SetupMouseText(ImPlotLocation location, ImPlotMouseTextFlags flags) {
     gp.CurrentPlot->MouseTextFlags = flags;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // SetNext
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void SetNextAxisLimits(ImAxis axis, double v_min, double v_max, ImPlotCond cond) {
     ImPlotContext& gp = *GImPlot;
@@ -2338,9 +2338,9 @@ void SetNextAxesToFit() {
         SetNextAxisToFit(i);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // BeginPlot
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 bool BeginPlot(const char* title_id, const ImVec2& size, ImPlotFlags flags) {
     IM_ASSERT_USER_ERROR(GImPlot != nullptr, "No current context. Did you call ImPlot::CreateContext() or ImPlot::SetCurrentContext()?");
@@ -2448,9 +2448,9 @@ bool BeginPlot(const char* title_id, const ImVec2& size, ImPlotFlags flags) {
     return true;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // SetupFinish
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void SetupFinish() {
     IM_ASSERT_USER_ERROR(GImPlot != nullptr, "No current context. Did you call ImPlot::CreateContext() or ImPlot::SetCurrentContext()?");
@@ -2748,9 +2748,9 @@ void SetupFinish() {
     ImGui::PushOverrideID(gp.CurrentItems->ID);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // EndPlot()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void EndPlot() {
     IM_ASSERT_USER_ERROR(GImPlot != nullptr, "No current context. Did you call ImPlot::CreateContext() or ImPlot::SetCurrentContext()?");
@@ -3218,9 +3218,9 @@ void EndPlot() {
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // BEGIN/END SUBPLOT
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static const float SUBPLOT_BORDER_SIZE             = 1.0f;
 static const float SUBPLOT_SPLITTER_HALF_THICKNESS = 4.0f;
@@ -3556,9 +3556,9 @@ void EndSubplots() {
 
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Plot Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void SetAxis(ImAxis axis) {
     ImPlotContext& gp = *GImPlot;
@@ -3711,9 +3711,9 @@ void HideNextItem(bool hidden, ImPlotCond cond) {
     gp.NextItemData.HiddenCond = cond;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Plot Tools
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void Annotation(double x, double y, const ImVec4& col, const ImVec2& offset, bool clamp, bool round) {
     ImPlotContext& gp = *GImPlot;
@@ -4087,9 +4087,9 @@ bool DragRect(int id, ImPlotRect* bounds, const ImVec4& col, ImPlotDragToolFlags
     return DragRect(id, &bounds->X.Min, &bounds->Y.Min,&bounds->X.Max, &bounds->Y.Max, col, flags);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Legend Utils and Tools
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 bool IsLegendEntryHovered(const char* label_id) {
     ImPlotContext& gp = *GImPlot;
@@ -4157,9 +4157,9 @@ void ShowAltLegend(const char* title_id, bool vertical, const ImVec2 size, bool 
     DrawList.PopClipRect();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Drag and Drop Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 bool BeginDragDropTargetPlot() {
     SetupLock();
@@ -4224,9 +4224,9 @@ void EndDragDropSource() {
     ImGui::EndDragDropSource();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Aligned Plots
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 bool BeginAlignedPlots(const char* group_id, bool vertical) {
     IM_ASSERT_USER_ERROR(GImPlot != nullptr, "No current context. Did you call ImPlot::CreateContext() or ImPlot::SetCurrentContext()?");
@@ -4259,9 +4259,9 @@ void EndAlignedPlots() {
     ResetCtxForNextAlignedPlots(GImPlot);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Plot and Item Styling
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImPlotStyle& GetStyle() {
     IM_ASSERT_USER_ERROR(GImPlot != nullptr, "No current context. Did you call ImPlot::CreateContext() or ImPlot::SetCurrentContext()?");
@@ -4365,9 +4365,9 @@ void PopStyleVar(int count) {
     }
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 // [Section] Colormaps
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 ImPlotColormap AddColormap(const char* name, const ImVec4* colormap, int size, bool qual) {
     ImPlotContext& gp = *GImPlot;
@@ -4659,9 +4659,9 @@ bool ColormapButton(const char* label, const ImVec2& size_arg, ImPlotColormap cm
     return pressed;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [Section] Miscellaneous
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImPlotInputMap& GetInputMap() {
     IM_ASSERT_USER_ERROR(GImPlot != nullptr, "No current context. Did you call ImPlot::CreateContext() or ImPlot::SetCurrentContext()?");
@@ -4701,9 +4701,9 @@ void MapInputReverse(ImPlotInputMap* dst) {
     map.ZoomRate        = 0.1f;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [Section] Miscellaneous
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ItemIcon(const ImVec4& col) {
     ItemIcon(ImGui::ColorConvertFloat4ToU32(col));
@@ -5735,9 +5735,9 @@ void StyleColorsLight(ImPlotStyle* dst) {
     colors[ImPlotCol_Crosshairs]    = ImVec4(0.00f, 0.00f, 0.00f, 0.50f);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Obsolete Functions/Types
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef IMPLOT_DISABLE_OBSOLETE_FUNCTIONS
 

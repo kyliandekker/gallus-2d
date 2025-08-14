@@ -7,9 +7,9 @@ namespace gallus
 {
 	namespace core
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// Data
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Represents a generic container for raw data, providing utility functions and automatic cleanup
 		/// for managing and interacting with the stored data.

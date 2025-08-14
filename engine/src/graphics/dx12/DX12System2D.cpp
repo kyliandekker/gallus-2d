@@ -17,9 +17,9 @@ namespace gallus
 	{
 		namespace dx12
 		{
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			// DX12System2D
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::Initialize(bool a_bWait, HWND a_hWnd, const glm::ivec2& a_vSize, win32::Window* a_pWindow)
 			{
 				m_vSize = a_vSize;
@@ -30,17 +30,17 @@ namespace gallus
 				return ThreadedSystem::Initialize(a_bWait);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::Destroy()
 			{
 				LOG(LOGSEVERITY_INFO, LOG_CATEGORY_DX12, "Destroying dx12 system.");
 				return ThreadedSystem::Destroy();
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::InitThreadWorker()
 			{
-#if _DEBUG
+#if _DEBUGs
 				// Always enable the debug layer before doing anything DX12 related
 				// so all possible errors generated while creating DX12 objects
 				// are caught by the debug layer.
@@ -57,7 +57,7 @@ namespace gallus
 				{
 					debugController1->SetEnableGPUBasedValidation(TRUE);
 				}
-#endif // _DEBUG
+#endif // _DEBUGs
 				// Get the adapter.
 				if (!GetAdapter(false))
 				{
@@ -226,14 +226,14 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::GetAdapter(bool a_bUseWarp)
 			{
 				Microsoft::WRL::ComPtr<IDXGIFactory4> dxgiFactory;
 				UINT createFactoryFlags = 0;
-#if defined(_DEBUG)
-				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
-#endif // _DEBUG
+#if defined(_DEBUGs)
+				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUGs;
+#endif // _DEBUGs
 
 				if (FAILED(CreateDXGIFactory2(createFactoryFlags, IID_PPV_ARGS(&dxgiFactory))))
 				{
@@ -288,7 +288,7 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::CreateDevice()
 			{
 				if (FAILED(D3D12CreateDevice(m_pAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_pDevice))))
@@ -299,7 +299,7 @@ namespace gallus
 				//    NAME_D3D12_OBJECT(d3d12Device2);
 
 				// Enable debug messages in debug mode.
-#ifdef _DEBUG
+#ifdef _DEBUGs
 				Microsoft::WRL::ComPtr<ID3D12InfoQueue> pInfoQueue;
 				if (SUCCEEDED(m_pDevice.As(&pInfoQueue)))
 				{
@@ -337,12 +337,12 @@ namespace gallus
 						return false;
 					}
 				}
-#endif // _DEBUG
+#endif // _DEBUGs
 
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::CheckTearingSupport()
 			{
 				BOOL allowTearing = FALSE;
@@ -365,14 +365,14 @@ namespace gallus
 				return allowTearing == TRUE;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::CreateSwapChain()
 			{
 				Microsoft::WRL::ComPtr<IDXGIFactory4> dxgiFactory4;
 				UINT createFactoryFlags = 0;
-#ifdef _DEBUG
-				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
-#endif // _DEBUG
+#ifdef _DEBUGs
+				createFactoryFlags = DXGI_CREATE_FACTORY_DEBUGs;
+#endif // _DEBUGs
 
 				if (FAILED(CreateDXGIFactory2(createFactoryFlags, IID_PPV_ARGS(&dxgiFactory4))))
 				{
@@ -430,7 +430,7 @@ namespace gallus
 				return m_pSwapChain != nullptr;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::CreateRTV()
 			{
 				size_t numBuffers = g_iBufferCount;
@@ -446,7 +446,7 @@ namespace gallus
 				m_RTV = HeapAllocation(rtvHeapDesc);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::CreateSRV()
 			{
 				D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
@@ -456,7 +456,7 @@ namespace gallus
 				m_SRV = HeapAllocation(srvHeapDesc);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::Finalize()
 			{
 				std::lock_guard<std::mutex> lock(m_RenderMutex);
@@ -469,14 +469,14 @@ namespace gallus
 				LOG(LOGSEVERITY_SUCCESS, LOG_CATEGORY_DX12, "Destroyed dx12 system.");
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::Flush()
 			{
 				m_pDirectCommandQueue->Flush();
 				m_pCopyCommandQueue->Flush();
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::UpdateRenderTargetViews()
 			{
 				CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_RTV.GetCPUDescriptorHandleForHeapStart());
@@ -507,7 +507,7 @@ namespace gallus
 				}
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 #ifdef _EDITOR
 			std::shared_ptr<Texture> DX12System2D::GetRenderTexture()
 			{
@@ -515,7 +515,7 @@ namespace gallus
 			}
 #endif // _EDITOR
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::CreateCommandQueues()
 			{
 				m_pDirectCommandQueue = std::make_shared<CommandQueue>(D3D12_COMMAND_LIST_TYPE_DIRECT);
@@ -524,7 +524,7 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::CreateViews()
 			{
 				CreateRTV();
@@ -533,7 +533,7 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::CreateRootSignature()
 			{
 				// Define descriptor ranges
@@ -607,23 +607,23 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::BeforeInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
 			{
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12System2D::AfterInitialize(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
 			{
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::AfterResize(const glm::ivec2& a_vSize)
 			{}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::Resize(const glm::ivec2& a_vPos, const glm::ivec2& a_vSize)
 			{
 				if (a_vSize.x == 0 || a_vSize.y == 0)
@@ -674,19 +674,19 @@ namespace gallus
 				m_vSize = glm::vec2(a_vSize.x, a_vSize.y);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			const Microsoft::WRL::ComPtr<ID3D12Resource>& DX12System2D::GetCurrentBackBuffer() const
 			{
 				return m_BackBuffers[m_iCurrentBackBufferIndex];
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			UINT DX12System2D::GetCurrentBackBufferIndex() const
 			{
 				return m_iCurrentBackBufferIndex;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			D3D12_CPU_DESCRIPTOR_HANDLE DX12System2D::GetCurrentRenderTargetView(bool a_bUseRenderTexture)
 			{
 				size_t backBufferStart = 0;
@@ -702,7 +702,7 @@ namespace gallus
 				return m_RTV.GetCPUHandle(backBufferStart + m_iCurrentBackBufferIndex);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::Loop()
 			{
 				if (!m_bInitialized.load())
@@ -722,6 +722,13 @@ namespace gallus
 					D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 				const FLOAT clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+				D3D12_CPU_DESCRIPTOR_HANDLE currentRtv;
+
+				D3D12_CPU_DESCRIPTOR_HANDLE rtv = GetCurrentRenderTargetView(false);
+				commandList->GetCommandList()->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
+
+				currentRtv = rtv;
 #ifdef _EDITOR
 				commandList->TransitionResource(m_pRenderTexture->GetResource(),
 					D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
@@ -729,31 +736,33 @@ namespace gallus
 
 				D3D12_CPU_DESCRIPTOR_HANDLE editorRtv = GetCurrentRenderTargetView(true);
 				commandList->GetCommandList()->ClearRenderTargetView(editorRtv, clearColor, 0, nullptr);
+
+				currentRtv = editorRtv;
 #endif // _EDITOR
-				D3D12_CPU_DESCRIPTOR_HANDLE rtv = GetCurrentRenderTargetView(false);
-				commandList->GetCommandList()->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
 
 				//------------------------------------------
 				// RENDER GAME
 				//------------------------------------------
-				Render3D(commandQueue, commandList, rtv);
+				Render3D(commandQueue, commandList, currentRtv);
 
 				//------------------------------------------
 				// EDITOR ONLY
 				//------------------------------------------
 #ifdef _EDITOR
+				currentRtv = rtv;
+
 				// Transition back to SRV for ImGui usage
 				commandList->TransitionResource(m_pRenderTexture->GetResource(),
 					D3D12_RESOURCE_STATE_RENDER_TARGET,
 					D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-				RenderUI(commandQueue, commandList, rtv);
+				RenderUI(commandQueue, commandList, currentRtv);
 #endif // _EDITOR
 
 				Present(commandQueue, commandList);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::ProcessWindowEvents()
 			{
 				std::lock_guard<std::mutex> lock(m_RenderMutex);
@@ -777,7 +786,7 @@ namespace gallus
 				}
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 #ifndef IMGUI_DISABLE
 			void DX12System2D::RenderUI(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle)
 			{
@@ -787,7 +796,7 @@ namespace gallus
 			}
 #endif // IMGUI_DISABLE
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::Render3D(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList, D3D12_CPU_DESCRIPTOR_HANDLE a_RTVHandle)
 			{
 				core::TOOL->GetResourceAtlas().TransitionResources(a_pCommandList);
@@ -811,7 +820,7 @@ namespace gallus
 				m_eOnRender(a_pCommandList);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12System2D::Present(std::shared_ptr<CommandQueue> a_pCommandQueue, std::shared_ptr<CommandList> a_pCommandList)
 			{
 				const UINT currentBackBufferIndex = GetCurrentBackBufferIndex();
@@ -836,7 +845,7 @@ namespace gallus
 				}
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			std::shared_ptr<CommandQueue> DX12System2D::GetCommandQueue(D3D12_COMMAND_LIST_TYPE a_Type)
 			{
 				std::shared_ptr<CommandQueue> commandQueue = nullptr;
@@ -861,7 +870,7 @@ namespace gallus
 				return commandQueue;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 #ifdef _EDITOR
 			void DX12System2D::CreateRenderTexture(const glm::ivec2& a_vSize)
 			{

@@ -67,9 +67,9 @@ Index of this file:
 
 #ifndef IMGUI_DISABLE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Header mess
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Includes
 #include <float.h>                  // FLT_MIN, FLT_MAX
@@ -145,9 +145,9 @@ Index of this file:
 #pragma GCC diagnostic ignored "-Wclass-memaccess"                  // [__GNUC__ >= 8] warning: 'memset/memcpy' clearing/writing an object of type 'xxxx' with no trivial copy-assignment; use assignment or value-initialization instead
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Forward declarations and basic types
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Scalar data types
 typedef unsigned int        ImGuiID;// A unique ID used by widgets (typically the result of hashing a stack of string)
@@ -330,10 +330,10 @@ struct ImVec4
 };
 IM_MSVC_RUNTIME_CHECKS_RESTORE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Dear ImGui end-user API functions
 // (Note that ImGui:: being a namespace, you can add extra ImGui:: functions in your own separate file. Please don't modify imgui source files!)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 namespace ImGui
 {
@@ -1108,9 +1108,9 @@ namespace ImGui
 
 } // namespace ImGui
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Flags & Enumerations
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Flags for ImGui::Begin()
 // (Those are per-window flags. There are shared flags in ImGuiIO: io.ConfigWindowsResizeFromEdges and io.ConfigWindowsMoveFromTitleBarOnly)
@@ -1949,9 +1949,9 @@ enum ImGuiCond_
 	ImGuiCond_Appearing = 1 << 3,   // Set the variable if the object/window is appearing after being hidden/inactive (or the first time)
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Tables API flags and structures (ImGuiTableFlags, ImGuiTableColumnFlags, ImGuiTableRowFlags, ImGuiTableBgTarget, ImGuiTableSortSpecs, ImGuiTableColumnSortSpecs)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Flags for ImGui::BeginTable()
 // - Important! Sizing policies have complex and subtle side effects, much more so than you would expect.
@@ -2119,13 +2119,13 @@ struct ImGuiTableColumnSortSpecs
 	}
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Helpers: Debug log, memory allocations macros, ImVector<>
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Debug Logging into ShowDebugLogWindow(), tty and more.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef IMGUI_DISABLE_DEBUG_TOOLS
 #define IMGUI_DEBUG_LOG(...)        ImGui::DebugLog(__VA_ARGS__)
@@ -2133,11 +2133,11 @@ struct ImGuiTableColumnSortSpecs
 #define IMGUI_DEBUG_LOG(...)        ((void)0)
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // IM_MALLOC(), IM_FREE(), IM_NEW(), IM_PLACEMENT_NEW(), IM_DELETE()
 // We call C++ constructor on own allocated memory via the placement "new(ptr) Type()" syntax.
 // Defining a custom placement new() with a custom parameter allows us to bypass including <new> which on some platforms complains when user has disabled exceptions.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct ImNewWrapper
 {};
@@ -2159,16 +2159,16 @@ template<typename T> void IM_DELETE(T* p)
 	}
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // ImVector<>
 // Lightweight std::vector<>-like class to avoid dragging dependencies (also, some implementations of STL with debug enabled are absurdly slow, we bypass it so our code runs fast in debug).
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - You generally do NOT need to care or use this ever. But we need to make it available in imgui.h because some of our public structures are relying on it.
 // - We use std-like naming convention here, which is a little unusual for this codebase.
 // - Important: clear() frees memory, resize(0) keep the allocated buffer. We use resize(0) a lot to intentionally recycle allocated buffers across frames and amortize our costs.
 // - Important: our implementation does NOT call C++ constructors/destructors, we treat everything as raw data! This is intentional but be extra mindful of that,
 //   Do NOT use this class as a std::vector replacement in your own code! Many of the structures used by dear imgui can be safely initialized by a zero-memset.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 IM_MSVC_RUNTIME_CHECKS_OFF
 template<typename T>
@@ -2377,13 +2377,13 @@ struct ImVector
 };
 IM_MSVC_RUNTIME_CHECKS_RESTORE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiStyle
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // You may modify the ImGui::GetStyle() main instance during initialization and before NewFrame().
 // During the frame, use ImGui::PushStyleVar(ImGuiStyleVar_XXXX)/PopStyleVar() to alter the main style values,
 // and ImGui::PushStyleColor(ImGuiCol_XXX)/PopStyleColor() for colors.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct ImGuiStyle
 {
@@ -2456,17 +2456,17 @@ struct ImGuiStyle
 #endif
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiIO
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Communicate most settings and inputs/outputs to Dear ImGui using this structure.
 // Access via ImGui::GetIO(). Read 'Programmer guide' section in .cpp file for general usage.
 // It is generally expected that:
 // - initialization: backends and user code writes to ImGuiIO.
 // - main loop: backends writes to ImGuiIO, user code and imgui code reads from ImGuiIO.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Also see ImGui::GetPlatformIO() and ImGuiPlatformIO struct for OS/platform related functions: clipboard, IME etc.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // [Internal] Storage used by IsKeyDown(), IsKeyPressed() etc functions.
 // If prior to 1.87 you used io.KeysDownDuration[] (which was marked as internal), you should use GetKeyData(key)->DownDuration and *NOT* io.KeysData[key]->DownDuration.
@@ -2720,9 +2720,9 @@ struct ImGuiIO
 	IMGUI_API   ImGuiIO();
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Misc data structures (ImGuiInputTextCallbackData, ImGuiSizeCallbackData, ImGuiPayload)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Shared state of InputText(), passed as an argument to your callback when a ImGuiInputTextFlags_Callback* flag is used.
 // The callback function should return 0 by default.
@@ -2846,9 +2846,9 @@ struct ImGuiPayload
 	}
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Helpers (ImGuiOnceUponAFrame, ImGuiTextFilter, ImGuiTextBuffer, ImGuiStorage, ImGuiListClipper, Math Operators, ImColor)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Helper: Unicode defines
 #define IM_UNICODE_CODEPOINT_INVALID 0xFFFD     // Invalid Unicode code point (standard value).
@@ -3247,9 +3247,9 @@ struct ImColor
 	}
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Multi-Select API flags and structures (ImGuiMultiSelectFlags, ImGuiSelectionRequestType, ImGuiSelectionRequest, ImGuiMultiSelectIO, ImGuiSelectionBasicStorage)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Multi-selection system
 // Documentation at: https://github.com/ocornut/imgui/wiki/Multi-Select
@@ -3398,10 +3398,10 @@ struct ImGuiSelectionExternalStorage
 	IMGUI_API void  ApplyRequests(ImGuiMultiSelectIO* ms_io);   // Apply selection requests by using AdapterSetItemSelected() calls
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Drawing API (ImDrawCmd, ImDrawIdx, ImDrawVert, ImDrawChannel, ImDrawListSplitter, ImDrawListFlags, ImDrawList, ImDrawData)
 // Hold a series of drawing commands. The user provides a renderer for ImDrawData which essentially contains an array of ImDrawList.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // The maximum line width to bake anti-aliased textures for. Build atlas with ImFontAtlasFlags_NoBakedLines to disable baking.
 #ifndef IM_DRAWLIST_TEX_LINES_WIDTH_MAX
@@ -3769,9 +3769,9 @@ struct ImDrawData
 	IMGUI_API void  ScaleClipRects(const ImVec2& fb_scale); // Helper to scale the ClipRect field of each ImDrawCmd. Use if your final output buffer is at a different scale than Dear ImGui expects, or if there is a difference between your window resolution and framebuffer resolution.
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Font API (ImFontConfig, ImFontGlyph, ImFontAtlasFlags, ImFontAtlas, ImFontGlyphRangesBuilder, ImFont)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // A font input/source (we may rename this to ImFontSource in the future)
 struct ImFontConfig
@@ -4071,9 +4071,9 @@ struct ImFont
 	IMGUI_API bool              IsGlyphRangeUnused(unsigned int c_begin, unsigned int c_last);
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Viewports
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Flags stored in ImGuiViewport::Flags, giving indications to the platform backends.
 enum ImGuiViewportFlags_
@@ -4150,9 +4150,9 @@ struct ImGuiViewport
 	}
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiPlatformIO + other Platform Dependent Interfaces (ImGuiPlatformMonitor, ImGuiPlatformImeData)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // [BETA] (Optional) Multi-Viewport Support!
 // If you are new to Dear ImGui and trying to integrate it into your engine, you can probably ignore this for now.
@@ -4198,7 +4198,7 @@ struct ImGuiViewport
 //   you may be tempted to ignore RenderPlatformWindowsDefault() and write customized code to perform your renderingg.
 //   You may decide to setup the platform_io's *RenderWindow and *SwapBuffers pointers and call your functions through those pointers,
 //   or you may decide to never setup those pointers and call your code directly. They are a convenience, not an obligatory interface.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Access via ImGui::GetPlatformIO()
 struct ImGuiPlatformIO
@@ -4322,11 +4322,11 @@ struct ImGuiPlatformImeData
 	}
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Obsolete functions and types
 // (Will be removed! Read 'API BREAKING CHANGES' section in imgui.cpp for details)
 // Please keep your copy of dear imgui up to date! Occasionally set '#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS' in imconfig.h to stay ahead.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 namespace ImGui
@@ -4475,7 +4475,7 @@ namespace ImGui
 #error IMGUI_DISABLE_METRICS_WINDOW was renamed to IMGUI_DISABLE_DEBUG_TOOLS, please use new name.
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #if defined(__clang__)
 #pragma clang diagnostic pop

@@ -26,9 +26,9 @@
 #include "implot.h"
 #include "implot_internal.h"
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Macros and Defines
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #define SQRT_1_2 0.70710678118f
 #define SQRT_3_2 0.86602540378f
@@ -67,9 +67,9 @@ static IMPLOT_INLINE float  ImInvSqrt(float x) { return 1.0f / sqrtf(x); }
 #define ImDrawFlags_RoundCornersAll ImDrawCornerFlags_All
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Template instantiation utility
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // By default, templates are instantiated for `float`, `double`, and for the following integer types, which are defined in imgui.h:
 //     signed char         ImS8;   // 8-bit signed integer
@@ -106,9 +106,9 @@ static IMPLOT_INLINE float  ImInvSqrt(float x) { return 1.0f / sqrtf(x); }
 
 namespace ImPlot {
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Calc maximum index size of ImDrawIdx
 template <typename T>
@@ -277,9 +277,9 @@ IMPLOT_INLINE void PrimRectLine(ImDrawList& draw_list, const ImVec2& Pmin, const
 }
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Item Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImPlotItem* RegisterOrGetItem(const char* label_id, ImPlotItemFlags flags, bool* just_created) {
     ImPlotContext& gp = *GImPlot;
@@ -384,9 +384,9 @@ void BustColorCache(const char* plot_title_id) {
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] BeginItem / EndItem
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static const float ITEM_HIGHLIGHT_LINE_SCALE = 2.0f;
 static const float ITEM_HIGHLIGHT_MARK_SCALE = 1.25f;
@@ -484,9 +484,9 @@ void EndItem() {
     gp.CurrentItem  = nullptr;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Indexers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename T>
 IMPLOT_INLINE T IndexData(const T* data, int idx, int count, int offset, int stride) {
@@ -551,9 +551,9 @@ struct IndexerConst {
     const double Ref;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Getters
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename _IndexerX, typename _IndexerY>
 struct GetterXY {
@@ -644,9 +644,9 @@ struct GetterError {
     const int Stride;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Fitters
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename _Getter1>
 struct Fitter1 {
@@ -768,9 +768,9 @@ struct FitterRect {
     const ImPlotPoint Pmax;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Transformers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct Transformer1 {
     Transformer1(double pixMin, double pltMin, double pltMax, double m, double scaMin, double scaMax, ImPlotTransform fwd, void* data) :
@@ -844,9 +844,9 @@ struct Transformer2 {
     Transformer1 Ty;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Renderers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct RendererBase {
     RendererBase(int prims, int idx_consumed, int vtx_consumed) :
@@ -1352,9 +1352,9 @@ struct RendererRectC : RendererBase {
     mutable ImVec2 UV;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] RenderPrimitives
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 /// Renders primitive shapes in bulk as efficiently as possible.
 template <class _Renderer>
@@ -1410,9 +1410,9 @@ void RenderPrimitives2(const _Getter1& getter1, const _Getter2& getter2, Args...
     RenderPrimitivesEx(_Renderer<_Getter1,_Getter2>(getter1,getter2,args...), draw_list, cull_rect);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Markers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <class _Getter>
 struct RendererMarkersFill : RendererBase {
@@ -1562,9 +1562,9 @@ void RenderMarkers(const _Getter& getter, ImPlotMarker marker, float size, bool 
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotLine
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename _Getter>
 void PlotLineEx(const char* label_id, const _Getter& getter, ImPlotLineFlags flags) {
@@ -1633,9 +1633,9 @@ void PlotLineG(const char* label_id, ImPlotGetter getter_func, void* data, int c
     PlotLineEx(label_id, getter, flags);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotScatter
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename Getter>
 void PlotScatterEx(const char* label_id, const Getter& getter, ImPlotScatterFlags flags) {
@@ -1679,9 +1679,9 @@ void PlotScatterG(const char* label_id, ImPlotGetter getter_func, void* data, in
     return PlotScatterEx(label_id, getter, flags);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotStairs
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename Getter>
 void PlotStairsEx(const char* label_id, const Getter& getter, ImPlotStairsFlags flags) {
@@ -1739,9 +1739,9 @@ void PlotStairsG(const char* label_id, ImPlotGetter getter_func, void* data, int
     return PlotStairsEx(label_id, getter, flags);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotShaded
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename Getter1, typename Getter2>
 void PlotShadedEx(const char* label_id, const Getter1& getter1, const Getter2& getter2, ImPlotShadedFlags flags) {
@@ -1799,9 +1799,9 @@ void PlotShadedG(const char* label_id, ImPlotGetter getter_func1, void* data1, I
     PlotShadedEx(label_id, getter1, getter2, flags);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotBars
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename Getter1, typename Getter2>
 void PlotBarsVEx(const char* label_id, const Getter1& getter1, const Getter2 getter2, double width, ImPlotBarsFlags flags) {
@@ -1890,9 +1890,9 @@ void PlotBarsG(const char* label_id, ImPlotGetter getter_func, void* data, int c
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotBarGroups
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename T>
 void PlotBarGroups(const char* const label_ids[], const T* values, int item_count, int group_count, double group_size, double shift, ImPlotBarGroupsFlags flags) {
@@ -1975,9 +1975,9 @@ void PlotBarGroups(const char* const label_ids[], const T* values, int item_coun
 CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotErrorBars
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename _GetterPos, typename _GetterNeg>
 void PlotErrorBarsVEx(const char* label_id, const _GetterPos& getter_pos, const _GetterNeg& getter_neg, ImPlotErrorBarsFlags flags) {
@@ -2055,9 +2055,9 @@ void PlotErrorBars(const char* label_id, const T* xs, const T* ys, const T* neg,
 CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotStems
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename _GetterM, typename _GetterB>
 void PlotStemsEx(const char* label_id, const _GetterM& get_mark, const _GetterB& get_base, ImPlotStemsFlags flags) {
@@ -2115,9 +2115,9 @@ CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotInfLines
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename T>
 void PlotInfLines(const char* label_id, const T* values, int count, ImPlotInfLinesFlags flags, int offset, int stride) {
@@ -2149,9 +2149,9 @@ void PlotInfLines(const char* label_id, const T* values, int count, ImPlotInfLin
 CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotPieChart
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 IMPLOT_INLINE void RenderPieSlice(ImDrawList& draw_list, const ImPlotPoint& center, double radius, double a0, double a1, ImU32 col) {
     const float resolution = 50 / (2 * IM_PI);
@@ -2226,9 +2226,9 @@ void PlotPieChart(const char* const label_ids[], const T* values, int count, dou
 CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotHeatmap
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename T>
 struct GetterHeatmapRowMaj {
@@ -2385,9 +2385,9 @@ void PlotHeatmap(const char* label_id, const T* values, int rows, int cols, doub
 CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotHistogram
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename T>
 double PlotHistogram(const char* label_id, const T* values, int count, int bins, double bar_scale, ImPlotRange range, ImPlotHistogramFlags flags) {
@@ -2471,9 +2471,9 @@ double PlotHistogram(const char* label_id, const T* values, int count, int bins,
 CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotHistogram2D
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template <typename T>
 double PlotHistogram2D(const char* label_id, const T* xs, const T* ys, int count, int x_bins, int y_bins, ImPlotRect range, ImPlotHistogramFlags flags) {
@@ -2549,9 +2549,9 @@ double PlotHistogram2D(const char* label_id, const T* xs, const T* ys, int count
 CALL_INSTANTIATE_FOR_NUMERIC_TYPES()
 #undef INSTANTIATE_MACRO
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotDigital
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // TODO: Make this behave like all the other plot types (.e. not fixed in y axis)
 
@@ -2630,9 +2630,9 @@ void PlotDigitalG(const char* label_id, ImPlotGetter getter_func, void* data, in
     return PlotDigitalEx(label_id, getter, flags);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotImage
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void PlotImage(const char* label_id, ImTextureID user_texture_id, const ImPlotPoint& bmin, const ImPlotPoint& bmax, const ImVec2& uv0, const ImVec2& uv1, const ImVec4& tint_col, ImPlotImageFlags) {
     if (BeginItemEx(label_id, FitterRect(bmin,bmax))) {
@@ -2648,9 +2648,9 @@ void PlotImage(const char* label_id, ImTextureID user_texture_id, const ImPlotPo
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotText
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void PlotText(const char* text, double x, double y, const ImVec2& pixel_offset, ImPlotTextFlags flags) {
     IM_ASSERT_USER_ERROR(GImPlot->CurrentPlot != nullptr, "PlotText() needs to be called between BeginPlot() and EndPlot()!");
@@ -2680,9 +2680,9 @@ void PlotText(const char* text, double x, double y, const ImVec2& pixel_offset, 
     PopPlotClipRect();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PlotDummy
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void PlotDummy(const char* label_id, ImPlotDummyFlags flags) {
     if (BeginItem(label_id, flags, ImPlotCol_Line))

@@ -18,19 +18,19 @@ namespace gallus
 		{
 			namespace editor
 			{
-				//-----------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				// HierarchyWindow
-				//-----------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				HierarchyWindow::HierarchyWindow(ImGuiWindow& a_Window) : BaseWindow(a_Window, ImGuiWindowFlags_NoCollapse, std::string(font::ICON_LIST) + " Hierarchy", "Hierarchy"), m_SearchBar(a_Window)
 				{
 					m_SearchBar.Initialize("");
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				HierarchyWindow::~HierarchyWindow()
 				{}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				bool HierarchyWindow::Initialize()
 				{
 					core::TOOL->GetECS().OnEntitiesUpdated() += std::bind(&HierarchyWindow::UpdateEntities, this);
@@ -38,7 +38,7 @@ namespace gallus
 					return BaseWindow::Initialize();
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				bool HierarchyWindow::Destroy()
 				{
 					core::TOOL->GetECS().OnEntitiesUpdated() -= std::bind(&HierarchyWindow::UpdateEntities, this);
@@ -46,7 +46,7 @@ namespace gallus
 					return BaseWindow::Destroy();
 				}
 
-				//-----------------------------------------------------------------------------------------------------
+				//---------------------------------------------------------------------
 				void HierarchyWindow::Render()
 				{
 					std::lock_guard<std::recursive_mutex> lock(core::TOOL->GetECS().m_EntityMutex);
@@ -67,7 +67,7 @@ namespace gallus
 						ImGui::IMGUI_FORMAT_ID(std::string(font::ICON_CUBE), BUTTON_ID, "SPAWN_ENTITY_HIERARCHY").c_str(), m_Window.GetHeaderSize(), m_Window.GetIconFont()))
 					{
 						core::TOOL->GetECS().CreateEntity(core::TOOL->GetECS().GetUniqueName("New GameObject"));
-						m_NeedsRefresh = true;
+						m_bNeedsRefresh = true;
 						//if (core::TOOL->GetEditor().GetCurrentScene() && !core::TOOL->GetECS().HasStarted())
 						//{
 						//	core::TOOL->GetEditor().SetDirty();
@@ -108,18 +108,18 @@ namespace gallus
 					ImGui::SetCursorPos(searchBarPos);
 					if (m_SearchBar.Render(ImGui::IMGUI_FORMAT_ID("", INPUT_ID, "HIERARCHY_CONSOLE").c_str(), ImVec2(searchbarWidth, toolbarSize.y), inputPadding))
 					{
-						m_NeedsRefresh = true;
+						m_bNeedsRefresh = true;
 					}
 
 					ImGui::SetCursorPos(endPos);
 
 					ImGui::EndToolbar(ImVec2(0, 0));
 
-					if (m_NeedsRefresh)
+					if (m_bNeedsRefresh)
 					{
-						m_FilteredEntities.clear();
+						m_aFilteredEntities.clear();
 
-						m_NeedsRefresh = false;
+						m_bNeedsRefresh = false;
 
 						bool isEmptyString = m_SearchBar.GetString().empty();
 
@@ -127,7 +127,8 @@ namespace gallus
 						{
 							if (isEmptyString || string_extensions::StringToLower(entity.GetName()).find(m_SearchBar.GetString()) != std::string::npos)
 							{
-								m_FilteredEntities.emplace_back(EntityUIView(m_Window, entity.GetEntityID()));
+								m_aFilteredEntities.push_back(entity.GetEntityID());
+								m_aEntityIcons.push_back(GetIcon(entity.GetEntityID()));
 							}
 						}
 					}
@@ -143,10 +144,13 @@ namespace gallus
 						))
 					{
 						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-						for (EntityUIView& entity : m_FilteredEntities)
+						for (size_t i = 0; i < m_aFilteredEntities.size(); i++)
 						{
+							gameplay::EntityID& entity = m_aFilteredEntities[i];
+							std::string& icon = m_aEntityIcons[i];
+
 							bool clicked = false, doubleClicked = false;
-							entity.Render(clicked, doubleClicked, /*&entity == core::TOOL->GetEditor().GetSelectable()*/ false);
+							RenderEntity(entity, icon, clicked, doubleClicked, /*&entity == core::TOOL->GetEditor().GetSelectable()*/ false);
 							if (clicked)
 							{
 								//m_LastID = entity.GetEntityID();
@@ -173,7 +177,7 @@ namespace gallus
 
 				void HierarchyWindow::UpdateEntities()
 				{
-					m_NeedsRefresh = true;
+					m_bNeedsRefresh = true;
 
 					//core::ENGINE.GetEditor().SetDirty();
 				}
@@ -187,6 +191,114 @@ namespace gallus
 					//}
 
 					//core::ENGINE.GetEditor().SetDirty();
+				}
+
+				std::string HierarchyWindow::GetIcon(const gameplay::EntityID& a_EntityID) const
+				{
+					return font::ICON_IMAGE;
+				}
+
+				void HierarchyWindow::RenderEntity(const gameplay::EntityID& a_EntityID, const std::string& a_sIcon, bool& a_bClicked, bool& a_bDoubleClicked, bool a_bSelected)
+				{
+					gameplay::Entity* entity = core::TOOL->GetECS().GetEntity(a_EntityID);
+					if (!entity)
+					{
+						return;
+					}
+
+					bool wasInactive = !entity->IsActive();
+					if (wasInactive)
+					{
+						ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+					}
+
+					// Set the size of each child
+					ImVec2 childSize = ImVec2(ImGui::GetContentRegionAvail().x, 32);
+					ImVec2 screenCursorPos = ImGui::GetCursorScreenPos();
+					ImVec2 cursorPos = screenCursorPos;
+					ImVec2 childEnd = ImVec2(cursorPos.x + childSize.x, cursorPos.y + childSize.y);
+
+					if (a_bSelected)
+					{
+						ImGui::GetWindowDrawList()->AddRectFilled(cursorPos, childEnd, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_HeaderActive)));
+					}
+
+					ImVec2 buttonCursorPos = ImVec2(ImGui::GetCursorPosX() + (m_Window.GetFramePadding().x * 3), ImGui::GetCursorPosY());
+
+					ImVec2 min = ImGui::GetCursorScreenPos(); // Top-left corner
+					ImVec2 max = ImVec2(min.x + childSize.x, min.y + childSize.y); // Bottom-right corner
+					if (ImGui::IsMouseHoveringRect(min, max))
+					{
+						ImGui::GetWindowDrawList()->AddRectFilled(cursorPos, childEnd, ImGui::ColorConvertFloat4ToU32(ImGui::GetStyleColorVec4(ImGuiCol_HeaderHovered)));
+						if (ImGui::IsMouseClicked(0))
+						{
+							a_bClicked = true;
+						}
+						if (ImGui::IsMouseDoubleClicked(0))
+						{
+							a_bDoubleClicked = true;
+						}
+					}
+
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+					float checkboxHeight = ImGui::GetFrameHeight();
+					ImVec2 centerPos = ImVec2(m_Window.GetWindowPadding().x, buttonCursorPos.y + (childSize.y - checkboxHeight) * 0.5f);
+					ImGui::SetCursorPos(centerPos);
+					bool temp = entity->IsActive();
+					if (ImGui::Checkbox(ImGui::IMGUI_FORMAT_ID("", CHECKBOX_ID, string_extensions::StringToUpper(entity->GetName()) + "_HIERARCHY").c_str(), &temp))
+					{
+						entity->SetIsActive(temp);
+						//core::TOOL->GetEditor().SetDirty();
+					}
+					ImGui::PopStyleVar();
+
+					ImGui::PushFont(m_Window.GetIconFont());
+
+					// Dynamically calculate the size of the icon
+					ImVec2 iconSize = ImVec2(m_Window.GetFontSize(), m_Window.GetFontSize()); // Replace this with your icon size calculation.
+
+					float iconOffset = m_Window.GetIconFont()->FontSize * 2.0f;
+
+					// Calculate offsets for centering
+					float verticalOffset = (childSize.y - iconSize.y) / 2.0f;   // Center vertically
+
+					// Final position of the icon
+					centerPos.y = buttonCursorPos.y + verticalOffset;
+
+					// Dynamically calculate the size of the icon
+					iconSize = ImGui::CalcTextSize(a_sIcon.c_str()); // Replace this with your icon size calculation.
+
+					iconOffset = m_Window.GetIconFont()->FontSize * 2.0f;
+
+					// Calculate offsets for centering
+					verticalOffset = (childSize.y - iconSize.y) / 2.0f;   // Center vertically
+
+					// Final position of the icon
+					centerPos = ImVec2(centerPos.x + iconOffset, buttonCursorPos.y);
+					centerPos.y += verticalOffset;
+
+					// Set cursor to the calculated position and render the icon
+					ImGui::SetCursorPos(centerPos);
+					ImGui::Text(a_sIcon.c_str());
+
+					ImGui::PopFont();
+
+					ImVec2 textSize = ImGui::CalcTextSize(entity->GetName().c_str());
+
+					// Calculate position to center the icon
+					centerPos = ImVec2(
+						centerPos.x + iconOffset,
+						buttonCursorPos.y + (childSize.y - textSize.y) * 0.5f
+					);
+					ImGui::SetCursorPos(centerPos);
+					ImGui::Text(entity->GetName().c_str());
+
+					ImGui::SetCursorScreenPos(ImVec2(screenCursorPos.x, screenCursorPos.y + childSize.y));
+
+					if (wasInactive)
+					{
+						ImGui::PopStyleVar();
+					}
 				}
 			}
 		}

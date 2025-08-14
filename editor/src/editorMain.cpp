@@ -5,12 +5,14 @@
 
 #include "utils/file_abstractions.h"
 #include "core/EditorTool.h"
+#include "gameplay/Game.h"
 #include "resource.h"
+
 #include "graphics/imgui/windows/MainWindowDock.h"
 #include "graphics/imgui/windows/ConsoleWindow.h"
 #include "graphics/imgui/windows/HierarchyWindow.h"
 #include "graphics/imgui/windows/SceneWindow.h"
-#include "gameplay/systems/MeshSystem.h"
+#include "graphics/imgui/windows/ExplorerWindow.h"
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
@@ -28,20 +30,18 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
 	// Initialize systems.
 	std::string name = "Gallus 2D Engine";
 	std::string saveDirPath = gallus::file::GetAppDataPath().generic_string() + "/tool";
+	std::string assetPath = "./data/assets/";
 	gallus::core::TOOL = new gallus::core::EditorTool();
 	gallus::core::TOOL->SetSaveDirectory(saveDirPath);
+	gallus::core::TOOL->GetResourceAtlas().SetResourceFolder(assetPath);
+
 	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::MainWindowDock(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
 	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::ConsoleWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
 	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::HierarchyWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
 	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::SceneWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
+	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::ExplorerWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
 
 	gallus::core::TOOL->Initialize(hInstance, name);
-
-	auto entityId = gallus::core::TOOL->GetECS().CreateEntity("New Sprite");
-	gallus::gameplay::MeshComponent* meshComp = reinterpret_cast<gallus::gameplay::MeshComponent*>(gallus::core::TOOL->GetECS().GetSystem<gallus::gameplay::MeshSystem>().CreateBaseComponent(entityId));
-	meshComp->SetMesh(gallus::core::TOOL->GetResourceAtlas().GetDefaultMesh());
-	meshComp->SetShader(gallus::core::TOOL->GetResourceAtlas().GetDefaultShader());
-	meshComp->SetTexture(gallus::core::TOOL->GetResourceAtlas().GetDefaultTexture());
 
 	// Load icons.
 	HICON hIconLarge = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
@@ -49,8 +49,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
 	SendMessage(gallus::core::TOOL->GetWindow().GetHWnd(), WM_SETICON, ICON_BIG, (LPARAM) hIconLarge);
 	SendMessage(gallus::core::TOOL->GetWindow().GetHWnd(), WM_SETICON, ICON_SMALL, (LPARAM) hIconSmall);
 
-	// Loop.
-	gallus::core::TOOL->Loop();
+	// Game
+	game::GAME.Initialize();
+	game::GAME.Loop();
 
 	// Destroy the tool after loop ends.
 	gallus::core::TOOL->Destroy();

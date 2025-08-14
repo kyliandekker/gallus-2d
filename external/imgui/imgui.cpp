@@ -100,9 +100,9 @@ CODE
 
 */
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // DOCUMENTATION
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 /*
 
@@ -1287,9 +1287,9 @@ static void             UpdateViewportPlatformMonitor(ImGuiViewportP* viewport);
 
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] CONTEXT AND MEMORY ALLOCATORS
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // DLL users:
 // - Heaps and globals are not shared across DLL boundaries!
@@ -1329,9 +1329,9 @@ static ImGuiMemAllocFunc    GImAllocatorAllocFunc = MallocWrapper;
 static ImGuiMemFreeFunc     GImAllocatorFreeFunc = FreeWrapper;
 static void*                GImAllocatorUserData = NULL;
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] USER FACING STRUCTURES (ImGuiStyle, ImGuiIO, ImGuiPlatformIO)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImGuiStyle::ImGuiStyle()
 {
@@ -1882,9 +1882,9 @@ ImGuiPlatformIO::ImGuiPlatformIO()
     Platform_LocaleDecimalPoint = '.';
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] MISC HELPERS/UTILITIES (Geometry functions)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImVec2 ImBezierCubicClosestPoint(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, const ImVec2& p, int num_segments)
 {
@@ -2002,9 +2002,9 @@ ImVec2 ImTriangleClosestPoint(const ImVec2& a, const ImVec2& b, const ImVec2& c,
     return proj_ca;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] MISC HELPERS/UTILITIES (String, Format, Hash functions)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Consider using _stricmp/_strnicmp under Windows or strcasecmp/strncasecmp. We don't actually use either ImStricmp/ImStrnicmp in the codebase any more.
 int ImStricmp(const char* str1, const char* str2)
@@ -2341,9 +2341,9 @@ ImGuiID ImHashStr(const char* data_p, size_t data_size, ImGuiID seed)
     return ~crc;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] MISC HELPERS/UTILITIES (File functions)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Default file functions
 #ifndef IMGUI_DISABLE_DEFAULT_FILE_FUNCTIONS
@@ -2421,9 +2421,9 @@ void*   ImFileLoadToMemory(const char* filename, const char* mode, size_t* out_f
     return file_data;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] MISC HELPERS/UTILITIES (ImText* functions)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 IM_MSVC_RUNTIME_CHECKS_OFF
 
@@ -2626,10 +2626,10 @@ int ImTextCountLines(const char* in_text, const char* in_text_end)
 
 IM_MSVC_RUNTIME_CHECKS_RESTORE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] MISC HELPERS/UTILITIES (Color functions)
 // Note: The Convert functions are early design which are not consistent with other API.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 IMGUI_API ImU32 ImAlphaBlendColors(ImU32 col_a, ImU32 col_b)
 {
@@ -2711,10 +2711,10 @@ void ImGui::ColorConvertHSVtoRGB(float h, float s, float v, float& out_r, float&
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiStorage
 // Helper: Key->value storage
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // std::lower_bound but without the bullshit
 ImGuiStoragePair* ImLowerBound(ImGuiStoragePair* in_begin, ImGuiStoragePair* in_end, ImGuiID key)
@@ -2851,9 +2851,9 @@ void ImGuiStorage::SetAllInt(int v)
 }
 IM_MSVC_RUNTIME_CHECKS_RESTORE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiTextFilter
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Helper: Parse and apply text filters. In format "aaaaa[,bbbb][,ccccc]"
 ImGuiTextFilter::ImGuiTextFilter(const char* default_filter) //-V1077
@@ -2948,9 +2948,9 @@ bool ImGuiTextFilter::PassFilter(const char* text, const char* text_end) const
     return false;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiTextBuffer, ImGuiTextIndex
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // On some platform vsnprintf() takes va_list by reference and modifies it.
 // va_copy is the 'correct' way to copy a va_list but Visual Studio prior to 2013 doesn't have it.
@@ -3031,9 +3031,9 @@ void ImGuiTextIndex::append(const char* base, int old_size, int new_size)
     EndOffset = ImMax(EndOffset, new_size);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiListClipper
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // FIXME-TABLE: This prevents us from using ImGuiListClipper _inside_ a table cell.
 // The problem we have is that without a Begin/End scheme for rows using the clipper is ambiguous.
@@ -3344,9 +3344,9 @@ bool ImGuiListClipper::Step()
     return ret;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] STYLING
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImGuiStyle& ImGui::GetStyle()
 {
@@ -3622,12 +3622,12 @@ const char* ImGui::GetStyleColorName(ImGuiCol idx)
     return "Unknown";
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] RENDER HELPERS
 // Some of those (internal) functions are currently quite a legacy mess - their signature and behavior will change,
 // we need a nicer separation between low-level functions and high-level functions relying on the ImGui context.
 // Also see imgui_draw.cpp for some more which have been reworked to not rely on ImGui:: context.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 const char* ImGui::FindRenderedTextEnd(const char* text, const char* text_end)
 {
@@ -3878,9 +3878,9 @@ void ImGui::RenderMouseCursor(ImVec2 base_pos, float base_scale, ImGuiMouseCurso
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] INITIALIZATION, SHUTDOWN
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Internal state access - if you want to share Dear ImGui state between modules (e.g. DLL) or allocate it yourself
 // Note that we still point to some static data and members (such as GFontAtlas), so the state instance you end up using will point to the static data within its module
@@ -4358,9 +4358,9 @@ void ImGui::CallContextHooks(ImGuiContext* ctx, ImGuiContextHookType hook_type)
             hook.Callback(&g, &hook);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] MAIN CODE (most of the code! lots of stuff, needs tidying up!)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // ImGuiWindow is mostly a dumb struct. It merely has a constructor and a few helper methods
 ImGuiWindow::ImGuiWindow(ImGuiContext* ctx, const char* name) : DrawListInst(NULL)
@@ -9095,9 +9095,9 @@ bool ImGui::IsRectVisible(const ImVec2& rect_min, const ImVec2& rect_max)
     return window->ClipRect.Overlaps(ImRect(rect_min, rect_max));
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ID STACK
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // This is one of the very rare legacy case where we use ImGuiWindow methods,
 // it should ideally be flattened at some point but it's been used a lots by widgets.
@@ -9262,9 +9262,9 @@ ImGuiID ImGui::GetID(int int_id)
 }
 IM_MSVC_RUNTIME_CHECKS_RESTORE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] INPUTS
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - GetModForLRModKey() [Internal]
 // - FixupKeyChord() [Internal]
 // - GetKeyData() [Internal]
@@ -9275,18 +9275,18 @@ IM_MSVC_RUNTIME_CHECKS_RESTORE
 // - GetTypematicRepeatRate() [Internal]
 // - GetKeyPressedAmount() [Internal]
 // - GetKeyMagnitude2d() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - UpdateKeyRoutingTable() [Internal]
 // - GetRoutingIdFromOwnerId() [Internal]
 // - GetShortcutRoutingData() [Internal]
 // - CalcRoutingScore() [Internal]
 // - SetShortcutRouting() [Internal]
 // - TestShortcutRouting() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - IsKeyDown()
 // - IsKeyPressed()
 // - IsKeyReleased()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - IsMouseDown()
 // - IsMouseClicked()
 // - IsMouseReleased()
@@ -9304,29 +9304,29 @@ IM_MSVC_RUNTIME_CHECKS_RESTORE
 // - ResetMouseDragDelta()
 // - GetMouseCursor()
 // - SetMouseCursor()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - UpdateAliasKey()
 // - GetMergedModsFromKeys()
 // - UpdateKeyboardInputs()
 // - UpdateMouseInputs()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - LockWheelingWindow [Internal]
 // - FindBestWheelingWindow [Internal]
 // - UpdateMouseWheel() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - SetNextFrameWantCaptureKeyboard()
 // - SetNextFrameWantCaptureMouse()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - GetInputSourceName() [Internal]
 // - DebugPrintInputEvent() [Internal]
 // - UpdateInputEvents() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - GetKeyOwner() [Internal]
 // - TestKeyOwner() [Internal]
 // - SetKeyOwner() [Internal]
 // - SetItemKeyOwner() [Internal]
 // - Shortcut() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static ImGuiKeyChord GetModForLRModKey(ImGuiKey key)
 {
@@ -10716,9 +10716,9 @@ bool ImGui::Shortcut(ImGuiKeyChord key_chord, ImGuiInputFlags flags, ImGuiID own
     return true;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ERROR CHECKING, STATE RECOVERY
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DebugCheckVersionAndDataLayout() (called via IMGUI_CHECKVERSION() macros)
 // - ErrorCheckUsingSetCursorPosToExtendParentBoundaries()
 // - ErrorCheckNewFrameSanityChecks()
@@ -10727,7 +10727,7 @@ bool ImGui::Shortcut(ImGuiKeyChord key_chord, ImGuiInputFlags flags, ImGuiID own
 // - ErrorRecoveryTryToRecoverState()
 // - ErrorRecoveryTryToRecoverWindowState()
 // - ErrorLog()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Verify ABI compatibility between caller code and compiled version of Dear ImGui. This helps detects some build issues.
 // Called by IMGUI_CHECKVERSION().
@@ -11161,12 +11161,12 @@ void ImGui::EndErrorTooltip()
     End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ITEM SUBMISSION
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - KeepAliveID()
 // - ItemAdd()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Code not using ItemAdd() may need to call this manually otherwise ActiveId will be cleared. In IMGUI_VERSION_NUM < 18717 this was called by GetID().
 void ImGui::KeepAliveID(ImGuiID id)
@@ -11272,9 +11272,9 @@ bool ImGui::ItemAdd(const ImRect& bb, ImGuiID id, const ImRect* nav_bb_arg, ImGu
 }
 IM_MSVC_RUNTIME_CHECKS_RESTORE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] LAYOUT
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - ItemSize()
 // - SameLine()
 // - GetCursorScreenPos()
@@ -11299,7 +11299,7 @@ IM_MSVC_RUNTIME_CHECKS_RESTORE
 // - BeginGroup()
 // - EndGroup()
 // Also see in imgui_widgets: tab bars, and in imgui_tables: tables, columns.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Advance cursor given item size for layout.
 // Register minimum needed size so it can extend the bounding box used for auto-fit calculation.
@@ -11700,9 +11700,9 @@ void ImGui::EndGroup()
 }
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] SCROLLING
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Helper to snap on edges when aiming at an item very close to the edge,
 // So the difference between WindowPadding and ItemSpacing will be in the visible area after scrolling.
@@ -11941,9 +11941,9 @@ void ImGui::SetScrollHereY(float center_y_ratio)
     window->ScrollTargetEdgeSnapDist.y = ImMax(0.0f, window->WindowPadding.y - spacing_y);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] TOOLTIPS
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 bool ImGui::BeginTooltip()
 {
@@ -12044,9 +12044,9 @@ void ImGui::SetItemTooltipV(const char* fmt, va_list args)
 }
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] POPUPS
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Supported flags: ImGuiPopupFlags_AnyPopupId, ImGuiPopupFlags_AnyPopupLevel
 bool ImGui::IsPopupOpen(ImGuiID id, ImGuiPopupFlags popup_flags)
@@ -12662,7 +12662,7 @@ ImVec2 ImGui::FindBestWindowPosForPopup(ImGuiWindow* window)
     return window->Pos;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] WINDOW FOCUS
 //----------------------------------------------------------------------------
 // - SetWindowFocus()
@@ -12676,7 +12676,7 @@ ImVec2 ImGui::FindBestWindowPosForPopup(ImGuiWindow* window)
 // - FindWindowDisplayIndex() [Internal]
 // - FocusWindow() [Internal]
 // - FocusTopMostWindowUnderOne() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::SetWindowFocus()
 {
@@ -12945,9 +12945,9 @@ void ImGui::FocusTopMostWindowUnderOne(ImGuiWindow* under_this_window, ImGuiWind
     FocusWindow(NULL, flags);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] KEYBOARD/GAMEPAD NAVIGATION
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // FIXME-NAV: The existence of SetNavID vs SetFocusID vs FocusWindow() needs to be clarified/reworked.
 // In our terminology those should be interchangeable, yet right now this is super confusing.
@@ -14600,9 +14600,9 @@ void ImGui::NavUpdateWindowingOverlay()
     PopStyleVar();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] DRAG AND DROP
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 bool ImGui::IsDragDropActive()
 {
@@ -14960,12 +14960,12 @@ void ImGui::EndDragDropTarget()
         ClearDragDrop();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] LOGGING/CAPTURING
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // All text output from the interface can be captured into tty/file/clipboard.
 // By default, tree nodes are automatically opened during logging.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Pass text data straight to log (without being displayed)
 static inline void LogTextV(ImGuiContext& g, const char* fmt, va_list args)
@@ -15208,9 +15208,9 @@ void ImGui::LogButtons()
         LogToClipboard();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] SETTINGS
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - UpdateSettings() [Internal]
 // - MarkIniSettingsDirty() [Internal]
 // - FindSettingsHandler() [Internal]
@@ -15219,13 +15219,13 @@ void ImGui::LogButtons()
 // - LoadIniSettingsFromMemory()
 // - SaveIniSettingsToDisk()
 // - SaveIniSettingsToMemory()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - CreateNewWindowSettings() [Internal]
 // - FindWindowSettingsByID() [Internal]
 // - FindWindowSettingsByWindow() [Internal]
 // - ClearWindowSettings() [Internal]
 // - WindowSettingsHandler_***() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Called by NewFrame()
 void ImGui::UpdateSettings()
@@ -15598,9 +15598,9 @@ static void WindowSettingsHandler_WriteAll(ImGuiContext* ctx, ImGuiSettingsHandl
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] LOCALIZATION
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::LocalizeRegisterEntries(const ImGuiLocEntry* entries, int count)
 {
@@ -15609,9 +15609,9 @@ void ImGui::LocalizeRegisterEntries(const ImGuiLocEntry* entries, int count)
         g.LocalizationTable[entries[n].Key] = entries[n].Text;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] VIEWPORTS, PLATFORM WINDOWS
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - GetMainViewport()
 // - FindViewportByID()
 // - FindViewportByPlatformHandle()
@@ -15635,7 +15635,7 @@ void ImGui::LocalizeRegisterEntries(const ImGuiLocEntry* entries, int count)
 // - UpdateViewportPlatformMonitor() [Internal]
 // - DestroyPlatformWindow() [Internal]
 // - DestroyPlatformWindows()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImGuiViewport* ImGui::GetMainViewport()
 {
@@ -16621,9 +16621,9 @@ void ImGui::DestroyPlatformWindows()
 }
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] DOCKING
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: Internal Types
 // Docking: Forward Declarations
 // Docking: ImGuiDockContext
@@ -16634,11 +16634,11 @@ void ImGui::DestroyPlatformWindows()
 // Docking: Builder Functions
 // Docking: Begin/End Support Functions (called from Begin/End)
 // Docking: Settings
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Typical Docking call flow: (root level is generally public API):
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - NewFrame()                               new dear imgui frame
 //    | DockContextNewFrameUpdateUndocking()  - process queued undocking requests
 //    | - DockContextProcessUndockWindow()    - process one window undocking request
@@ -16666,32 +16666,32 @@ void ImGui::DestroyPlatformWindows()
 //    |     - EndTabBar()
 //    |   - BeginDockableDragDropTarget()
 //    |      - DockNodeUpdate()               - recurse into child nodes...
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DockSpace()                              user submit a dockspace into a window
 //    | Begin(Child)                          - create a child window
 //    | DockNodeUpdate()                      - call main dock node update function
 //    | End(Child)
 //    | ItemSize()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - Begin()
 //    | BeginDocked()
 //    | BeginDockableDragDropSource()
 //    | BeginDockableDragDropTarget()
 //    | - DockNodePreviewDockRender()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - EndFrame()
 //    | DockContextEndFrame()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: Internal Types
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - ImGuiDockRequestType
 // - ImGuiDockRequest
 // - ImGuiDockPreviewData
 // - ImGuiDockNodeSettings
 // - ImGuiDockContext
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 enum ImGuiDockRequestType
 {
@@ -16755,9 +16755,9 @@ struct ImGuiDockNodeSettings
     ImGuiDockNodeSettings() { memset(this, 0, sizeof(*this)); SplitAxis = ImGuiAxis_None; }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: Forward Declarations
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 namespace ImGui
 {
@@ -16817,16 +16817,16 @@ namespace ImGui
     static void             DockSettingsHandler_WriteAll(ImGuiContext* imgui_ctx, ImGuiSettingsHandler* handler, ImGuiTextBuffer* buf);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: ImGuiDockContext
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // The lifetime model is different from the one of regular windows: we always create a ImGuiDockNode for each ImGuiDockNodeSettings,
 // or we always hold the entire docking node tree. Nodes are frequently hidden, e.g. if the window(s) or child nodes they host are not active.
 // At boot time only, we run a simple GC to remove nodes that have no references.
 // Because dock node settings (which are small, contiguous structures) are always mirrored by their corresponding dock nodes (more complete structures),
 // we can also very easily recreate the nodes from scratch given the settings data (this is what DockContextRebuild() does).
 // This is convenient as docking reconfiguration can be implemented by mostly poking at the simpler settings data.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DockContextInitialize()
 // - DockContextShutdown()
 // - DockContextClearNodes()
@@ -16843,7 +16843,7 @@ namespace ImGui
 // - DockContextPruneUnusedSettingsNodes()
 // - DockContextBuildNodesFromSettings()
 // - DockContextBuildAddWindowsToNodes()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::DockContextInitialize(ImGuiContext* ctx)
 {
@@ -17178,9 +17178,9 @@ void ImGui::DockContextBuildAddWindowsToNodes(ImGuiContext* ctx, ImGuiID root_id
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: ImGuiDockContext Docking/Undocking functions
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DockContextQueueDock()
 // - DockContextQueueUndockWindow()
 // - DockContextQueueUndockNode()
@@ -17189,7 +17189,7 @@ void ImGui::DockContextBuildAddWindowsToNodes(ImGuiContext* ctx, ImGuiID root_id
 // - DockContextProcessUndockWindow()
 // - DockContextProcessUndockNode()
 // - DockContextCalcDropPosForDocking()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::DockContextQueueDock(ImGuiContext* ctx, ImGuiWindow* target, ImGuiDockNode* target_node, ImGuiWindow* payload, ImGuiDir split_dir, float split_ratio, bool split_outer)
 {
@@ -17465,9 +17465,9 @@ bool ImGui::DockContextCalcDropPosForDocking(ImGuiWindow* target, ImGuiDockNode*
     return true;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: ImGuiDockNode
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DockNodeGetTabOrder()
 // - DockNodeAddWindow()
 // - DockNodeRemoveWindow()
@@ -17496,7 +17496,7 @@ bool ImGui::DockContextCalcDropPosForDocking(ImGuiWindow* target, ImGuiDockNode*
 // - DockNodeCalcDropRectsAndTestMousePos()
 // - DockNodePreviewDockSetup()
 // - DockNodePreviewDockRender()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImGuiDockNode::ImGuiDockNode(ImGuiID id)
 {
@@ -19038,9 +19038,9 @@ static void ImGui::DockNodePreviewDockRender(ImGuiWindow* host_window, ImGuiDock
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: ImGuiDockNode Tree manipulation functions
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DockNodeTreeSplit()
 // - DockNodeTreeMerge()
 // - DockNodeTreeUpdatePosSize()
@@ -19048,7 +19048,7 @@ static void ImGui::DockNodePreviewDockRender(ImGuiWindow* host_window, ImGuiDock
 // - DockNodeTreeUpdateSplitter()
 // - DockNodeTreeFindFallbackLeafNode()
 // - DockNodeTreeFindNodeByPos()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::DockNodeTreeSplit(ImGuiContext* ctx, ImGuiDockNode* parent_node, ImGuiAxis split_axis, int split_inheritor_child_idx, float split_ratio, ImGuiDockNode* new_node)
 {
@@ -19409,13 +19409,13 @@ ImGuiDockNode* ImGui::DockNodeTreeFindVisibleNodeByPos(ImGuiDockNode* node, ImVe
     return node;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: Public Functions (SetWindowDock, DockSpace, DockSpaceOverViewport)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - SetWindowDock() [Internal]
 // - DockSpace()
 // - DockSpaceOverViewport()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // [Internal] Called via SetNextWindowDockID()
 void ImGui::SetWindowDock(ImGuiWindow* window, ImGuiID dock_id, ImGuiCond cond)
@@ -19608,13 +19608,13 @@ ImGuiID ImGui::DockSpaceOverViewport(ImGuiID dockspace_id, const ImGuiViewport* 
     return dockspace_id;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: Builder Functions
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Very early end-user API to manipulate dock nodes.
 // Only available in imgui_internal.h. Expect this API to change/break!
 // It is expected that those functions are all called _before_ the dockspace node submission.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DockBuilderDockWindow()
 // - DockBuilderGetNode()
 // - DockBuilderSetNodePos()
@@ -19629,7 +19629,7 @@ ImGuiID ImGui::DockSpaceOverViewport(ImGuiID dockspace_id, const ImGuiViewport* 
 // - DockBuilderCopyWindowSettings()
 // - DockBuilderCopyDockSpace()
 // - DockBuilderFinish()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::DockBuilderDockWindow(const char* window_name, ImGuiID node_id)
 {
@@ -20041,15 +20041,15 @@ void ImGui::DockBuilderFinish(ImGuiID root_id)
     DockContextBuildAddWindowsToNodes(&g, root_id);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: Begin/End Support Functions (called from Begin/End)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - GetWindowAlwaysWantOwnTabBar()
 // - DockContextBindNodeToWindow()
 // - BeginDocked()
 // - BeginDockableDragDropSource()
 // - BeginDockableDragDropTarget()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 bool ImGui::GetWindowAlwaysWantOwnTabBar(ImGuiWindow* window)
 {
@@ -20352,9 +20352,9 @@ void ImGui::BeginDockableDragDropTarget(ImGuiWindow* window)
     EndDragDropTarget();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Docking: Settings
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DockSettingsRenameNodeReferences()
 // - DockSettingsRemoveNodeReferences()
 // - DockSettingsFindNodeSettings()
@@ -20363,7 +20363,7 @@ void ImGui::BeginDockableDragDropTarget(ImGuiWindow* window)
 // - DockSettingsHandler_ReadLine()
 // - DockSettingsHandler_DockNodeToSettings()
 // - DockSettingsHandler_WriteAll()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static void ImGui::DockSettingsRenameNodeReferences(ImGuiID old_node_id, ImGuiID new_node_id)
 {
@@ -20576,13 +20576,13 @@ static void ImGui::DockSettingsHandler_WriteAll(ImGuiContext* ctx, ImGuiSettings
 }
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] PLATFORM DEPENDENT HELPERS
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - Default clipboard handlers
 // - Default shell function handlers
 // - Default IME handlers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #if defined(_WIN32) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS) && !defined(IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS)
 
@@ -20710,7 +20710,7 @@ static void Platform_SetClipboardTextFn_DefaultImpl(ImGuiContext* ctx, const cha
 
 #endif // Default clipboard handlers
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef IMGUI_DISABLE_DEFAULT_SHELL_FUNCTIONS
 #if defined(__APPLE__) && TARGET_OS_IPHONE
@@ -20766,7 +20766,7 @@ static bool Platform_OpenInShellFn_DefaultImpl(ImGuiContext*, const char* path)
 static bool Platform_OpenInShellFn_DefaultImpl(ImGuiContext*, const char*) { return false; }
 #endif // Default shell handlers
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Win32 API IME support (for Asian languages, etc.)
 #if defined(_WIN32) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS) && !defined(IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS)
@@ -20806,9 +20806,9 @@ static void Platform_SetImeDataFn_DefaultImpl(ImGuiContext*, ImGuiViewport*, ImG
 
 #endif // Default IME handlers
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] METRICS/DEBUGGER WINDOW
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - DebugRenderViewportThumbnail() [Internal]
 // - RenderViewportsThumbnails() [Internal]
 // - DebugTextEncoding()
@@ -20828,7 +20828,7 @@ static void Platform_SetImeDataFn_DefaultImpl(ImGuiContext*, ImGuiViewport*, ImG
 // - DebugNodeWindowSettings() [Internal]
 // - DebugNodeWindowsList() [Internal]
 // - DebugNodeWindowsListByBeginStackParent() [Internal]
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef IMGUI_DISABLE_DEBUG_TOOLS
 
@@ -22350,9 +22350,9 @@ void ImGui::DebugNodeWindowsListByBeginStackParent(ImGuiWindow** windows, int wi
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] DEBUG LOG WINDOW
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::DebugLog(const char* fmt, ...)
 {
@@ -22511,9 +22511,9 @@ void ImGui::DebugTextUnformattedWithLocateItem(const char* line_begin, const cha
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] OTHER DEBUG TOOLS (ITEM PICKER, ID STACK TOOL)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Draw a small cross at current CursorPos in current window's DrawList
 void ImGui::DebugDrawCursorPos(ImU32 col)
@@ -22838,7 +22838,7 @@ void ImGui::DebugHookIdInfo(ImGuiID, ImGuiDataType, const void*, const void*) {}
 
 #endif // #ifndef IMGUI_DISABLE_DEBUG_TOOLS
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Include imgui_user.inl at the end of imgui.cpp to access private data/functions that aren't exposed.
 // Prefer just including imgui_internal.h from your code rather than using this define. If a declaration is missing from imgui_internal.h add it or request it on the github.
@@ -22846,6 +22846,6 @@ void ImGui::DebugHookIdInfo(ImGuiID, ImGuiDataType, const void*, const void*) {}
 #include "imgui_user.inl"
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #endif // #ifndef IMGUI_DISABLE

@@ -7,10 +7,9 @@ namespace gallus
 {
 	namespace core
 	{
-#define CATEGORY_TOOL "TOOL"
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// Tool
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool Tool::Initialize(HINSTANCE a_hInstance, const std::string& a_sName)
 		{
 			TOOL = this;
@@ -22,10 +21,9 @@ namespace gallus
 			// Logger is a global var unlike all the other systems. Not the prettiest but not too bad either.
 			logger::LOGGER.Initialize(true);
 
-			LOG(LOGSEVERITY_INFO, CATEGORY_TOOL, "Initializing tool.");
+			LOG(LOGSEVERITY_INFO, LOG_CATEGORY_ENGINE, "Initializing tool.");
 
 			// We initialize the window first and set the size and title after it has been created.
-			m_Window.OnQuit() += std::bind(&Tool::Shutdown, this);
 			m_Window.Initialize(true, a_hInstance);
 			m_Window.SetTitle(a_sName);
 
@@ -36,7 +34,7 @@ namespace gallus
 
 			System::Initialize();
 
-			LOG(LOGSEVERITY_INFO, CATEGORY_TOOL, "Initialized tool.");
+			LOG(LOGSEVERITY_INFO, LOG_CATEGORY_ENGINE, "Initialized tool.");
 
 #ifdef _TEST
 			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
@@ -54,10 +52,10 @@ namespace gallus
 			return true;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool Tool::Destroy()
 		{
-			LOG(LOGSEVERITY_INFO, CATEGORY_TOOL, "Destroying engine.");
+			LOG(LOGSEVERITY_INFO, LOG_CATEGORY_ENGINE, "Destroying engine.");
 
 			m_ECS.Destroy();
 
@@ -71,42 +69,28 @@ namespace gallus
 			return System::Destroy();
 		}
 
-		//-----------------------------------------------------------------------------------------------------
-		void Tool::Shutdown()
-		{
-			m_bRunning.store(false);
-		}
-
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		ResourceAtlas& Tool::GetResourceAtlas()
 		{
 			return m_ResourceAtlas;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		graphics::win32::Window& Tool::GetWindow()
 		{
 			return m_Window;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		graphics::dx12::DX12System2D& Tool::GetDX12()
 		{
 			return m_DX12;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		gameplay::EntityComponentSystem& Tool::GetECS()
 		{
 			return m_ECS;
-		}
-
-		//-----------------------------------------------------------------------------------------------------
-		void Tool::Loop()
-		{
-			while (m_bRunning.load())
-			{
-			}
 		}
 	}
 }

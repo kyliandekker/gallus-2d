@@ -14,7 +14,7 @@
 #include "d3dx12_property_format_table.h"
 #include "d3d12.h"
 #include "d3dx12_core.h"
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 template <typename T, typename U, typename V>
 inline void D3D12DecomposeSubresource( UINT Subresource, UINT MipLevels, UINT ArraySize, _Out_ T& MipSlice, _Out_ U& ArraySlice, _Out_ V& PlaneSlice ) noexcept
 {
@@ -23,7 +23,7 @@ inline void D3D12DecomposeSubresource( UINT Subresource, UINT MipLevels, UINT Ar
     PlaneSlice = static_cast<V>(Subresource / (MipLevels * ArraySize));
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Row-by-row memcpy
 inline void MemcpySubresource(
     _In_ const D3D12_MEMCPY_DEST* pDest,
@@ -45,7 +45,7 @@ inline void MemcpySubresource(
     }
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Row-by-row memcpy
 inline void MemcpySubresource(
     _In_ const D3D12_MEMCPY_DEST* pDest,
@@ -68,7 +68,7 @@ inline void MemcpySubresource(
     }
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Returns required size of a buffer to be used for data upload
 inline UINT64 GetRequiredIntermediateSize(
     _In_ ID3D12Resource* pDestinationResource,
@@ -91,7 +91,7 @@ inline UINT64 GetRequiredIntermediateSize(
     return RequiredSize;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // All arrays must be populated (e.g. by calling GetCopyableFootprints)
 inline UINT64 UpdateSubresources(
     _In_ ID3D12GraphicsCommandList* pCmdList,
@@ -155,7 +155,7 @@ inline UINT64 UpdateSubresources(
     return RequiredSize;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // All arrays must be populated (e.g. by calling GetCopyableFootprints)
 inline UINT64 UpdateSubresources(
     _In_ ID3D12GraphicsCommandList* pCmdList,
@@ -220,7 +220,7 @@ inline UINT64 UpdateSubresources(
     return RequiredSize;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Heap-allocating UpdateSubresources implementation
 inline UINT64 UpdateSubresources(
     _In_ ID3D12GraphicsCommandList* pCmdList,
@@ -262,7 +262,7 @@ inline UINT64 UpdateSubresources(
     return Result;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Heap-allocating UpdateSubresources implementation
 inline UINT64 UpdateSubresources(
     _In_ ID3D12GraphicsCommandList* pCmdList,
@@ -305,7 +305,7 @@ inline UINT64 UpdateSubresources(
     return Result;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Stack-allocating UpdateSubresources implementation
 template <UINT MaxSubresources>
 inline UINT64 UpdateSubresources(
@@ -336,7 +336,7 @@ inline UINT64 UpdateSubresources(
     return UpdateSubresources(pCmdList, pDestinationResource, pIntermediate, FirstSubresource, NumSubresources, RequiredSize, Layouts, NumRows, RowSizesInBytes, pSrcData);
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Stack-allocating UpdateSubresources implementation
 template <UINT MaxSubresources>
 inline UINT64 UpdateSubresources(
@@ -368,11 +368,11 @@ inline UINT64 UpdateSubresources(
     return UpdateSubresources(pCmdList, pDestinationResource, pIntermediate, FirstSubresource, NumSubresources, RequiredSize, Layouts, NumRows, RowSizesInBytes, pResourceData, pSrcData);
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 constexpr bool D3D12IsLayoutOpaque( D3D12_TEXTURE_LAYOUT Layout ) noexcept
 { return Layout == D3D12_TEXTURE_LAYOUT_UNKNOWN || Layout == D3D12_TEXTURE_LAYOUT_64KB_UNDEFINED_SWIZZLE; }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 template< typename T >
 inline T D3DX12Align(T uValue, T uAlign)
 {
@@ -385,7 +385,7 @@ inline T D3DX12Align(T uValue, T uAlign)
     return uResult;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 template< typename T >
 inline T D3DX12AlignAtLeast(T uValue, T uAlign)
 {
@@ -401,7 +401,7 @@ inline const CD3DX12_RESOURCE_DESC1* D3DX12ConditionallyExpandAPIDesc(
 }
 
 #if defined(D3D12_SDK_VERSION) && (D3D12_SDK_VERSION >= 606)
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // The difference between D3DX12GetCopyableFootprints and ID3D12Device::GetCopyableFootprints
 // is that this one loses a lot of error checking by assuming the arguments are correct
 inline bool D3DX12GetCopyableFootprints(
@@ -554,7 +554,7 @@ inline bool D3DX12GetCopyableFootprints(
     return true;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 inline D3D12_RESOURCE_DESC1 D3DX12ResourceDesc0ToDesc1(D3D12_RESOURCE_DESC const& desc0)
 {
     D3D12_RESOURCE_DESC1       desc1;
@@ -575,7 +575,7 @@ inline D3D12_RESOURCE_DESC1 D3DX12ResourceDesc0ToDesc1(D3D12_RESOURCE_DESC const
     return desc1;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 inline bool D3DX12GetCopyableFootprints(
 	_In_  const D3D12_RESOURCE_DESC& pResourceDesc,
 	_In_range_(0, D3D12_REQ_SUBRESOURCES) UINT FirstSubresource,

@@ -11,9 +11,9 @@ namespace gallus
 {
 	namespace gameplay
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// EntityComponentSystem
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool EntityComponentSystem::Initialize()
 		{
 			// These systems are in order of initialization.
@@ -29,7 +29,7 @@ namespace gallus
 			return System::Initialize();
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool EntityComponentSystem::Destroy()
 		{
 			for (AbstractECSSystem* system : m_aSystems)
@@ -41,7 +41,7 @@ namespace gallus
 			return System::Destroy();
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void EntityComponentSystem::Update(const float& a_fDeltaTime)
 		{
 			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
@@ -92,31 +92,31 @@ namespace gallus
 
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool EntityComponentSystem::IsPaused() const
 		{
 			return m_bPaused;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void EntityComponentSystem::SetPaused(bool a_bPaused)
 		{
 			m_bPaused = a_bPaused;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool EntityComponentSystem::HasStarted() const
 		{
 			return m_bStarted;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void EntityComponentSystem::SetStarted(bool a_bStarted)
 		{
 			m_bStarted = a_bStarted;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		EntityID EntityComponentSystem::CreateEntity(const std::string& a_sName)
 		{
 			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
@@ -129,13 +129,13 @@ namespace gallus
 			return id;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool EntityComponentSystem::IsEntityValid(const EntityID& a_ID) const
 		{
 			return a_ID.IsValid();
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void EntityComponentSystem::DeleteEntity(const EntityID& a_ID)
 		{
 			auto it = std::find_if(m_aEntities.begin(), m_aEntities.end(), [&](Entity& e)
@@ -148,7 +148,7 @@ namespace gallus
 			}
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const Entity* EntityComponentSystem::GetEntity(const EntityID& a_ID) const
 		{
 			auto it = std::find_if(m_aEntities.begin(), m_aEntities.end(),
@@ -165,7 +165,7 @@ namespace gallus
 			return nullptr;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		Entity* EntityComponentSystem::GetEntity(const EntityID& a_ID)
 		{
 			auto it = std::find_if(m_aEntities.begin(), m_aEntities.end(), [&](Entity& e)
@@ -179,7 +179,7 @@ namespace gallus
 			return nullptr;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void EntityComponentSystem::Clear()
 		{
 			for (Entity& entity : m_aEntities)
@@ -188,7 +188,7 @@ namespace gallus
 			}
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::string EntityComponentSystem::GetUniqueName(const std::string& a_sName)
 		{
 			std::string name = a_sName;
@@ -214,13 +214,13 @@ namespace gallus
 			return name;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::vector<Entity>& EntityComponentSystem::GetEntities()
 		{
 			return m_aEntities;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::vector<AbstractECSSystem*> EntityComponentSystem::GetSystemsContainingEntity(const EntityID& a_ID)
 		{
 			std::vector<AbstractECSSystem*> systems;
@@ -234,13 +234,13 @@ namespace gallus
 			return systems;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::vector<AbstractECSSystem*> EntityComponentSystem::GetSystemsContainingEntity(const Entity& a_Entity)
 		{
 			return GetSystemsContainingEntity(a_Entity.GetEntityID());
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::vector<AbstractECSSystem*> EntityComponentSystem::GetSystems()
 		{
 			return m_aSystems;

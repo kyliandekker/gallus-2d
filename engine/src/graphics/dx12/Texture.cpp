@@ -6,6 +6,7 @@
 #include "core/Tool.h"
 #include "logger/Logger.h"
 #include "graphics/dx12/CommandList.h"
+#include "core/Data.h"
 
 namespace gallus
 {
@@ -13,13 +14,13 @@ namespace gallus
 	{
 		namespace dx12
 		{
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			Texture::~Texture()
 			{
 				m_pResource.Reset();
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void Texture::Destroy()
 			{
 				if (m_pResource)
@@ -30,19 +31,19 @@ namespace gallus
 				}
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::CheckSRVSupport() const
 			{
 				return CheckFormatSupport(D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::CheckRTVSupport() const
 			{
 				return CheckFormatSupport(D3D12_FORMAT_SUPPORT1_RENDER_TARGET);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::CheckUAVSupport() const
 			{
 				return CheckFormatSupport(D3D12_FORMAT_SUPPORT1_TYPED_UNORDERED_ACCESS_VIEW) &&
@@ -50,19 +51,19 @@ namespace gallus
 					CheckFormatSupport(D3D12_FORMAT_SUPPORT2_UAV_TYPED_STORE);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::CheckDSVSupport() const
 			{
 				return CheckFormatSupport(D3D12_FORMAT_SUPPORT1_DEPTH_STENCIL);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			glm::ivec2 Texture::GetSize() const
 			{
 				return glm::ivec2(GetResourceDesc().Width, GetResourceDesc().Height);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::CreateSRV(std::shared_ptr<CommandList> a_pCommandList)
 			{
 				if (m_iSRVIndex != -1 || !m_pResource)
@@ -82,7 +83,7 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void Texture::Bind(std::shared_ptr<CommandList> a_pCommandList)
 			{
 				a_pCommandList->GetCommandList()->SetDescriptorHeaps(1, core::TOOL->GetDX12().GetSRV().GetHeap().GetAddressOf());
@@ -92,23 +93,23 @@ namespace gallus
 				a_pCommandList->GetCommandList()->SetGraphicsRootDescriptorTable(1, gpuHandle);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void Texture::Unbind(std::shared_ptr<CommandList> a_pCommandList)
 			{}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			CD3DX12_GPU_DESCRIPTOR_HANDLE Texture::GetGPUHandle()
 			{
 				return core::TOOL->GetDX12().GetSRV().GetGPUHandle(m_iSRVIndex);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			CD3DX12_CPU_DESCRIPTOR_HANDLE Texture::GetCPUHandle()
 			{
 				return core::TOOL->GetDX12().GetSRV().GetCPUHandle(m_iSRVIndex);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::LoadByName(const std::string& a_sName, const D3D12_RESOURCE_DESC& a_Description, const D3D12_HEAP_PROPERTIES& a_Heap, const D3D12_RESOURCE_STATES a_ResourceState)
 			{
 				const bool success = CreateResource(a_Description, a_sName, a_Heap, a_ResourceState);
@@ -129,22 +130,20 @@ namespace gallus
 			}
 
 			// TODO: This is for loading from the tex file (library of all textures that would get compiled). For now it is unused since we just use the editor.
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::LoadByName(const std::string& a_sName, std::shared_ptr<CommandList> a_pCommandList, const D3D12_HEAP_PROPERTIES& a_Heap, const D3D12_RESOURCE_STATES a_ResourceState)
 			{
 				m_ResourceType = core::ResourceType::ResourceType_Texture;
 				return false;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::LoadByPath(const fs::path& a_Path, std::shared_ptr<CommandList> a_CommandList)
 			{
 				if (m_pResource && !m_bIsDestroyable)
 				{
 					return false;
 				}
-
-				// TODO: Use Data container.
 
 				int width, height, channels;
 				stbi_uc* imageData = stbi_load(a_Path.generic_string().c_str(), &width, &height, &channels, STBI_rgb_alpha);
@@ -153,6 +152,11 @@ namespace gallus
 					LOGF(LOGSEVERITY_ERROR, LOG_CATEGORY_DX12, "Failed to load texture: \"%s\".", a_Path.generic_string().c_str());
 					return false;
 				}
+
+				size_t memorySize = static_cast<size_t>(width) * height * 4;
+				core::Data data = core::Data(imageData, memorySize);
+
+				stbi_image_free(imageData);
 
 				m_sName = a_Path.filename().generic_string();
 				m_Path = a_Path;
@@ -174,14 +178,12 @@ namespace gallus
 				const CD3DX12_HEAP_PROPERTIES uploadHeapProperties(D3D12_HEAP_TYPE_UPLOAD);
 				const CD3DX12_RESOURCE_DESC bufferResource = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
 				D3D12_SUBRESOURCE_DATA textureData = {};
-				textureData.pData = imageData;
+				textureData.pData = data.data();
 				textureData.RowPitch = width * channels;
 				textureData.SlicePitch = textureData.RowPitch * height;
 
 				UploadTexture(uploadHeapProperties, bufferResource);
 				UpdateSubresources(a_CommandList->GetCommandList().Get(), m_pResource.Get(), m_pResourceUploadHeap.Get(), 0, 0, 1, &textureData);
-
-				stbi_image_free(imageData);
 
 				D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 				srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -198,7 +200,7 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::UploadTexture(const D3D12_HEAP_PROPERTIES& a_UploadHeapProperties, const D3D12_RESOURCE_DESC& a_BufferDescription)
 			{
 				UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_pResource.Get(), 0, 1);
@@ -217,19 +219,19 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			Microsoft::WRL::ComPtr<ID3D12Resource>& Texture::GetUploadResource()
 			{
 				return m_pResourceUploadHeap;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void Texture::SetSRVDesc(const D3D12_SHADER_RESOURCE_VIEW_DESC& a_SrvDesc)
 			{
 				m_SrvDesc = a_SrvDesc;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Texture::IsValid() const
 			{
 				return m_pResource && m_iSRVIndex != -1;

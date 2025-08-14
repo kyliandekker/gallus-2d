@@ -26,9 +26,9 @@ namespace gallus
 
 		std::string ResourceTypeToString(ResourceType a_ResourceType);
 
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// EngineResource
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Represents an engine resource with details like category, type and name.
 		/// </summary>

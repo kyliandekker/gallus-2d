@@ -44,9 +44,9 @@ Index of this file:
 #pragma once
 #ifndef IMGUI_DISABLE
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Header mess
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef IMGUI_VERSION
 #include "imgui.h"
@@ -126,9 +126,9 @@ Index of this file:
 #define IMGUI_ENABLE_STB_TRUETYPE
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Forward declarations
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Utilities
 // (other types which are not forwarded declared are: ImBitArray<>, ImSpan<>, ImSpanAllocator<>, ImPool<>, ImChunkStream<>)
@@ -211,18 +211,18 @@ typedef int ImGuiTooltipFlags;          // -> enum ImGuiTooltipFlags_       // F
 typedef int ImGuiTypingSelectFlags;     // -> enum ImGuiTypingSelectFlags_  // Flags: for GetTypingSelectRequest()
 typedef int ImGuiWindowRefreshFlags;    // -> enum ImGuiWindowRefreshFlags_ // Flags: for SetNextWindowRefreshPolicy()
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Context pointer
 // See implementation of this variable in imgui.cpp for comments and details.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef GImGui
 extern IMGUI_API ImGuiContext* GImGui;  // Current implicit context pointer
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Macros
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Internal Drag and Drop payload types. String starting with '_' are reserved for Dear ImGui.
 #define IMGUI_PAYLOAD_TYPE_WINDOW       "_IMWINDOW"     // Payload == ImGuiWindow*
@@ -338,11 +338,11 @@ extern IMGUI_API ImGuiContext* GImGui;  // Current implicit context pointer
 #define IM_PRIX64   "llX"
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Generic helpers
 // Note that the ImXXX helpers functions are lower-level than ImGui functions.
 // ImGui functions or the ImGui context are never called/used from other ImXXX functions.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - Helpers: Hashing
 // - Helpers: Sorting
 // - Helpers: Bit manipulation
@@ -362,7 +362,7 @@ extern IMGUI_API ImGuiContext* GImGui;  // Current implicit context pointer
 // - Helper: ImChunkStream<>
 // - Helper: ImGuiTextIndex
 // - Helper: ImGuiStorage
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Helpers: Hashing
 IMGUI_API ImGuiID       ImHashData(const void* data, size_t data_size, ImGuiID seed = 0);
@@ -755,9 +755,9 @@ struct ImGuiTextIndex
 // Helper: ImGuiStorage
 IMGUI_API ImGuiStoragePair* ImLowerBound(ImGuiStoragePair* in_begin, ImGuiStoragePair* in_end, ImGuiID key);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImDrawList support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // ImDrawList: Helper function to calculate a circle's segment count given its radius and a "maximum error" value.
 // Estimation of number of circle segment based on error is derived using method described in https://stackoverflow.com/a/2244088/15194693
@@ -819,9 +819,9 @@ struct ImDrawDataBuilder
     ImDrawDataBuilder()                     { memset(this, 0, sizeof(*this)); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Data types support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct ImGuiDataVarInfo
 {
@@ -852,9 +852,9 @@ enum ImGuiDataTypePrivate_
     ImGuiDataType_ID,
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Widgets support: flags, enums, data structures
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Extend ImGuiItemFlags
 // - input: PushItemFlag() manipulates g.CurrentItemFlags, g.NextItemData.ItemFlags, ItemAdd() calls may add extra flags too.
@@ -1357,9 +1357,9 @@ struct ImGuiDeactivatedItemData
     bool        IsAlive;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Popup support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 enum ImGuiPopupPositionPolicy
 {
@@ -1383,9 +1383,9 @@ struct ImGuiPopupData
     ImGuiPopupData()    { memset(this, 0, sizeof(*this)); ParentNavLayer = OpenFrameCount = -1; }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Inputs support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Bit array for named keys
 typedef ImBitArray<ImGuiKey_NamedKey_COUNT, -ImGuiKey_NamedKey_BEGIN>    ImBitArrayForNamedKeys;
@@ -1550,9 +1550,9 @@ enum ImGuiInputFlagsPrivate_
     ImGuiInputFlags_SupportedBySetItemKeyOwner  = ImGuiInputFlags_SupportedBySetKeyOwner | ImGuiInputFlags_CondMask_,
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Clipper support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Note that Max is exclusive, so perhaps should be using a Begin/End convention.
 struct ImGuiListClipperRange
@@ -1580,9 +1580,9 @@ struct ImGuiListClipperData
     void                            Reset(ImGuiListClipper* clipper) { ListClipper = clipper; StepNo = ItemsFrozen = 0; Ranges.resize(0); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Navigation support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 enum ImGuiActivateFlags_
 {
@@ -1676,9 +1676,9 @@ struct ImGuiFocusScopeData
     ImGuiID             WindowID;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Typing-select support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Flags for GetTypingSelectRequest()
 enum ImGuiTypingSelectFlags_
@@ -1713,9 +1713,9 @@ struct IMGUI_API ImGuiTypingSelectState
     void            Clear()  { SearchBuffer[0] = 0; SingleCharModeLock = false; } // We preserve remaining data for easier debugging
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Columns support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Flags for internal's BeginColumns(). This is an obsolete API. Prefer using BeginTable() nowadays!
 enum ImGuiOldColumnFlags_
@@ -1769,9 +1769,9 @@ struct ImGuiOldColumns
     ImGuiOldColumns()   { memset(this, 0, sizeof(*this)); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Box-select support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct ImGuiBoxSelectState
 {
@@ -1797,9 +1797,9 @@ struct ImGuiBoxSelectState
     ImGuiBoxSelectState()   { memset(this, 0, sizeof(*this)); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Multi-select support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // We always assume that -1 is an invalid value (which works for indices and pointers)
 #define ImGuiSelectionUserData_Invalid        ((ImGuiSelectionUserData)-1)
@@ -1844,9 +1844,9 @@ struct IMGUI_API ImGuiMultiSelectState
     ImGuiMultiSelectState() { Window = NULL; ID = 0; LastFrameActive = LastSelectionSize = 0; RangeSelected = NavIdSelected = -1; RangeSrcItem = NavIdItem = ImGuiSelectionUserData_Invalid; }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Docking support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #define DOCKING_HOST_DRAW_CHANNEL_BG 0  // Dock host: background fill
 #define DOCKING_HOST_DRAW_CHANNEL_FG 1  // Dock host: decorations and contents
@@ -1999,9 +1999,9 @@ struct ImGuiDockContext
 
 #endif // #ifdef IMGUI_HAS_DOCK
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Viewport support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // ImGuiViewport Private/Internals fields (cardinal sin: we are using inheritance!)
 // Every instance of ImGuiViewport is in fact a ImGuiViewportP.
@@ -2050,9 +2050,9 @@ struct ImGuiViewportP : public ImGuiViewport
     ImRect  GetBuildWorkRect() const    { ImVec2 pos = CalcWorkRectPos(BuildWorkInsetMin); ImVec2 size = CalcWorkRectSize(BuildWorkInsetMin, BuildWorkInsetMax); return ImRect(pos.x, pos.y, pos.x + size.x, pos.y + size.y); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Settings support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Windows data saved in imgui.ini file
 // Because we never destroy or rename ImGuiWindowSettings, we can store the names in a separate buffer easily.
@@ -2091,9 +2091,9 @@ struct ImGuiSettingsHandler
     ImGuiSettingsHandler() { memset(this, 0, sizeof(*this)); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Localization support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // This is experimental and not officially supported, it'll probably fall short of features, if/when it does we may backtrack.
 enum ImGuiLocKey : int
@@ -2120,9 +2120,9 @@ struct ImGuiLocEntry
     const char*     Text;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Error handling, State recovery support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Macros used by Recoverable Error handling
 // - Only dispatch error if _EXPR: evaluate as assert (similar to an assert macro).
@@ -2136,9 +2136,9 @@ struct ImGuiLocEntry
 // The error callback is currently not public, as it is expected that only advanced users will rely on it.
 typedef void (*ImGuiErrorCallback)(ImGuiContext* ctx, void* user_data, const char* msg); // Function signature for g.ErrorCallback
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Metrics, Debug Tools
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // See IMGUI_DEBUG_LOG() and IMGUI_DEBUG_LOG_XXX() macros.
 enum ImGuiDebugLogFlags_
@@ -2222,9 +2222,9 @@ struct ImGuiIDStackTool
     ImGuiIDStackTool()      { memset(this, 0, sizeof(*this)); CopyToClipboardLastTime = -FLT_MAX; }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Generic context hooks
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 typedef void (*ImGuiContextHookCallback)(ImGuiContext* ctx, ImGuiContextHook* hook);
 enum ImGuiContextHookType { ImGuiContextHookType_NewFramePre, ImGuiContextHookType_NewFramePost, ImGuiContextHookType_EndFramePre, ImGuiContextHookType_EndFramePost, ImGuiContextHookType_RenderPre, ImGuiContextHookType_RenderPost, ImGuiContextHookType_Shutdown, ImGuiContextHookType_PendingRemoval_ };
@@ -2240,9 +2240,9 @@ struct ImGuiContextHook
     ImGuiContextHook()          { memset(this, 0, sizeof(*this)); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiContext (main Dear ImGui context)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct ImGuiContext
 {
@@ -2627,9 +2627,9 @@ struct ImGuiContext
     ImGuiContext(ImFontAtlas* shared_font_atlas);
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGuiWindowTempData, ImGuiWindow
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Transient per-window data, reset at the beginning of the frame. This used to be called ImGuiDrawContext, hence the DC variable name in ImGuiWindow.
 // (That's theory, in practice the delimitation between ImGuiWindow and ImGuiWindowTempData is quite tenuous and could be reconsidered..)
@@ -2837,9 +2837,9 @@ public:
     ImRect      MenuBarRect() const     { float y1 = Pos.y + TitleBarHeight; return ImRect(Pos.x, y1, Pos.x + SizeFull.x, y1 + MenuBarHeight); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Tab bar, Tab item support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Extend ImGuiTabBarFlags_
 enum ImGuiTabBarFlagsPrivate_
@@ -2920,9 +2920,9 @@ struct IMGUI_API ImGuiTabBar
     ImGuiTabBar();
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Table support
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #define IM_COL32_DISABLE                IM_COL32(0,0,0,1)   // Special sentinel code which cannot be used as a regular color.
 #define IMGUI_TABLE_MAX_COLUMNS         512                 // May be further lifted
@@ -3212,10 +3212,10 @@ struct ImGuiTableSettings
     ImGuiTableColumnSettings*   GetColumnSettings()     { return (ImGuiTableColumnSettings*)(this + 1); }
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGui internal API
 // No guarantee of forward compatibility here!
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 namespace ImGui
 {
@@ -3864,9 +3864,9 @@ namespace ImGui
 } // namespace ImGui
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImFontAtlas internal API
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // This structure is likely to evolve as we add support for incremental atlas updates.
 // Conceptually this could be in ImGuiPlatformIO, but we are far from ready to make this public.
@@ -3890,9 +3890,9 @@ IMGUI_API void      ImFontAtlasBuildMultiplyCalcLookupTable(unsigned char out_ta
 IMGUI_API void      ImFontAtlasBuildMultiplyRectAlpha8(const unsigned char table[256], unsigned char* pixels, int x, int y, int w, int h, int stride);
 IMGUI_API void      ImFontAtlasBuildGetOversampleFactors(const ImFontConfig* cfg, int* out_oversample_h, int* out_oversample_v);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Test Engine specific hooks (imgui_test_engine)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
 extern void         ImGuiTestEngineHook_ItemAdd(ImGuiContext* ctx, ImGuiID id, const ImRect& bb, const ImGuiLastItemData* item_data);           // item_data may be NULL
@@ -3909,7 +3909,7 @@ extern const char*  ImGuiTestEngine_FindItemDebugLabel(ImGuiContext* ctx, ImGuiI
 #define IMGUI_TEST_ENGINE_ITEM_INFO(_ID,_LABEL,_FLAGS)      ((void)g)
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #if defined(__clang__)
 #pragma clang diagnostic pop

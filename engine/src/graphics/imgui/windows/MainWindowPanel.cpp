@@ -12,9 +12,9 @@ namespace gallus
 	{
 		namespace imgui
 		{
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			// MainWindowPanel
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			MainWindowPanel::MainWindowPanel(ImGuiWindow& a_Window) : BaseWindow(a_Window, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar, "", "Main Window", true)
 			{}
 		}

@@ -173,9 +173,9 @@ namespace IMGUI_STB_NAMESPACE
 using namespace IMGUI_STB_NAMESPACE;
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Style functions
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::StyleColorsDark(ImGuiStyle* dst)
 {
@@ -373,9 +373,9 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
     colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImDrawList
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImDrawListSharedData::ImDrawListSharedData()
 {
@@ -1760,16 +1760,16 @@ void ImDrawList::AddImageRounded(ImTextureID user_texture_id, const ImVec2& p_mi
         PopTextureID();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImTriangulator, ImDrawList concave polygon fill
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Triangulate concave polygons. Based on "Triangulation by Ear Clipping" paper, O(N^2) complexity.
 // Reference: https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 // Provided as a convenience for user but not used by main library.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - ImTriangulator [Internal]
 // - AddConcavePolyFilled()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 enum ImTriangulatorNodeType
 {
@@ -2071,11 +2071,11 @@ void ImDrawList::AddConcavePolyFilled(const ImVec2* points, const int points_cou
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImDrawListSplitter
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // FIXME: This may be a little confusing, trying to be a little too low-level/optimal instead of just doing vector swap..
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImDrawListSplitter::ClearFreeMemory()
 {
@@ -2216,9 +2216,9 @@ void ImDrawListSplitter::SetCurrentChannel(ImDrawList* draw_list, int idx)
         draw_list->AddDrawCmd();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImDrawData
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImDrawData::Clear()
 {
@@ -2312,9 +2312,9 @@ void ImDrawData::ScaleClipRects(const ImVec2& fb_scale)
             cmd.ClipRect = ImVec4(cmd.ClipRect.x * fb_scale.x, cmd.ClipRect.y * fb_scale.y, cmd.ClipRect.z * fb_scale.x, cmd.ClipRect.w * fb_scale.y);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Helpers ShadeVertsXXX functions
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Generic linear color gradient, write to RGB fields, leave A untouched.
 void ImGui::ShadeVertsLinearColorGradientKeepAlpha(ImDrawList* draw_list, int vert_start_idx, int vert_end_idx, ImVec2 gradient_p0, ImVec2 gradient_p1, ImU32 col0, ImU32 col1)
@@ -2373,9 +2373,9 @@ void ImGui::ShadeVertsTransformPos(ImDrawList* draw_list, int vert_start_idx, in
         vertex->pos = ImRotate(vertex->pos- pivot_in, cos_a, sin_a) + pivot_out;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImFontConfig
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImFontConfig::ImFontConfig()
 {
@@ -2389,9 +2389,9 @@ ImFontConfig::ImFontConfig()
     EllipsisChar = 0;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImFontAtlas
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - Default texture data encoded in ASCII
 // - ImFontAtlas::ClearInputData()
 // - ImFontAtlas::ClearTexData()
@@ -2423,7 +2423,7 @@ ImFontConfig::ImFontConfig()
 // - ImFontAtlasBuildRenderLinesTexData()
 // - ImFontAtlasBuildInit()
 // - ImFontAtlasBuildFinish()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // A work of art lies ahead! (. = white layer, X = black layer, others are blank)
 // The 2x2 white texels on the top left are the ones we'll use everywhere in Dear ImGui to render filled shapes.
@@ -3385,7 +3385,7 @@ void ImFontAtlasBuildFinish(ImFontAtlas* atlas)
 // - GetGlyphRangesCyrillic()
 // - GetGlyphRangesThai()
 // - GetGlyphRangesVietnamese()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Retrieve list of range (2 int per range, values are inclusive)
 const ImWchar*   ImFontAtlas::GetGlyphRangesDefault()
@@ -3648,9 +3648,9 @@ const ImWchar*  ImFontAtlas::GetGlyphRangesVietnamese()
     return &ranges[0];
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImFontGlyphRangesBuilder
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImFontGlyphRangesBuilder::AddText(const char* text, const char* text_end)
 {
@@ -3686,9 +3686,9 @@ void ImFontGlyphRangesBuilder::BuildRanges(ImVector<ImWchar>* out_ranges)
     out_ranges->push_back(0);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImFont
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 ImFont::ImFont()
 {
@@ -4310,9 +4310,9 @@ void ImFont::RenderText(ImDrawList* draw_list, float size, const ImVec2& pos, Im
     draw_list->_VtxCurrentIdx = vtx_index;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImGui Internal Render Helpers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Vaguely redesigned to stop accessing ImGui global state:
 // - RenderArrow()
 // - RenderBullet()
@@ -4321,10 +4321,10 @@ void ImFont::RenderText(ImDrawList* draw_list, float size, const ImVec2& pos, Im
 // - RenderArrowPointingAt()
 // - RenderRectFilledRangeH()
 // - RenderRectFilledWithHole()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Function in need of a redesign (legacy mess)
 // - RenderColorRectWithAlphaCheckerboard()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Render an arrow aimed to be aligned with text (p_min is a position in the same space text would be positioned). To e.g. denote expanded/collapsed state
 void ImGui::RenderArrow(ImDrawList* draw_list, ImVec2 pos, ImU32 col, ImGuiDir dir, float scale)
@@ -4537,14 +4537,14 @@ void ImGui::RenderColorRectWithAlphaCheckerboard(ImDrawList* draw_list, ImVec2 p
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Decompression code
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Compressed with stb_compress() then converted to a C array and encoded as base85.
 // Use the program in misc/fonts/binary_to_compressed_c.cpp to create the array from a TTF file.
 // The purpose of encoding as base85 instead of "0x00,0x01,..." style is only save on _source code_ size.
 // Decompression from stb.h (public domain) by Sean Barrett https://github.com/nothings/stb/blob/master/stb.h
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static unsigned int stb_decompress_length(const unsigned char *input)
 {
@@ -4656,14 +4656,14 @@ static unsigned int stb_decompress(unsigned char *output, const unsigned char *i
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Default font data (ProggyClean.ttf)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // ProggyClean.ttf
 // Copyright (c) 2004, 2005 Tristan Grimmer
 // MIT license (see License.txt in http://www.proggyfonts.net/index.php?menu=download)
 // Download and more information at http://www.proggyfonts.net or http://upperboundsinteractive.com/fonts.php
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef IMGUI_DISABLE_DEFAULT_FONT
 

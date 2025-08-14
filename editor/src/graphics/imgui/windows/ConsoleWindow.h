@@ -23,12 +23,12 @@ namespace gallus
 			{
 				inline std::mutex MESSAGE_MUTEX;
 
+				//---------------------------------------------------------------------
+				// ConsoleWindow
+				//---------------------------------------------------------------------
 				/// <summary>
 				/// A window that displays and manages the logger messages of the project.
 				/// </summary>
-				//-----------------------------------------------------------------------------
-				// ConsoleWindow
-				//-----------------------------------------------------------------------------
 				class ConsoleWindow : public BaseWindow
 				{
 				public:

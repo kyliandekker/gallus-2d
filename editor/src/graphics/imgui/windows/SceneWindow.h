@@ -5,12 +5,6 @@
 
 #include "graphics/imgui/windows/BaseWindow.h"
 
-#include <vector>
-
-#include "gameplay/EntityID.h"
-#include "graphics/imgui/views/DataTypes/StringTextInput.h"
-#include "graphics/imgui/views/EntityUIView.h"
-
 namespace gallus
 {
 	namespace graphics
@@ -21,12 +15,12 @@ namespace gallus
 
 			namespace editor
 			{
+				//---------------------------------------------------------------------
+				// SceneWindow
+				//---------------------------------------------------------------------
 				/// <summary>
 				/// A window that displays the scene.
 				/// </summary>
-				//-----------------------------------------------------------------------------
-				// SceneWindow
-				//-----------------------------------------------------------------------------
 				class SceneWindow : public BaseWindow
 				{
 				public:

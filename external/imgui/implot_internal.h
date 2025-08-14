@@ -25,9 +25,9 @@
 // You may use this file to debug, understand or extend ImPlot features but we
 // don't provide any guarantee of forward compatibility!
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Header Mess
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #pragma once
 
@@ -44,9 +44,9 @@
 #define GetBufSize GetSize
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Constants
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Constants can be changed unless stated otherwise. We may move some of these
 // to ImPlotStyleVar_ over time.
@@ -60,9 +60,9 @@
 // Max character size for tick labels
 #define IMPLOT_LABEL_MAX_SIZE 32
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Macros
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #define IMPLOT_NUM_X_AXES ImAxis_Y1
 #define IMPLOT_NUM_Y_AXES (ImAxis_COUNT - IMPLOT_NUM_X_AXES)
@@ -73,9 +73,9 @@
     ImU32 g = ((col >> IM_COL32_G_SHIFT) & 0xFF); \
     ImU32 b = ((col >> IM_COL32_B_SHIFT) & 0xFF);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Forward Declarations
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 struct ImPlotTick;
 struct ImPlotAxis;
@@ -86,17 +86,17 @@ struct ImPlotPlot;
 struct ImPlotNextPlotData;
 struct ImPlotTicker;
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Context Pointer
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #ifndef GImPlot
 extern IMPLOT_API ImPlotContext* GImPlot; // Current implicit context pointer
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Generic Helpers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Computes the common (base-10) logarithm
 static inline float  ImLog10(float x)  { return log10f(x); }
@@ -222,9 +222,9 @@ static inline bool ImOverlaps(T min_a, T max_a, T min_b, T max_b) {
     return min_a <= max_b && min_b <= max_a;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] ImPlot Enums
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 typedef int ImPlotTimeUnit;    // -> enum ImPlotTimeUnit_
 typedef int ImPlotDateFmt;     // -> enum ImPlotDateFmt_
@@ -264,15 +264,15 @@ enum ImPlotTimeFmt_ {              // default        [ 24 Hour Clock ]
     ImPlotTimeFmt_Hr               // 7pm            [ 19:00        ]
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Callbacks
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 typedef void (*ImPlotLocator)(ImPlotTicker& ticker, const ImPlotRange& range, float pixels, bool vertical, ImPlotFormatter formatter, void* formatter_data);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Structs
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Combined date/time format spec
 struct ImPlotDateTimeSpec {
@@ -1248,16 +1248,16 @@ struct ImPlotContext {
     ImPlotAlignmentData*        CurrentAlignmentV;
 };
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Internal API
 // No guarantee of forward compatibility here!
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 namespace ImPlot {
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Context Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Initializes an ImPlotContext
 IMPLOT_API void Initialize(ImPlotContext* ctx);
@@ -1268,9 +1268,9 @@ IMPLOT_API void ResetCtxForNextAlignedPlots(ImPlotContext* ctx);
 // Resets an ImPlot context for the next call to BeginSubplot
 IMPLOT_API void ResetCtxForNextSubplot(ImPlotContext* ctx);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Plot Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Gets a plot from the current ImPlotContext
 IMPLOT_API ImPlotPlot* GetPlot(const char* title);
@@ -1282,9 +1282,9 @@ IMPLOT_API void BustPlotCache();
 // Shows a plot's context menu.
 IMPLOT_API void ShowPlotContextMenu(ImPlotPlot& plot);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Setup Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Lock Setup and call SetupFinish if necessary.
 static inline void SetupLock() {
@@ -1294,9 +1294,9 @@ static inline void SetupLock() {
     gp.CurrentPlot->SetupLocked = true;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Subplot Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Advances to next subplot
 IMPLOT_API void SubplotNextCell();
@@ -1304,9 +1304,9 @@ IMPLOT_API void SubplotNextCell();
 // Shows a subplot's context menu.
 IMPLOT_API void ShowSubplotsContextMenu(ImPlotSubplot& subplot);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Item Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Begins a new item. Returns false if the item should not be plotted. Pushes PlotClipRect.
 IMPLOT_API bool BeginItem(const char* label_id, ImPlotItemFlags flags=0, ImPlotCol recolor_from=IMPLOT_AUTO);
@@ -1335,9 +1335,9 @@ IMPLOT_API ImPlotItem* GetCurrentItem();
 // Busts the cache for every item for every plot in the current context.
 IMPLOT_API void BustItemCache();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Axis Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Returns true if any enabled axis is locked from user input.
 static inline bool AnyAxesInputLocked(ImPlotAxis* axes, int count) {
@@ -1408,9 +1408,9 @@ static inline bool RangesOverlap(const ImPlotRange& r1, const ImPlotRange& r2)
 // Shows an axis's context menu.
 IMPLOT_API void ShowAxisContextMenu(ImPlotAxis& axis, ImPlotAxis* equal_axis, bool time_allowed = false);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Legend Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Gets the position of an inner rect that is located inside of an outer rect according to an ImPlotLocation and padding amount.
 IMPLOT_API ImVec2 GetLocationPos(const ImRect& outer_rect, const ImVec2& inner_size, ImPlotLocation location, const ImVec2& pad = ImVec2(0,0));
@@ -1423,16 +1423,16 @@ IMPLOT_API void ShowAltLegend(const char* title_id, bool vertical = true, const 
 // Shows an legends's context menu.
 IMPLOT_API bool ShowLegendContextMenu(ImPlotLegend& legend, bool visible);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Label Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Create a a string label for a an axis value
 IMPLOT_API void LabelAxisValue(const ImPlotAxis& axis, double value, char* buff, int size, bool round = false);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Styling Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Get styling data for next item (call between Begin/EndItem)
 static inline const ImPlotNextItemData& GetItemData() { return GImPlot->NextItemData; }
@@ -1482,9 +1482,9 @@ IMPLOT_API ImU32  SampleColormapU32(float t, ImPlotColormap cmap);
 // Render a colormap bar
 IMPLOT_API void RenderColorBar(const ImU32* colors, int size, ImDrawList& DrawList, const ImRect& bounds, bool vert, bool reversed, bool continuous);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Math and Misc Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Rounds x to powers of 2,5 and 10 for generating axis labels (from Graphics Gems 1 Chapter 11.2)
 IMPLOT_API double NiceNum(double x, bool round);
@@ -1535,9 +1535,9 @@ static inline void CalculateBins(const T* values, int count, ImPlotBin meth, con
     width_out = range.Size() / bins_out;
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Time Utils
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Returns true if year is leap year (366 days long)
 static inline bool IsLeapYear(int year) {
@@ -1595,9 +1595,9 @@ IMPLOT_API bool ShowDatePicker(const char* id, int* level, ImPlotTime* t, const 
 // #t will be set when a new hour, minute, or sec is selected or am/pm is toggled, and the function will return true.
 IMPLOT_API bool ShowTimePicker(const char* id, ImPlotTime* t);
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Transforms
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static inline double TransformForward_Log10(double v, void*) {
     v = v <= 0.0 ? DBL_MIN : v;
@@ -1625,9 +1625,9 @@ static inline double TransformInverse_Logit(double v, void*) {
     return 1.0 / (1.0 + ImPow(10,-v));
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Formatters
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static inline int Formatter_Default(double value, char* buff, int size, void* data) {
     char* fmt = (char*)data;
@@ -1655,9 +1655,9 @@ static inline int Formatter_Time(double, char* buff, int size, void* data) {
     return FormatDateTime(ftd->Time, buff, size, ftd->Spec);
 }
 
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 // [SECTION] Locator
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 void Locator_Default(ImPlotTicker& ticker, const ImPlotRange& range, float pixels, bool vertical, ImPlotFormatter formatter, void* formatter_data);
 void Locator_Time(ImPlotTicker& ticker, const ImPlotRange& range, float pixels, bool vertical, ImPlotFormatter formatter, void* formatter_data);

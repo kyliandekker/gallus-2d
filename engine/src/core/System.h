@@ -10,9 +10,9 @@ namespace gallus
 {
 	namespace core
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// System
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Base class for all systems within the engine, providing a common interface 
 		/// for initialization, destruction, and readiness checking.
@@ -42,9 +42,9 @@ namespace gallus
 			std::atomic<bool> m_bRunning{ false }; /// Flag indicating whether the system is running.
 		};
 
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// ThreadedSystem
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Base class for all threaded systems within the engine, providing a common interface 
 		/// for initialization, destruction, and readiness checking.

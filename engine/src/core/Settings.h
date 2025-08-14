@@ -9,9 +9,9 @@ namespace gallus
 	{
 /// Whether DX12 makes a full log of creating devices, resources, etc (spam).
 #define LOG_SETTINGS 0
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// Settings
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Manages editor settings, including window size, log visibility filters, 
 		/// and tracking previously opened projects.

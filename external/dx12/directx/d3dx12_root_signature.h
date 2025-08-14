@@ -14,7 +14,7 @@
 #include "d3d12.h"
 #include "d3dx12_default.h"
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_DESCRIPTOR_RANGE : public D3D12_DESCRIPTOR_RANGE
 {
     CD3DX12_DESCRIPTOR_RANGE() = default;
@@ -60,7 +60,7 @@ struct CD3DX12_DESCRIPTOR_RANGE : public D3D12_DESCRIPTOR_RANGE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_DESCRIPTOR_TABLE : public D3D12_ROOT_DESCRIPTOR_TABLE
 {
     CD3DX12_ROOT_DESCRIPTOR_TABLE() = default;
@@ -91,7 +91,7 @@ struct CD3DX12_ROOT_DESCRIPTOR_TABLE : public D3D12_ROOT_DESCRIPTOR_TABLE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_CONSTANTS : public D3D12_ROOT_CONSTANTS
 {
     CD3DX12_ROOT_CONSTANTS() = default;
@@ -126,7 +126,7 @@ struct CD3DX12_ROOT_CONSTANTS : public D3D12_ROOT_CONSTANTS
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_DESCRIPTOR : public D3D12_ROOT_DESCRIPTOR
 {
     CD3DX12_ROOT_DESCRIPTOR() = default;
@@ -154,7 +154,7 @@ struct CD3DX12_ROOT_DESCRIPTOR : public D3D12_ROOT_DESCRIPTOR
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_PARAMETER : public D3D12_ROOT_PARAMETER
 {
     CD3DX12_ROOT_PARAMETER() = default;
@@ -260,7 +260,7 @@ struct CD3DX12_ROOT_PARAMETER : public D3D12_ROOT_PARAMETER
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_STATIC_SAMPLER_DESC : public D3D12_STATIC_SAMPLER_DESC
 {
     CD3DX12_STATIC_SAMPLER_DESC() = default;
@@ -361,7 +361,7 @@ struct CD3DX12_STATIC_SAMPLER_DESC : public D3D12_STATIC_SAMPLER_DESC
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #if defined(D3D12_SDK_VERSION) && (D3D12_SDK_VERSION >= 609)
 struct CD3DX12_STATIC_SAMPLER_DESC1 : public D3D12_STATIC_SAMPLER_DESC1
 {
@@ -475,7 +475,7 @@ struct CD3DX12_STATIC_SAMPLER_DESC1 : public D3D12_STATIC_SAMPLER_DESC1
 };
 #endif // D3D12_SDK_VERSION >= 609
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_SIGNATURE_DESC : public D3D12_ROOT_SIGNATURE_DESC
 {
     CD3DX12_ROOT_SIGNATURE_DESC() = default;
@@ -522,7 +522,7 @@ struct CD3DX12_ROOT_SIGNATURE_DESC : public D3D12_ROOT_SIGNATURE_DESC
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_DESCRIPTOR_RANGE1 : public D3D12_DESCRIPTOR_RANGE1
 {
     CD3DX12_DESCRIPTOR_RANGE1() = default;
@@ -572,7 +572,7 @@ struct CD3DX12_DESCRIPTOR_RANGE1 : public D3D12_DESCRIPTOR_RANGE1
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_DESCRIPTOR_TABLE1 : public D3D12_ROOT_DESCRIPTOR_TABLE1
 {
     CD3DX12_ROOT_DESCRIPTOR_TABLE1() = default;
@@ -603,7 +603,7 @@ struct CD3DX12_ROOT_DESCRIPTOR_TABLE1 : public D3D12_ROOT_DESCRIPTOR_TABLE1
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_DESCRIPTOR1 : public D3D12_ROOT_DESCRIPTOR1
 {
     CD3DX12_ROOT_DESCRIPTOR1() = default;
@@ -638,7 +638,7 @@ struct CD3DX12_ROOT_DESCRIPTOR1 : public D3D12_ROOT_DESCRIPTOR1
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_ROOT_PARAMETER1 : public D3D12_ROOT_PARAMETER1
 {
     CD3DX12_ROOT_PARAMETER1() = default;
@@ -750,7 +750,7 @@ struct CD3DX12_ROOT_PARAMETER1 : public D3D12_ROOT_PARAMETER1
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC : public D3D12_VERSIONED_ROOT_SIGNATURE_DESC
 {
     CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC() = default;
@@ -868,7 +868,7 @@ struct CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC : public D3D12_VERSIONED_ROOT_SIGNA
 #endif
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_CPU_DESCRIPTOR_HANDLE : public D3D12_CPU_DESCRIPTOR_HANDLE
 {
     CD3DX12_CPU_DESCRIPTOR_HANDLE() = default;
@@ -929,7 +929,7 @@ struct CD3DX12_CPU_DESCRIPTOR_HANDLE : public D3D12_CPU_DESCRIPTOR_HANDLE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_GPU_DESCRIPTOR_HANDLE : public D3D12_GPU_DESCRIPTOR_HANDLE
 {
     CD3DX12_GPU_DESCRIPTOR_HANDLE() = default;
@@ -990,7 +990,7 @@ struct CD3DX12_GPU_DESCRIPTOR_HANDLE : public D3D12_GPU_DESCRIPTOR_HANDLE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // D3D12 exports a new method for serializing root signatures in the Windows 10 Anniversary Update.
 // To help enable root signature 1.1 features when they are available and not require maintaining
 // two code paths for building root signatures, this helper method reconstructs a 1.0 signature when

@@ -15,7 +15,7 @@
 #include "d3d12.h"
 #include "d3dx12_default.h"
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #ifndef D3DX12_ASSERT
   #ifdef assert
     #define D3DX12_ASSERT(x) assert(x)
@@ -24,7 +24,7 @@
   #endif
 #endif
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 template <typename t_CommandListType>
 inline ID3D12CommandList * const * CommandListCast(t_CommandListType * const * pp) noexcept
 {
@@ -35,18 +35,18 @@ inline ID3D12CommandList * const * CommandListCast(t_CommandListType * const * p
     return reinterpret_cast<ID3D12CommandList * const *>(pp);
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 inline bool operator==( const D3D12_VIEWPORT& l, const D3D12_VIEWPORT& r ) noexcept
 {
     return l.TopLeftX == r.TopLeftX && l.TopLeftY == r.TopLeftY && l.Width == r.Width &&
         l.Height == r.Height && l.MinDepth == r.MinDepth && l.MaxDepth == r.MaxDepth;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 inline bool operator!=( const D3D12_VIEWPORT& l, const D3D12_VIEWPORT& r ) noexcept
 { return !( l == r ); }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RECT : public D3D12_RECT
 {
     CD3DX12_RECT() = default;
@@ -66,7 +66,7 @@ struct CD3DX12_RECT : public D3D12_RECT
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_VIEWPORT : public D3D12_VIEWPORT
 {
     CD3DX12_VIEWPORT() = default;
@@ -133,7 +133,7 @@ struct CD3DX12_VIEWPORT : public D3D12_VIEWPORT
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_BOX : public D3D12_BOX
 {
     CD3DX12_BOX() = default;
@@ -188,7 +188,7 @@ inline bool operator==( const D3D12_BOX& l, const D3D12_BOX& r ) noexcept
 inline bool operator!=( const D3D12_BOX& l, const D3D12_BOX& r ) noexcept
 { return !( l == r ); }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_DEPTH_STENCIL_DESC : public D3D12_DEPTH_STENCIL_DESC
 {
     CD3DX12_DEPTH_STENCIL_DESC() = default;
@@ -241,7 +241,7 @@ struct CD3DX12_DEPTH_STENCIL_DESC : public D3D12_DEPTH_STENCIL_DESC
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_DEPTH_STENCIL_DESC1 : public D3D12_DEPTH_STENCIL_DESC1
 {
     CD3DX12_DEPTH_STENCIL_DESC1() = default;
@@ -334,7 +334,7 @@ struct CD3DX12_DEPTH_STENCIL_DESC1 : public D3D12_DEPTH_STENCIL_DESC1
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #if defined(D3D12_SDK_VERSION) && (D3D12_SDK_VERSION >= 606)
 struct CD3DX12_DEPTH_STENCIL_DESC2 : public D3D12_DEPTH_STENCIL_DESC2
 {
@@ -461,7 +461,7 @@ struct CD3DX12_DEPTH_STENCIL_DESC2 : public D3D12_DEPTH_STENCIL_DESC2
 };
 #endif // D3D12_SDK_VERSION >= 606
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_BLEND_DESC : public D3D12_BLEND_DESC
 {
     CD3DX12_BLEND_DESC() = default;
@@ -485,7 +485,7 @@ struct CD3DX12_BLEND_DESC : public D3D12_BLEND_DESC
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RASTERIZER_DESC : public D3D12_RASTERIZER_DESC
 {
     CD3DX12_RASTERIZER_DESC() = default;
@@ -534,7 +534,7 @@ struct CD3DX12_RASTERIZER_DESC : public D3D12_RASTERIZER_DESC
 };
 
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #if defined(D3D12_SDK_VERSION) && (D3D12_SDK_VERSION >= 608)
 struct CD3DX12_RASTERIZER_DESC1 : public D3D12_RASTERIZER_DESC1
 {
@@ -620,7 +620,7 @@ struct CD3DX12_RASTERIZER_DESC1 : public D3D12_RASTERIZER_DESC1
 };
 #endif // D3D12_SDK_VERSION >= 608
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 #if defined(D3D12_SDK_VERSION) && (D3D12_SDK_VERSION >= 610)
 struct CD3DX12_RASTERIZER_DESC2 : public D3D12_RASTERIZER_DESC2
 {
@@ -726,7 +726,7 @@ struct CD3DX12_RASTERIZER_DESC2 : public D3D12_RASTERIZER_DESC2
 };
 #endif // D3D12_SDK_VERSION >= 610
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RESOURCE_ALLOCATION_INFO : public D3D12_RESOURCE_ALLOCATION_INFO
 {
     CD3DX12_RESOURCE_ALLOCATION_INFO() = default;
@@ -742,7 +742,7 @@ struct CD3DX12_RESOURCE_ALLOCATION_INFO : public D3D12_RESOURCE_ALLOCATION_INFO
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_HEAP_PROPERTIES : public D3D12_HEAP_PROPERTIES
 {
     CD3DX12_HEAP_PROPERTIES() = default;
@@ -792,7 +792,7 @@ inline bool operator==( const D3D12_HEAP_PROPERTIES& l, const D3D12_HEAP_PROPERT
 inline bool operator!=( const D3D12_HEAP_PROPERTIES& l, const D3D12_HEAP_PROPERTIES& r ) noexcept
 { return !( l == r ); }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_HEAP_DESC : public D3D12_HEAP_DESC
 {
     CD3DX12_HEAP_DESC() = default;
@@ -877,7 +877,7 @@ inline bool operator==( const D3D12_HEAP_DESC& l, const D3D12_HEAP_DESC& r ) noe
 inline bool operator!=( const D3D12_HEAP_DESC& l, const D3D12_HEAP_DESC& r ) noexcept
 { return !( l == r ); }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_CLEAR_VALUE : public D3D12_CLEAR_VALUE
 {
     CD3DX12_CLEAR_VALUE() = default;
@@ -904,7 +904,7 @@ struct CD3DX12_CLEAR_VALUE : public D3D12_CLEAR_VALUE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 inline bool operator==( const D3D12_CLEAR_VALUE &a, const D3D12_CLEAR_VALUE &b) noexcept
 {
     if (a.Format != b.Format) return false;
@@ -923,7 +923,7 @@ inline bool operator==( const D3D12_CLEAR_VALUE &a, const D3D12_CLEAR_VALUE &b) 
     }
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RANGE : public D3D12_RANGE
 {
     CD3DX12_RANGE() = default;
@@ -939,7 +939,7 @@ struct CD3DX12_RANGE : public D3D12_RANGE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RANGE_UINT64 : public D3D12_RANGE_UINT64
 {
     CD3DX12_RANGE_UINT64() = default;
@@ -955,7 +955,7 @@ struct CD3DX12_RANGE_UINT64 : public D3D12_RANGE_UINT64
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_SUBRESOURCE_RANGE_UINT64 : public D3D12_SUBRESOURCE_RANGE_UINT64
 {
     CD3DX12_SUBRESOURCE_RANGE_UINT64() = default;
@@ -980,7 +980,7 @@ struct CD3DX12_SUBRESOURCE_RANGE_UINT64 : public D3D12_SUBRESOURCE_RANGE_UINT64
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_SHADER_BYTECODE : public D3D12_SHADER_BYTECODE
 {
     CD3DX12_SHADER_BYTECODE() = default;
@@ -1002,7 +1002,7 @@ struct CD3DX12_SHADER_BYTECODE : public D3D12_SHADER_BYTECODE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_TILED_RESOURCE_COORDINATE : public D3D12_TILED_RESOURCE_COORDINATE
 {
     CD3DX12_TILED_RESOURCE_COORDINATE() = default;
@@ -1022,7 +1022,7 @@ struct CD3DX12_TILED_RESOURCE_COORDINATE : public D3D12_TILED_RESOURCE_COORDINAT
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_TILE_REGION_SIZE : public D3D12_TILE_REGION_SIZE
 {
     CD3DX12_TILE_REGION_SIZE() = default;
@@ -1044,7 +1044,7 @@ struct CD3DX12_TILE_REGION_SIZE : public D3D12_TILE_REGION_SIZE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_SUBRESOURCE_TILING : public D3D12_SUBRESOURCE_TILING
 {
     CD3DX12_SUBRESOURCE_TILING() = default;
@@ -1064,7 +1064,7 @@ struct CD3DX12_SUBRESOURCE_TILING : public D3D12_SUBRESOURCE_TILING
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_TILE_SHAPE : public D3D12_TILE_SHAPE
 {
     CD3DX12_TILE_SHAPE() = default;
@@ -1082,7 +1082,7 @@ struct CD3DX12_TILE_SHAPE : public D3D12_TILE_SHAPE
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_PACKED_MIP_INFO : public D3D12_PACKED_MIP_INFO
 {
     CD3DX12_PACKED_MIP_INFO() = default;
@@ -1102,7 +1102,7 @@ struct CD3DX12_PACKED_MIP_INFO : public D3D12_PACKED_MIP_INFO
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_SUBRESOURCE_FOOTPRINT : public D3D12_SUBRESOURCE_FOOTPRINT
 {
     CD3DX12_SUBRESOURCE_FOOTPRINT() = default;
@@ -1134,7 +1134,7 @@ struct CD3DX12_SUBRESOURCE_FOOTPRINT : public D3D12_SUBRESOURCE_FOOTPRINT
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_TEXTURE_COPY_LOCATION : public D3D12_TEXTURE_COPY_LOCATION
 {
     CD3DX12_TEXTURE_COPY_LOCATION() = default;
@@ -1162,13 +1162,13 @@ struct CD3DX12_TEXTURE_COPY_LOCATION : public D3D12_TEXTURE_COPY_LOCATION
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 constexpr UINT D3D12CalcSubresource( UINT MipSlice, UINT ArraySlice, UINT PlaneSlice, UINT MipLevels, UINT ArraySize ) noexcept
 {
     return MipSlice + ArraySlice * MipLevels + PlaneSlice * MipLevels * ArraySize;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 inline UINT8 D3D12GetFormatPlaneCount(
     _In_ ID3D12Device* pDevice,
     DXGI_FORMAT Format
@@ -1182,7 +1182,7 @@ inline UINT8 D3D12GetFormatPlaneCount(
     return formatInfo.PlaneCount;
 }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RESOURCE_DESC : public D3D12_RESOURCE_DESC
 {
     CD3DX12_RESOURCE_DESC() = default;
@@ -1297,7 +1297,7 @@ inline bool operator==( const D3D12_RESOURCE_DESC& l, const D3D12_RESOURCE_DESC&
 inline bool operator!=( const D3D12_RESOURCE_DESC& l, const D3D12_RESOURCE_DESC& r ) noexcept
 { return !( l == r ); }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RESOURCE_DESC1 : public D3D12_RESOURCE_DESC1
 {
     CD3DX12_RESOURCE_DESC1() = default;
@@ -1440,7 +1440,7 @@ inline bool operator==( const D3D12_RESOURCE_DESC1& l, const D3D12_RESOURCE_DESC
 inline bool operator!=( const D3D12_RESOURCE_DESC1& l, const D3D12_RESOURCE_DESC1& r ) noexcept
 { return !( l == r ); }
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Fills in the mipmap and alignment values of pDesc when either members are zero
 // Used to replace an implicit field to an explicit (0 mip map = max mip map level)
 // If expansion has occured, returns LclDesc, else returns the original pDesc
@@ -1496,7 +1496,7 @@ inline const CD3DX12_RESOURCE_DESC1* D3DX12ConditionallyExpandAPIDesc(
 }
 
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_VIEW_INSTANCING_DESC : public D3D12_VIEW_INSTANCING_DESC
 {
     CD3DX12_VIEW_INSTANCING_DESC() = default;
@@ -1520,7 +1520,7 @@ struct CD3DX12_VIEW_INSTANCING_DESC : public D3D12_VIEW_INSTANCING_DESC
     }
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 struct CD3DX12_RT_FORMAT_ARRAY : public D3D12_RT_FORMAT_ARRAY
 {
     CD3DX12_RT_FORMAT_ARRAY() = default;

@@ -915,19 +915,19 @@ IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandlerEx(HWND hwnd, UINT msg, WPA
 }
 
 
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 // DPI-related helpers (optional)
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 // - Use to enable DPI awareness without having to create an application manifest.
 // - Your own app may already do this via a manifest or explicit calls. This is mostly useful for our examples/ apps.
 // - In theory we could call simple functions from Windows SDK such as SetProcessDPIAware(), SetProcessDpiAwareness(), etc.
 //   but most of the functions provided by Microsoft require Windows 8.1/10+ SDK at compile time and Windows 8/10+ at runtime,
 //   neither we want to require the user to have. So we dynamically select and load those functions to avoid dependencies.
-//---------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 // This is the scheme successfully used by GLFW (from which we borrowed some of the code) and other apps aiming to be highly portable.
 // ImGui_ImplWin32_EnableDpiAwareness() is just a helper called by main.cpp, we don't call it automatically.
 // If you are trying to implement your own backend for your own engine, you may ignore that noise.
-//---------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
 // Perform our own check with RtlVerifyVersionInfo() instead of using functions from <VersionHelpers.h> as they
 // require a manifest to be functional for checks above 8.1. See https://github.com/ocornut/imgui/issues/4200
@@ -1043,9 +1043,9 @@ float ImGui_ImplWin32_GetDpiScaleForHwnd(void* hwnd)
 	return ImGui_ImplWin32_GetDpiScaleForMonitor(monitor);
 }
 
-//---------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 // Transparency related helpers (optional)
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 #if defined(_MSC_VER)
 #pragma comment(lib, "dwmapi")  // Link with dwmapi.lib. MinGW will require linking with '-ldwmapi'
@@ -1083,11 +1083,11 @@ void ImGui_ImplWin32_EnableAlphaCompositing(void* hwnd)
 	}
 }
 
-//---------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 // MULTI-VIEWPORT / PLATFORM INTERFACE SUPPORT
 // This is an _advanced_ and _optional_ feature, allowing the backend to create and handle multiple viewports simultaneously.
 // If you are new to dear imgui or creating a new binding for dear imgui, it is recommended that you completely ignore this section first..
-//--------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 // Helper structure we store in the void* RendererUserData field of each ImGuiViewport to easily retrieve our backend data.
 struct ImGui_ImplWin32_ViewportData
@@ -1467,7 +1467,7 @@ static void ImGui_ImplWin32_ShutdownMultiViewportSupport()
 	ImGui::DestroyPlatformWindows();
 }
 
-//---------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop

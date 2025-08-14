@@ -10,25 +10,25 @@ namespace gallus
 	{
 		namespace dx12
 		{
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			// DX12Resource
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			DX12Resource::DX12Resource(const D3D12_RESOURCE_DESC& a_ResourceDesc, const std::string& a_sName)
 			{
 				CreateResource(a_ResourceDesc, a_sName);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			DX12Resource::DX12Resource(const std::string& a_sName) : EngineResource(a_sName)
 			{
 				m_wsName = std::wstring(m_sName.begin(), m_sName.end());
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			DX12Resource::~DX12Resource()
 			{}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12Resource::CreateResource(const D3D12_RESOURCE_DESC& a_ResourceDesc, const std::string& a_sName, const D3D12_HEAP_PROPERTIES& a_Heap, const D3D12_RESOURCE_STATES a_ResourceState, const D3D12_CLEAR_VALUE* a_pOptimizedClearValue)
 			{
 				if (m_pResource)
@@ -65,19 +65,19 @@ namespace gallus
 				return true;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12Resource::IsValid() const
 			{
 				return (m_pResource != nullptr);
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			Microsoft::WRL::ComPtr<ID3D12Resource>& DX12Resource::GetResource()
 			{
 				return m_pResource;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			D3D12_RESOURCE_DESC DX12Resource::GetResourceDesc() const
 			{
 				D3D12_RESOURCE_DESC resDesc = {};
@@ -89,19 +89,19 @@ namespace gallus
 				return resDesc;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12Resource::CheckFormatSupport(D3D12_FORMAT_SUPPORT1 a_FormatSupport) const
 			{
 				return (m_FormatSupport.Support1 & a_FormatSupport) != 0;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool DX12Resource::CheckFormatSupport(D3D12_FORMAT_SUPPORT2 a_FormatSupport) const
 			{
 				return (m_FormatSupport.Support2 & a_FormatSupport) != 0;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12Resource::SetResource(Microsoft::WRL::ComPtr<ID3D12Resource> a_pResource)
 			{
 				// Resources that cannot be destroyed cannot be overridden.
@@ -119,7 +119,7 @@ namespace gallus
 				m_pResource = a_pResource;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void DX12Resource::CheckFeatureSupport()
 			{
 				Microsoft::WRL::ComPtr<ID3D12Device2>& device = core::TOOL->GetDX12().GetDevice();

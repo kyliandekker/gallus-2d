@@ -188,9 +188,9 @@ Index of this file:
 #endif
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Forward Declarations, Helpers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #if !defined(IMGUI_DISABLE_DEMO_WINDOWS)
 
@@ -219,9 +219,9 @@ static void ShowDemoWindowTables();
 static void ShowDemoWindowColumns();
 static void ShowDemoWindowInputs();
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Helpers
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Helper to display a little (?) mark which shows a tooltip when hovered.
 // In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
@@ -245,9 +245,9 @@ ImGuiDemoMarkerCallback             GImGuiDemoMarkerCallback = NULL;
 void*                               GImGuiDemoMarkerCallbackUserData = NULL;
 #define IMGUI_DEMO_MARKER(section)  do { if (GImGuiDemoMarkerCallback != NULL) GImGuiDemoMarkerCallback(__FILE__, __LINE__, section, GImGuiDemoMarkerCallbackUserData); } while (0)
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Demo Window / ShowDemoWindow()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - ShowDemoWindow()
 // - ShowDemoWindowWidgets()
 // - ShowDemoWindowLayout()
@@ -255,7 +255,7 @@ void*                               GImGuiDemoMarkerCallbackUserData = NULL;
 // - ShowDemoWindowTables()
 // - ShowDemoWindowColumns()
 // - ShowDemoWindowInputs()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate most Dear ImGui features (this is big function!)
 // You may execute this function to experiment with the UI and understand what it does.
@@ -6485,10 +6485,10 @@ static void ShowDemoWindowInputs()
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] About Window / ShowAboutWindow()
 // Access from Dear ImGui Demo -> Tools -> About
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::ShowAboutWindow(bool* p_open)
 {
@@ -6634,13 +6634,13 @@ void ImGui::ShowAboutWindow(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Style Editor / ShowStyleEditor()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - ShowFontSelector()
 // - ShowStyleSelector()
 // - ShowStyleEditor()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Forward declare ShowFontAtlas() which isn't worth putting in public API yet
 namespace ImGui { IMGUI_API void ShowFontAtlas(ImFontAtlas* atlas); }
@@ -6971,9 +6971,9 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
     ImGui::PopItemWidth();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] User Guide / ShowUserGuide()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 void ImGui::ShowUserGuide()
 {
@@ -7005,12 +7005,12 @@ void ImGui::ShowUserGuide()
     ImGui::Unindent();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Main Menu Bar / ShowExampleAppMainMenuBar()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - ShowExampleAppMainMenuBar()
 // - ShowExampleMenuFile()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate creating a "main" fullscreen menu bar and populating it.
 // Note the difference between BeginMainMenuBar() and BeginMenuBar():
@@ -7122,9 +7122,9 @@ static void ShowExampleMenuFile()
     if (ImGui::MenuItem("Quit", "Alt+F4")) {}
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Debug Console / ShowExampleAppConsole()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate creating a simple console window, with scrolling, filtering, completion and history.
 // For the console example, we are using a more C++ like approach of declaring a class to hold both data and functions.
@@ -7485,9 +7485,9 @@ static void ShowExampleAppConsole(bool* p_open)
     console.Draw("Example: Console", p_open);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Debug Log / ShowExampleAppLog()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Usage:
 //  static ExampleAppLog my_log;
@@ -7647,9 +7647,9 @@ static void ShowExampleAppLog(bool* p_open)
     log.Draw("Example: Log", p_open);
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Simple Layout / ShowExampleAppLayout()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate create a window with multiple child windows.
 static void ShowExampleAppLayout(bool* p_open)
@@ -7714,9 +7714,9 @@ static void ShowExampleAppLayout(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Property Editor / ShowExampleAppPropertyEditor()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 static void ShowPlaceholderObject(const char* prefix, int uid)
 {
@@ -7799,9 +7799,9 @@ static void ShowExampleAppPropertyEditor(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Long Text / ShowExampleAppLongText()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate/test rendering huge amount of text, and the incidence of clipping.
 static void ShowExampleAppLongText(bool* p_open)
@@ -7862,9 +7862,9 @@ static void ShowExampleAppLongText(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Auto Resize / ShowExampleAppAutoResize()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate creating a window which gets auto-resized according to its content.
 static void ShowExampleAppAutoResize(bool* p_open)
@@ -7887,9 +7887,9 @@ static void ShowExampleAppAutoResize(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Constrained Resize / ShowExampleAppConstrainedResize()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate creating a window with custom resize constraints.
 // Note that size constraints currently don't work on a docked window (when in 'docking' branch)
@@ -7986,9 +7986,9 @@ static void ShowExampleAppConstrainedResize(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Simple overlay / ShowExampleAppSimpleOverlay()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate creating a simple static window with no decoration
 // + a context-menu to choose which corner of the screen to use.
@@ -8042,9 +8042,9 @@ static void ShowExampleAppSimpleOverlay(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Fullscreen window / ShowExampleAppFullscreen()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate creating a window covering the entire screen/viewport
 static void ShowExampleAppFullscreen(bool* p_open)
@@ -8078,9 +8078,9 @@ static void ShowExampleAppFullscreen(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Manipulating Window Titles / ShowExampleAppWindowTitles()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Demonstrate the use of "##" and "###" in identifiers to manipulate ID generation.
 // This applies to all regular items as well.
@@ -8114,9 +8114,9 @@ static void ShowExampleAppWindowTitles(bool*)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Custom Rendering using ImDrawList API / ShowExampleAppCustomRendering()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Add a |_| looking shape
 static void PathConcaveShape(ImDrawList* draw_list, float x, float y, float sz)
@@ -8428,9 +8428,9 @@ static void ShowExampleAppCustomRendering(bool* p_open)
     ImGui::End();
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Example App: Documents Handling / ShowExampleAppDocuments()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Simplified structure to mimic a Document model
 struct MyDocument

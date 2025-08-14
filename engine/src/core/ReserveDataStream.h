@@ -6,9 +6,9 @@ namespace gallus
 {
 	namespace core
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// ReserveDataStream
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		/// <summary>
 		/// Represents a generic container for raw data, providing utility functions and automatic cleanup
 		/// for managing and interacting with the stored data. Allows the user to move the offset for reading and writing data at specific points.

@@ -50,9 +50,9 @@ namespace gallus
 				NumRootParameters = 2
 			};
 
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			// DX12System2D
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			/// <summary>
 			/// Represents a DirectX 12 rendering window, managing device resources, rendering, and synchronization. Only basic 2D rendering.
 			/// </summary>

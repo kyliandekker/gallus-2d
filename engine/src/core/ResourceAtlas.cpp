@@ -11,9 +11,9 @@ namespace gallus
 {
 	namespace core
 	{
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		// ResourceAtlas
-		//-----------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		template<class T>
 		std::shared_ptr<T> ResourceAtlas::GetResource(std::vector<std::shared_ptr<T>>& a_aVector, const std::string& a_sName, const fs::path& a_Path)
 		{
@@ -55,7 +55,7 @@ namespace gallus
 			return a_aVector[index];
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		template<class T>
 		int32_t ResourceAtlas::HasResource(std::vector<std::shared_ptr<T>>& a_aVector, const std::string& a_sName, const fs::path& a_Path)
 		{
@@ -72,14 +72,14 @@ namespace gallus
 			return -1;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Texture> ResourceAtlas::LoadTexture(const std::string& a_sName, std::shared_ptr<graphics::dx12::CommandList> a_pCommandList)
 		{
 			std::shared_ptr<graphics::dx12::Texture> texture = GetResource(m_aTextures, a_sName, fs::path());
 			if (!texture->IsValid())
 			{
 //#ifdef _EDITOR
-				fs::path texturePath = fs::path("./data/assets/textures/" + a_sName).lexically_normal();
+				fs::path texturePath = fs::path(m_sResourceFolder + "/textures/" + a_sName).lexically_normal();
 				texture->LoadByPath(texturePath, a_pCommandList);
 //#else
 //				texture->LoadByName(a_sName, a_pCommandList);
@@ -88,7 +88,7 @@ namespace gallus
 			return texture;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Texture> ResourceAtlas::LoadTextureByDescription(const std::string& a_sName, D3D12_RESOURCE_DESC& a_Description)
 		{
 			std::shared_ptr<graphics::dx12::Texture> texture = GetResource(m_aTextures, a_sName, fs::path());
@@ -99,28 +99,28 @@ namespace gallus
 			return texture;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Texture> ResourceAtlas::LoadTextureEmpty(const std::string& a_sName)
 		{
 			std::shared_ptr<graphics::dx12::Texture> texture = GetResource(m_aTextures, a_sName, fs::path());
 			return texture;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool ResourceAtlas::HasTexture(const std::string& a_sName)
 		{
 			return HasResource(m_aTextures, a_sName, fs::path());
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Shader> ResourceAtlas::LoadShader(const std::string& a_sVertexShader, const std::string& a_sPixelShader)
 		{
 			std::shared_ptr<graphics::dx12::Shader> shader = GetResource(m_aShaders, a_sVertexShader, fs::path());
 			if (!shader->IsValid())
 			{
 //#ifdef _EDITOR
-				fs::path vertexShaderPath = fs::path("./data/assets/shaders/" + a_sVertexShader).lexically_normal();
-				fs::path pixelShaderPath = fs::path("./data/assets/shaders/" + a_sPixelShader).lexically_normal();
+				fs::path vertexShaderPath = fs::path(m_sResourceFolder + "/shaders/" + a_sVertexShader).lexically_normal();
+				fs::path pixelShaderPath = fs::path(m_sResourceFolder + "/shaders/" + a_sPixelShader).lexically_normal();
 //
 				shader->LoadByPath(vertexShaderPath, pixelShaderPath);
 //#else
@@ -130,13 +130,13 @@ namespace gallus
 			return shader;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool ResourceAtlas::HasShader(const std::string& a_sName)
 		{
 			return HasResource(m_aShaders, a_sName, fs::path());
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Mesh> ResourceAtlas::LoadMesh(const std::string& a_sName, std::shared_ptr<graphics::dx12::CommandList> a_pCommandList)
 		{
 			std::shared_ptr<graphics::dx12::Mesh> mesh = GetResource(m_aMeshes, a_sName, fs::path());
@@ -147,19 +147,19 @@ namespace gallus
 			return mesh;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		bool ResourceAtlas::HasMesh(const std::string& a_sName)
 		{
 			return HasResource(m_aMeshes, a_sName, fs::path());
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Shader> ResourceAtlas::GetDefaultShader()
 		{
 			return m_aShaders[MISSING];
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Texture> ResourceAtlas::GetDefaultTexture()
 		{
 #ifdef _EDITOR
@@ -169,13 +169,13 @@ namespace gallus
 #endif // _EDITOR
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		std::shared_ptr<graphics::dx12::Mesh> ResourceAtlas::GetDefaultMesh()
 		{
 			return m_aMeshes[MISSING];
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		void ResourceAtlas::TransitionResources(std::shared_ptr<graphics::dx12::CommandList> a_CommandList)
 		{
 			for (std::shared_ptr<graphics::dx12::Texture> texture : m_aTextures)
@@ -187,19 +187,19 @@ namespace gallus
 			}
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const std::vector<std::shared_ptr<graphics::dx12::Texture>>& ResourceAtlas::GetTextures() const
 		{
 			return m_aTextures;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const std::vector<std::shared_ptr<graphics::dx12::Shader>>& ResourceAtlas::GetShaders() const
 		{
 			return m_aShaders;
 		}
 
-		//-----------------------------------------------------------------------------------------------------
+		//---------------------------------------------------------------------
 		const std::vector<std::shared_ptr<graphics::dx12::Mesh>>& ResourceAtlas::GetMeshes() const
 		{
 			return m_aMeshes;

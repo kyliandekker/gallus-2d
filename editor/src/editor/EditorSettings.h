@@ -6,6 +6,9 @@ namespace gallus
 {
 	namespace editor
 	{
+		//---------------------------------------------------------------------
+		// EditorSettings
+		//---------------------------------------------------------------------
 		class EditorSettings : public core::Settings
 		{
 		public:

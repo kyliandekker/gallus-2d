@@ -13,9 +13,9 @@ namespace gallus
 	{
 		namespace dx12
 		{
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			// CommandQueue
-			//-----------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			CommandQueue::CommandQueue(D3D12_COMMAND_LIST_TYPE a_CommandListType) :
 				m_CommandListType(a_CommandListType),
 				m_iFenceValue(0)
@@ -46,7 +46,7 @@ namespace gallus
 				}
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			std::shared_ptr<CommandList> CommandQueue::GetCommandList()
 			{
 				Microsoft::WRL::ComPtr<ID3D12Device2>& device = core::TOOL->GetDX12().GetDevice();
@@ -96,7 +96,7 @@ namespace gallus
 				return commandList;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			uint64_t CommandQueue::ExecuteCommandList(std::shared_ptr<CommandList> a_pCommandList)
 			{
 				a_pCommandList->GetCommandList()->Close();
@@ -127,7 +127,7 @@ namespace gallus
 				return fenceValue;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			uint64_t CommandQueue::Signal()
 			{
 				uint64_t fenceValue = ++m_iFenceValue;
@@ -135,13 +135,13 @@ namespace gallus
 				return fenceValue;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool CommandQueue::IsFenceComplete(uint64_t a_iFenceValue)
 			{
 				return m_pFence->GetCompletedValue() >= a_iFenceValue;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void CommandQueue::WaitForFenceValue(uint64_t a_iFenceValue)
 			{
 				if (!IsFenceComplete(a_iFenceValue))
@@ -151,19 +151,19 @@ namespace gallus
 				}
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void CommandQueue::Flush()
 			{
 				WaitForFenceValue(Signal());
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			const Microsoft::WRL::ComPtr<ID3D12CommandQueue>& CommandQueue::GetCommandQueue() const
 			{
 				return m_pCommandQueue;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			Microsoft::WRL::ComPtr<ID3D12CommandAllocator> CommandQueue::CreateCommandAllocator()
 			{
 				Microsoft::WRL::ComPtr<ID3D12Device2>& device = core::TOOL->GetDX12().GetDevice();

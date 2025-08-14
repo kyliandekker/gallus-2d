@@ -46,7 +46,7 @@
 #define D3DX12_COM_PTR_ADDRESSOF(x) &x.p
 #endif
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_STATE_OBJECT_DESC
 {
 public:
@@ -311,7 +311,7 @@ private:
 #endif // D3D12_SDK_VERSION >= 612
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_DXIL_LIBRARY_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -381,7 +381,7 @@ private:
     std::vector<D3D12_EXPORT_DESC> m_Exports;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_EXISTING_COLLECTION_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -453,7 +453,7 @@ private:
     std::vector<D3D12_EXPORT_DESC> m_Exports;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_SUBOBJECT_TO_EXPORTS_ASSOCIATION_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -515,7 +515,7 @@ private:
     std::vector<LPCWSTR> m_Exports;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_DXIL_SUBOBJECT_TO_EXPORTS_ASSOCIATION
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -579,7 +579,7 @@ private:
     std::vector<LPCWSTR> m_Exports;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_HIT_GROUP_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -636,7 +636,7 @@ private:
         m_Strings[m_NumStrings]; // one string for every entrypoint name
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_RAYTRACING_SHADER_CONFIG_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -674,7 +674,7 @@ private:
     D3D12_RAYTRACING_SHADER_CONFIG m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_RAYTRACING_PIPELINE_CONFIG_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -711,7 +711,7 @@ private:
     D3D12_RAYTRACING_PIPELINE_CONFIG m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_RAYTRACING_PIPELINE_CONFIG1_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -749,7 +749,7 @@ private:
     D3D12_RAYTRACING_PIPELINE_CONFIG1 m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_GLOBAL_ROOT_SIGNATURE_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -786,7 +786,7 @@ private:
     D3DX12_COM_PTR<ID3D12RootSignature> m_pRootSig;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_LOCAL_ROOT_SIGNATURE_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -823,7 +823,7 @@ private:
     D3DX12_COM_PTR<ID3D12RootSignature> m_pRootSig;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_STATE_OBJECT_CONFIG_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -860,7 +860,7 @@ private:
     D3D12_STATE_OBJECT_CONFIG m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_NODE_MASK_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -898,7 +898,7 @@ private:
 };
 
 #if defined(D3D12_SDK_VERSION) && (D3D12_SDK_VERSION >= 612)
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_STREAM_OUTPUT_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -957,7 +957,7 @@ private:
     std::vector<D3D12_SO_DECLARATION_ENTRY> m_soDecalEntries;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_BLEND_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1007,7 +1007,7 @@ private:
     CD3DX12_BLEND_DESC m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_RASTERIZER_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1076,7 +1076,7 @@ private:
     CD3DX12_RASTERIZER_DESC2 m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_DEPTH_STENCIL2_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1147,7 +1147,7 @@ private:
     CD3DX12_DEPTH_STENCIL_DESC2 m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_INPUT_LAYOUT_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1213,7 +1213,7 @@ private:
     CD3DX12_STATE_OBJECT_DESC::StringContainer<LPCSTR, std::string> m_Strings;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_IB_STRIP_CUT_VALUE_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1245,7 +1245,7 @@ private:
     D3D12_INDEX_BUFFER_STRIP_CUT_VALUE m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_PRIMITIVE_TOPOLOGY_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1277,7 +1277,7 @@ private:
     D3D12_PRIMITIVE_TOPOLOGY_TYPE m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_RENDER_TARGET_FORMATS_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1314,7 +1314,7 @@ private:
     D3D12_RT_FORMAT_ARRAY m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_DEPTH_STENCIL_FORMAT_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1346,7 +1346,7 @@ private:
     DXGI_FORMAT m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_SAMPLE_DESC_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1383,7 +1383,7 @@ private:
     DXGI_SAMPLE_DESC m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_FLAGS_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1416,7 +1416,7 @@ private:
     D3D12_PIPELINE_STATE_FLAGS m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_VIEW_INSTANCING_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1481,7 +1481,7 @@ private:
     std::vector<D3D12_VIEW_INSTANCE_LOCATION> m_viewInstanceLocationsVector;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_DEPTH_STENCIL_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1552,7 +1552,7 @@ private:
     CD3DX12_DEPTH_STENCIL_DESC m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_DEPTH_STENCIL1_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1627,7 +1627,7 @@ private:
     CD3DX12_DEPTH_STENCIL_DESC1 m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_SAMPLE_MASK_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1659,7 +1659,7 @@ private:
     UINT m_Desc;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_GENERIC_PROGRAM_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {
@@ -1749,7 +1749,7 @@ private:
     CD3DX12_STATE_OBJECT_DESC::StringContainer<LPCWSTR, std::wstring> m_Strings;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_NODE_OUTPUT_OVERRIDES
 {
 public:
@@ -1801,14 +1801,14 @@ private:
     UINT* m_pNumOutputOverrides;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_NODE_HELPER_BASE
 {
 public:
     virtual ~CD3DX12_NODE_HELPER_BASE() = default;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_SHADER_NODE // Not specifying launch mode.
                           // Don't need to distinguish if no parameter overriding is happening
     : public CD3DX12_NODE_HELPER_BASE
@@ -1831,7 +1831,7 @@ private:
     CD3DX12_STATE_OBJECT_DESC::StringContainer<LPCWSTR, std::wstring> m_Strings;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Use this class when defining a broadcasting launch node where configuration parameters
 // need to be overridden.  If overrides are not needed, just use CD3DX12_COMPUTE_SHADER_NODE
 class CD3DX12_BROADCASTING_LAUNCH_NODE_OVERRIDES
@@ -1905,7 +1905,7 @@ private:
     CD3DX12_NODE_OUTPUT_OVERRIDES m_NodeOutputOverrides;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Use this class when defining a coalescing launch node where configuration parameters
 // need to be overridden.  If overrides are not needed, just use CD3DX12_COMPUTE_SHADER_NODE
 class CD3DX12_COALESCING_LAUNCH_NODE_OVERRIDES
@@ -1969,7 +1969,7 @@ private:
     CD3DX12_NODE_OUTPUT_OVERRIDES m_NodeOutputOverrides;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Use this class when defining a thread launch node where configuration parameters
 // need to be overridden.  If overrides are not needed, just use CD3DX12_COMPUTE_SHADER_NODE
 class CD3DX12_THREAD_LAUNCH_NODE_OVERRIDES
@@ -2026,7 +2026,7 @@ private:
     CD3DX12_NODE_OUTPUT_OVERRIDES m_NodeOutputOverrides;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Use this class when defining a node where configuration parameters
 // need to be overridden for parameters that are common to all launch node types.
 // This option is a convenience if you don't want to determine what the launch mode is
@@ -2086,7 +2086,7 @@ private:
     CD3DX12_NODE_OUTPUT_OVERRIDES m_NodeOutputOverrides;
 };
 
-//------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 class CD3DX12_WORK_GRAPH_SUBOBJECT
     : public CD3DX12_STATE_OBJECT_DESC::SUBOBJECT_HELPER_BASE
 {

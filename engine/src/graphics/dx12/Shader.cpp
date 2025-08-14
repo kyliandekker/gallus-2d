@@ -10,14 +10,14 @@ namespace gallus
 	{
 		namespace dx12
 		{
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			void Shader::Bind(std::shared_ptr<CommandList> a_CommandList)
 			{
 				a_CommandList->GetCommandList()->SetPipelineState(m_pPipelineState.Get());
 				a_CommandList->GetCommandList()->SetGraphicsRootSignature(core::TOOL->GetDX12().GetRootSignature().Get()); // Set the existing root signature
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			Microsoft::WRL::ComPtr<ID3DBlob> Shader::CompileShader(const fs::path& a_FilePath, const std::string& a_EntryPoint, const std::string& a_Target)
 			{
 				Microsoft::WRL::ComPtr<ID3DBlob> shaderBlob;
@@ -52,20 +52,20 @@ namespace gallus
 				return shaderBlob;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			const std::string& Shader::GetPixelPath() const
 			{
 				return m_sPixelName;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			const std::string& Shader::GetVertexPath() const
 			{
 				return m_sName;
 			}
 
 			// TODO: This does nothing right now.
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Shader::LoadByName(const std::string& a_sVertexShader, const std::string& a_sPixelShader)
 			{
 				m_ResourceType = core::ResourceType::ResourceType_Shader;
@@ -73,7 +73,7 @@ namespace gallus
 				return false;
 			}
 
-			//-----------------------------------------------------------------------------------------------------
+			//---------------------------------------------------------------------
 			bool Shader::LoadByPath(const fs::path& a_VertexShaderPath, const fs::path& a_PixelShaderPath)
 			{
 				m_Path = a_VertexShaderPath;

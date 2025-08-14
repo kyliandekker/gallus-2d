@@ -28,13 +28,13 @@ Index of this file:
 // - In Visual Studio w/ Visual Assist installed: ALT+G ("VAssistX.GoToImplementation") can also follow symbols inside comments.
 // - In VS Code, CLion, etc.: CTRL+click can follow symbols inside comments.
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Commentary
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Typical tables call flow: (root level is generally public API):
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - BeginTable()                               user begin into a table
 //    | BeginChild()                            - (if ScrollX/ScrollY is set)
 //    | TableBeginInitMemory()                  - first time table is used
@@ -45,13 +45,13 @@ Index of this file:
 //    |    - TableUpdateColumnsWeightFromWidth()- recompute columns weights (of stretch columns) from their respective width
 // - TableSetupColumn()                         user submit columns details (optional)
 // - TableSetupScrollFreeze()                   user submit scroll freeze information (optional)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - TableUpdateLayout() [Internal]             followup to BeginTable(): setup everything: widths, columns positions, clipping rectangles. Automatically called by the FIRST call to TableNextRow() or TableHeadersRow().
 //    | TableSetupDrawChannels()                - setup ImDrawList channels
 //    | TableUpdateBorders()                    - detect hovering columns for resize, ahead of contents submission
 //    | TableBeginContextMenuPopup()
 //    | - TableDrawDefaultContextMenu()         - draw right-click context menu contents
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - TableHeadersRow() or TableHeader()         user submit a headers row (optional)
 //    | TableSortSpecsClickColumn()             - when left-clicked: alter sort order and sort direction
 //    | TableOpenContextMenu()                  - when right-clicked: trigger opening of the default context menu
@@ -63,18 +63,18 @@ Index of this file:
 //    | TableEndCell()                          - close existing column/cell
 //    | TableBeginCell()                        - enter into current column/cell
 // - [...]                                      user emit contents
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - EndTable()                                 user ends the table
 //    | TableDrawBorders()                      - draw outer borders, inner vertical borders
 //    | TableMergeDrawChannels()                - merge draw channels if clipping isn't required
 //    | EndChild()                              - (if ScrollX/ScrollY is set)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // TABLE SIZING
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // (Read carefully because this is subtle but it does make sense!)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About 'outer_size':
 // Its meaning needs to differ slightly depending on if we are using ScrollX/ScrollY flags.
 // Default value is ImVec2(0.0f, 0.0f).
@@ -89,14 +89,14 @@ Index of this file:
 //   - outer_size.y  < 0.0f  ->  Bottom-align. Not meaningful if parent window can vertically scroll.
 //   - outer_size.y  = 0.0f  ->  Bottom-align, consistent with BeginChild(). Not recommended unless table is last item in parent window.
 //   - outer_size.y  > 0.0f  ->  Set Exact height. Recommended when using Scrolling on any axis.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Outer size is also affected by the NoHostExtendX/NoHostExtendY flags.
 // Important to note how the two flags have slightly different behaviors!
 //   - ImGuiTableFlags_NoHostExtendX -> Make outer width auto-fit to columns (overriding outer_size.x value). Only available when ScrollX/ScrollY are disabled and Stretch columns are not used.
 //   - ImGuiTableFlags_NoHostExtendY -> Make outer height stop exactly at outer_size.y (prevent auto-extending table past the limit). Only available when ScrollX/ScrollY is disabled. Data below the limit will be clipped and not visible.
 // In theory ImGuiTableFlags_NoHostExtendY could be the default and any non-scrolling tables with outer_size.y != 0.0f would use exact height.
 // This would be consistent but perhaps less useful and more confusing (as vertically clipped items are not useful and not easily noticeable).
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About 'inner_width':
 //   With ScrollX disabled:
 //   - inner_width          ->  *ignored*
@@ -104,18 +104,18 @@ Index of this file:
 //   - inner_width  < 0.0f  ->  *illegal* fit in known width (right align from outer_size.x) <-- weird
 //   - inner_width  = 0.0f  ->  fit in outer_width: Fixed size columns will take space they need (if avail, otherwise shrink down), Stretch columns becomes Fixed columns.
 //   - inner_width  > 0.0f  ->  override scrolling width, generally to be larger than outer_size.x. Fixed column take space they need (if avail, otherwise shrink down), Stretch columns share remaining space!
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // Details:
 // - If you want to use Stretch columns with ScrollX, you generally need to specify 'inner_width' otherwise the concept
 //   of "available space" doesn't make sense.
 // - Even if not really useful, we allow 'inner_width < outer_size.x' for consistency and to facilitate understanding
 //   of what the value does.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // COLUMNS SIZING POLICIES
 // (Reference: ImGuiTableFlags_SizingXXX flags and ImGuiTableColumnFlags_WidthXXX flags)
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About overriding column sizing policy and width/weight with TableSetupColumn():
 // We use a default parameter of -1 for 'init_width'/'init_weight'.
 //   - with ImGuiTableColumnFlags_WidthFixed,    init_width  <= 0 (default)  --> width is automatic
@@ -124,21 +124,21 @@ Index of this file:
 //   - with ImGuiTableColumnFlags_WidthStretch,  init_weight >  0 (explicit) --> weight is custom
 // Widths are specified _without_ CellPadding. If you specify a width of 100.0f, the column will be cover (100.0f + Padding * 2.0f)
 // and you can fit a 100.0f wide item in it without clipping and with padding honored.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About default sizing policy (if you don't specify a ImGuiTableColumnFlags_WidthXXXX flag)
 //   - with Table policy ImGuiTableFlags_SizingFixedFit      --> default Column policy is ImGuiTableColumnFlags_WidthFixed, default Width is equal to contents width
 //   - with Table policy ImGuiTableFlags_SizingFixedSame     --> default Column policy is ImGuiTableColumnFlags_WidthFixed, default Width is max of all contents width
 //   - with Table policy ImGuiTableFlags_SizingStretchSame   --> default Column policy is ImGuiTableColumnFlags_WidthStretch, default Weight is 1.0f
 //   - with Table policy ImGuiTableFlags_SizingStretchWeight --> default Column policy is ImGuiTableColumnFlags_WidthStretch, default Weight is proportional to contents
 // Default Width and default Weight can be overridden when calling TableSetupColumn().
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About mixing Fixed/Auto and Stretch columns together:
 //   - the typical use of mixing sizing policies is: any number of LEADING Fixed columns, followed by one or two TRAILING Stretch columns.
 //   - using mixed policies with ScrollX does not make much sense, as using Stretch columns with ScrollX does not make much sense in the first place!
 //     that is, unless 'inner_width' is passed to BeginTable() to explicitly provide a total width to layout columns in.
 //   - when using ImGuiTableFlags_SizingFixedSame with mixed columns, only the Fixed/Auto columns will match their widths to the width of the maximum contents.
 //   - when using ImGuiTableFlags_SizingStretchSame with mixed columns, only the Stretch columns will match their weights/widths.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About using column width:
 // If a column is manually resizable or has a width specified with TableSetupColumn():
 //   - you may use GetContentRegionAvail().x to query the width available in a given column.
@@ -147,12 +147,12 @@ Index of this file:
 //   - its width will be automatic and be set to the max of items submitted.
 //   - therefore you generally cannot have ALL items of the columns use e.g. SetNextItemWidth(-FLT_MIN).
 //   - but if the column has one or more items of known/fixed size, this will become the reference width used by SetNextItemWidth(-FLT_MIN).
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // TABLES CLIPPING/CULLING
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About clipping/culling of Rows in Tables:
 // - For large numbers of rows, it is recommended you use ImGuiListClipper to submit only visible rows.
 //   ImGuiListClipper is reliant on the fact that rows are of equal height.
@@ -160,7 +160,7 @@ Index of this file:
 // - Note that auto-resizing columns don't play well with using the clipper.
 //   By default a table with _ScrollX but without _Resizable will have column auto-resize.
 //   So, if you want to use the clipper, make sure to either enable _Resizable, either setup columns width explicitly with _WidthFixed.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About clipping/culling of Columns in Tables:
 // - Both TableSetColumnIndex() and TableNextColumn() return true when the column is visible or performing
 //   width measurements. Otherwise, you may skip submitting the contents of a cell/column, BUT ONLY if you know
@@ -178,14 +178,14 @@ Index of this file:
 //
 // - We need to distinguish those cases because non-hidden columns that are clipped outside of scrolling bounds should still contribute their height to the row.
 //   However, in the majority of cases, the contribution to row height is the same for all columns, or the tallest cells are known by the programmer.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // About clipping/culling of whole Tables:
 // - Scrolling tables with a known outer size can be clipped earlier as BeginTable() will return false.
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Header mess
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
@@ -240,9 +240,9 @@ Index of this file:
 #pragma GCC diagnostic ignored "-Wclass-memaccess"                  // [__GNUC__ >= 8] warning: 'memset/memcpy' clearing/writing an object of type 'xxxx' with no trivial copy-assignment; use assignment or value-initialization instead
 #endif
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Tables: Main code
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - TableFixFlags() [Internal]
 // - TableFindByID() [Internal]
 // - BeginTable()
@@ -255,7 +255,7 @@ Index of this file:
 // - EndTable()
 // - TableSetupColumn()
 // - TableSetupScrollFreeze()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 // Configuration
 static const int TABLE_DRAW_CHANNEL_BG0 = 0;
@@ -1677,9 +1677,9 @@ void ImGui::TableSetupScrollFreeze(int columns, int rows)
     }
 }
 
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // [SECTION] Tables: Simple accessors
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 // - TableGetColumnCount()
 // - TableGetColumnName()
 // - TableGetColumnName() [Internal]
@@ -1690,7 +1690,7 @@ void ImGui::TableSetupScrollFreeze(int columns, int rows)
 // - TableGetHoveredColumn() [Internal]
 // - TableGetHoveredRow() [Internal]
 // - TableSetBgColor()
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 int ImGui::TableGetColumnCount()
 {
