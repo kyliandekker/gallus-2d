@@ -32,9 +32,15 @@ namespace gallus
 		}
 
 		//---------------------------------------------------------------------
-		FileResourceType FileResource::GetResourceType() const
+		AssetType FileResource::GetAssetType() const
 		{
-			return m_ResourceType;
+			return m_AssetType;
+		}
+
+		//---------------------------------------------------------------------
+		void FileResource::SetAssetType(AssetType a_AssetType)
+		{
+			m_AssetType = a_AssetType;
 		}
 
 		//---------------------------------------------------------------------
@@ -79,19 +85,15 @@ namespace gallus
 		//---------------------------------------------------------------------
 		bool FileResource::Scan()
 		{
-			m_Path = m_Path;
-
 			if (!fs::exists(m_Path))
 			{
 				return false;
 			}
 
-			m_ResourceType = fs::is_directory(m_Path) ? FileResourceType::Folder : FileResourceType::File;
-
 			// Scan the folder.
-			if (m_ResourceType == FileResourceType::Folder)
+			if (m_AssetType == AssetType::Folder)
 			{
-				m_aResources.clear();
+				m_aChildren.clear();
 
 				// Go through each file/folder and check their status.
 				fs::directory_iterator ds = fs::directory_iterator(m_Path, std::filesystem::directory_options::skip_permission_denied);
@@ -133,13 +135,12 @@ namespace gallus
 						FileResource resource;
 						resource.m_Path = dirEntry.path();
 						resource.m_Parent = this;
-						resource.m_ResourceType = FileResourceType::File;
 						resource.m_AssetType = assetType;
 						if (!hasMetadata)
 						{
 							resource.SaveMetadata(document, document.GetAllocator());
 						}
-						m_aResources.push_back(resource);
+						m_aChildren.push_back(resource);
 					}
 					else
 					{
@@ -147,14 +148,14 @@ namespace gallus
 						FileResource folderResource;
 						folderResource.m_Path = dirEntry.path();
 						folderResource.m_Parent = this;
-						folderResource.m_ResourceType = FileResourceType::Folder;
+						folderResource.m_AssetType = AssetType::Folder;
 
-						m_aResources.push_back(folderResource);
+						m_aChildren.push_back(folderResource);
 					}
 				}
 			}
 
-			for (auto& resource : m_aResources)
+			for (auto& resource : m_aChildren)
 			{
 				resource.Scan();
 			}
@@ -162,6 +163,7 @@ namespace gallus
 			return true;
 		}
 
+		//---------------------------------------------------------------------
 		void FileResource::Rename(const std::string& a_sName)
 		{
 			fs::path newPath = m_Path.parent_path().generic_string() + a_sName + m_Path.extension().generic_string();
@@ -172,21 +174,13 @@ namespace gallus
 			// TODO: Rescan.
 		}
 
+		//---------------------------------------------------------------------
 		void FileResource::Delete()
 		{
 			fs::remove(m_Path.c_str());
 		}
 
-		AssetType FileResource::GetAssetType() const
-		{
-			return m_AssetType;
-		}
-
-		void FileResource::SetAssetType(AssetType a_AssetType)
-		{
-			m_AssetType = a_AssetType;
-		}
-
+		//---------------------------------------------------------------------
 		bool FileResource::SaveMetadata(rapidjson::Document& a_Document, rapidjson::Document::AllocatorType& a_Allocator) const
 		{
 			fs::path metaPath = m_Path.generic_string() + ".meta";

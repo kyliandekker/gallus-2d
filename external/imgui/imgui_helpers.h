@@ -22,6 +22,7 @@ namespace ImGui
 #define INPUT_ID "###INPUT_"
 #define CHECKBOX_ID "###CHECKBOX_"
 #define FOLD_ID "###CHECKBOX_"
+#define SLIDER_ID "###SLIDER_"
 #define DRAG_ITEM_ID "###DRAG_ITEM_"
 #define SELECTABLE_ID "###SELECTABLE_"
 #define FOLDOUT_ID "###FOLDOUT_"

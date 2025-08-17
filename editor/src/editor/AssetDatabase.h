@@ -48,13 +48,16 @@ namespace gallus
 			/// <returns>A reference to the root folder.</returns>
 			FileResource& GetRoot();
 
+			SimpleEvent<>& GetOnScanCompleted()
+			{
+				return m_eOnScanCompleted;
+			}
+
 			bool Scan(); /// Function that scans the database.
-
-			SimpleEvent<> m_eOnScanCompleted; /// Simple event that gets called when the asset database has completed a scan.
-			SimpleEvent<> m_eOnBeforeScan; /// Simple event that gets called before the asset database starts a scan.
-
-			std::recursive_mutex m_AssetMutex;
 		private:
+			std::recursive_mutex m_AssetMutex;
+			SimpleEvent<> m_eOnScanCompleted; /// Simple event that gets called when the asset database has completed a scan.
+
 			bool m_bRescan; /// Whether the asset database needs to be scanned again.
 			FileResource m_AssetsRoot; /// The root of the asset database.
 		};

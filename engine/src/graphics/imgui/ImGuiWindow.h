@@ -43,6 +43,11 @@ namespace gallus
 				bool Initialize();
 
 				/// <summary>
+				/// Initializes the windows.
+				/// </summary>
+				bool InitializeWindows();
+
+				/// <summary>
 				/// Destroys all imgui resources.
 				/// </summary>
 				bool Destroy() override;

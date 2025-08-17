@@ -56,6 +56,19 @@ namespace gallus
 			}
 
 			//---------------------------------------------------------------------
+			bool ImGuiWindow::InitializeWindows()
+			{
+				if (!m_aWindows.empty())
+				{
+					for (BaseWindow* window : m_aWindows)
+					{
+						window->Initialize();
+					}
+				}
+				return true;
+			}
+
+			//---------------------------------------------------------------------
 			bool ImGuiWindow::Destroy()
 			{
 				ImGui_ImplDX12_Shutdown();
@@ -129,7 +142,7 @@ namespace gallus
 
 				ImFontConfig font_config_icon_capital;
 				font_config_icon_capital.FontDataOwnedByAtlas = false;
-				m_CapitalIconFont = io.Fonts->AddFontFromMemoryTTF(&font::ICON, sizeof(font::ICON), m_HeaderSize.x / 2, &font_config_icon_capital, icons_ranges_b);
+				m_CapitalIconFont = io.Fonts->AddFontFromMemoryTTF(&font::ICON, sizeof(font::ICON), m_HeaderSize.x * 0.75f, &font_config_icon_capital, icons_ranges_b);
 
 				ImFontConfig icons_config_b;
 				icons_config_b.FontDataOwnedByAtlas = false;

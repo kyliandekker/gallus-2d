@@ -15,6 +15,8 @@
 #include "graphics/dx12/CommandList.h"
 #include "graphics/dx12/Texture.h"
 
+#include "graphics/imgui/views/inspector/ExplorerFileInspectorView.h"
+
 namespace gallus
 {
 	namespace graphics
@@ -26,65 +28,21 @@ namespace gallus
 				ExplorerWindow::ExplorerWindow(ImGuiWindow& a_Window) : BaseWindow(a_Window, ImGuiWindowFlags_NoCollapse, std::string(font::ICON_FOLDER) + " Explorer", "Explorer"), m_SearchBar(a_Window)
 				{
 					m_SearchBar.Initialize("");
-
-					//m_PreviousFolder.SetIcon(font::ICON_FILE_FOLDER);
-					//m_PreviousFolder.SetName("../");
-					//m_PreviousFolder.SetFileResourceUIType(FileResourceUIType::FileResourceType_PreviousFolder);
-					//m_PreviousFolder.SetFileResourceType(FileResourceType::Folder);
 				}
 
 				bool ExplorerWindow::Initialize()
 				{
-					//OnScanCompleted();
-
-					//core::TOOL->GetEditor().GetAssetDatabase().m_OnBeforeScan += std::bind(&ExplorerWindow::OnBeforeScan, this);
-					//core::TOOL->GetEditor().GetAssetDatabase().m_OnScanCompleted += std::bind(&ExplorerWindow::OnScanCompleted, this);
+					core::EDITOR_TOOL->GetAssetDatabase().GetOnScanCompleted() += std::bind(&ExplorerWindow::OnScanCompleted, this);
 
 					return BaseWindow::Initialize();
 				}
 
 				bool ExplorerWindow::Destroy()
 				{
-					//core::TOOL->GetEditor().GetAssetDatabase().m_OnBeforeScan -= std::bind(&ExplorerWindow::OnBeforeScan, this);
-					//core::TOOL->GetEditor().GetAssetDatabase().m_OnScanCompleted -= std::bind(&ExplorerWindow::OnScanCompleted, this);
+					core::EDITOR_TOOL->GetAssetDatabase().GetOnScanCompleted() -= std::bind(&ExplorerWindow::OnScanCompleted, this);
 
 					return BaseWindow::Destroy();
 				}
-
-				//void ExplorerWindow::SetExplorerRoot(FileResourceUIView* a_Resource)
-				//{
-				//	if (!a_Resource)
-				//	{
-				//		return;
-				//	}
-
-				//	m_FolderRoot = a_Resource;
-				//	m_PreviousFolderRoot = m_FolderRoot->GetResource()->GetPath();
-				//}
-
-				/*
-				void ExplorerWindow::LoadTexture(FileResourceUIView* a_ResourceView)
-				{
-					if (!m_PreviewTexture)
-					{
-						m_PreviewTexture = core::TOOL->GetDX12().GetResourceAtlas().LoadTextureEmpty(L"Explorer Preview Texture");
-					}
-
-					m_PreviewTexture->SetResourceCategory(graphics::dx12::DX12ResourceCategory::Editor);
-
-					if (m_PreviewTexture->IsValid())
-					{
-						m_PreviewTexture->Destroy();
-					}
-
-					auto cCommandQueue = core::TOOL->GetDX12().GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
-					auto cCommandList = cCommandQueue->GetCommandList();
-					m_PreviewTexture->LoadByPath(a_ResourceView->GetResource()->GetPath(), cCommandList);
-					cCommandQueue->ExecuteCommandList(cCommandList);
-					cCommandQueue->Flush();
-
-					core::TOOL->GetEditor().m_PreviewTexture = m_PreviewTexture;
-				}*/
 
 				void ExplorerWindow::RenderFolder(ExplorerFileUIView& a_Resource, int a_Indent, const ImVec2& a_InitialPos)
 				{
@@ -92,61 +50,60 @@ namespace gallus
 						clicked = false,
 						right_clicked = false;
 
-					a_Resource.RenderTree(clicked, right_clicked, false /*This should be highlighted if it is the root.*/, a_Indent, a_InitialPos, false /*highlighted if selected*/);
+					a_Resource.RenderTree(clicked, right_clicked, m_pViewedFolder == &a_Resource, a_Indent, a_InitialPos, false /*highlighted if selected*/);
 
-					//if (clicked)
-					//{
-					//	m_NewFolderRoot = a_Resource;
-					//}
+					if (clicked)
+					{
+						m_pViewedFolder = &a_Resource;
+						m_bNeedsRefresh = true;
 
-					//if (right_clicked)
-					//{
-					//	m_SelectedResource = a_Resource;
-					//}
+						core::EDITOR_TOOL->SetSelectable(&a_Resource, new ExplorerFileInspectorView(m_Window, a_Resource));
+					}
 
 					if (a_Resource.IsFoldedOut())
 					{
-
+						for (ExplorerFileUIView& child : a_Resource.GetChildren())
+						{
+							if (child.GetFileResource().GetAssetType() == gallus::editor::AssetType::Folder)
+							{
+								RenderFolder(child, a_Indent + 1, ImGui::GetCursorPos());
+							}
+						}
 					}
 				}
 
 				void ExplorerWindow::Render()
 				{
-					// This needs to be done at the start of the frame to avoid errors.
-					// We set the root directory of the second window that shows the assets.
-					//if (m_NewFolderRoot)
-					//{
-					//	if (m_NewFolderRoot != m_FolderRoot)
-					//	{
-					//		if (FileResourceUIView* derivedPtr = dynamic_cast<FileResourceUIView*>(core::TOOL->GetEditor().GetSelectable()))
-					//		{
-					//			core::TOOL->GetEditor().SetSelectable(nullptr);
-					//		}
-
-					//		SetExplorerRoot(m_NewFolderRoot);
-					//		m_NeedsRefresh = true;
-					//	}
-					//	m_NewFolderRoot = nullptr;
-					//	m_SelectedResource = nullptr;
-					//}
-
-					// This needs to be done at the start of the frame to avoid errors.
-					// We refresh the assets that show up based on the search bar and the root directory.
-					if (m_bNeedsRefresh)
+					if (m_bNeedsRescan)
 					{
+						m_pViewedFolder = nullptr;
+
+						m_aFilteredExplorerItems.clear();
 						m_aExplorerItems.clear();
 
-						for (gallus::editor::FileResource& fileResource : gallus::core::EDITOR_TOOL->GetAssetDatabase().GetRoot().GetResources())
+						m_aExplorerItems.reserve(gallus::core::EDITOR_TOOL->GetAssetDatabase().GetRoot().GetChildren().size());
+						for (gallus::editor::FileResource& fileResource : gallus::core::EDITOR_TOOL->GetAssetDatabase().GetRoot().GetChildren())
 						{
 							m_aExplorerItems.emplace_back(m_Window, fileResource);
 						}
-						m_bNeedsRefresh = false;
+						m_bNeedsRescan = false;
 					}
 
-					//if (!m_FolderRoot)
-					//{
-					//	return;
-					//}
+					// This needs to be done at the start of the frame to avoid errors.
+					// We refresh the assets that show up based on the search bar and the root directory.
+					if (m_bNeedsRefresh && m_pViewedFolder)
+					{
+						m_aFilteredExplorerItems.clear();
+
+						for (ExplorerFileUIView& view : m_pViewedFolder->GetChildren())
+						{
+							if (m_SearchBar.GetString().empty() || string_extensions::StringToLower(view.GetFileResource().GetPath().filename().generic_string()).find(m_SearchBar.GetString()) != std::string::npos)
+							{
+								m_aFilteredExplorerItems.push_back(&view);
+							}
+						}
+						m_bNeedsRefresh = false;
+					}
 
 					ImVec2 toolbarSize = ImVec2(ImGui::GetContentRegionAvail().x, m_Window.GetHeaderSize().y);
 					ImGui::BeginToolbar(toolbarSize);
@@ -159,8 +116,7 @@ namespace gallus
 					if (ImGui::IconButton(
 						ImGui::IMGUI_FORMAT_ID(std::string(font::ICON_REFRESH), BUTTON_ID, "RESCAN_EXPLORER").c_str(), m_Window.GetHeaderSize(), m_Window.GetIconFont(), ImGui::GetStyleColorVec4(ImGuiCol_TextColorAccent)))
 					{
-						//core::TOOL->GetEditor().GetAssetDatabase().Rescan();
-						m_bNeedsRefresh = true;
+						core::EDITOR_TOOL->GetAssetDatabase().Rescan();
 					}
 
 					ImGui::SameLine();
@@ -198,7 +154,7 @@ namespace gallus
 					ImGui::SetCursorPos(searchBarPos);
 					if (m_SearchBar.Render(ImGui::IMGUI_FORMAT_ID("", INPUT_ID, "SEARCHBAR_EXPLORER").c_str(), ImVec2(searchbarWidth, toolbarSize.y), inputPadding))
 					{
-						//m_NeedsRefresh = true;
+						m_bNeedsRefresh = true;
 					}
 
 					ImGui::SetCursorPos(endPos);
@@ -207,8 +163,6 @@ namespace gallus
 					ImGui::PopStyleVar();
 
 					ImGui::EndToolbar(ImVec2(m_Window.GetWindowPadding().x, 0));
-
-					//m_ShowPopUp = false;
 
 					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, m_Window.GetWindowPadding());
 					ImGui::SetCursorPosY(ImGui::GetCursorPos().y + m_Window.GetFramePadding().y);
@@ -222,7 +176,7 @@ namespace gallus
 						))
 					{
 						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-						for (ExplorerFileUIView view : m_aExplorerItems)
+						for (ExplorerFileUIView& view : m_aExplorerItems)
 						{
 							RenderFolder(view, 0, ImGui::GetCursorPos());
 						}
@@ -243,11 +197,74 @@ namespace gallus
 						ImGuiChildFlags_Borders
 						))
 					{
+						if (m_pViewedFolder)
+						{
+							if (ImGui::BeginChild(
+								ImGui::IMGUI_FORMAT_ID("", CHILD_ID, "FILES_INNER_EXPLORER").c_str(),
+								ImVec2(
+								0,
+								0
+								)
+								))
+							{
+								int count = m_pViewedFolder->GetParent() ? 1 : 0;
+								for (ExplorerFileUIView* view : m_aFilteredExplorerItems)
+								{
+									if (!view)
+									{
+										continue;
+									}
 
+									bool
+										clicked = false,
+										right_clicked = false,
+										double_clicked = false;
+
+									if (m_ExplorerViewMode == ExplorerViewMode::ExplorerViewMode_List)
+									{
+										view->RenderList(clicked, right_clicked, double_clicked, core::EDITOR_TOOL->GetSelectable() == view, false);
+									}
+									else
+									{
+										ImVec2 viewSize = m_Window.GetHeaderSize() * 2.0f;
+
+										// Calculate the maximum number of icons that can fit horizontally as squares
+										int iconsPerRow = static_cast<int>(ImGui::GetContentRegionAvail().x / viewSize.x);
+										iconsPerRow = std::max(1, iconsPerRow); // Ensure at least 1 icon fits
+
+										// Get the available space in the window
+										view->RenderGrid(viewSize, clicked, right_clicked, double_clicked, core::EDITOR_TOOL->GetSelectable() == view, false);
+
+										count++;
+										if (count % iconsPerRow != 0)
+										{
+											ImGui::SameLine();
+										}
+									}
+
+									if (double_clicked && view->GetFileResource().GetAssetType() == gallus::editor::AssetType::Folder)
+									{
+										m_pViewedFolder = view;
+										m_bNeedsRefresh = true;
+									}
+
+									if (clicked)
+									{
+										core::EDITOR_TOOL->SetSelectable(view, new ExplorerFileInspectorView(m_Window, *view));
+									}
+								}
+							}
+							ImGui::EndChild();
+						}
 					}
 					ImGui::EndChild();
 					ImGui::PopStyleVar();
 					ImGui::PopStyleVar();
+				}
+
+				void ExplorerWindow::OnScanCompleted()
+				{
+					m_bNeedsRescan = true;
 				}
 			}
 		}

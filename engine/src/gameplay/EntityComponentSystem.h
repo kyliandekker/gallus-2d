@@ -168,7 +168,7 @@ namespace gallus
 			/// <returns>A vector containing all systems in the ECS.</returns>
 			std::vector<AbstractECSSystem*> GetSystems();
 
-			std::recursive_mutex m_EntityMutex;
+			mutable std::recursive_mutex m_EntityMutex;
 
 			SimpleEvent<>& OnEntitiesUpdated()
 			{

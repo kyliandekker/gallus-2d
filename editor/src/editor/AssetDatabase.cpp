@@ -54,8 +54,6 @@ namespace gallus
 		//---------------------------------------------------------------------
 		bool AssetDatabase::Scan()
 		{
-			m_eOnBeforeScan();
-
 			if (m_AssetsRoot.Scan())
 			{
 				LOG(LOGSEVERITY_INFO, LOG_CATEGORY_EDITOR, "Scanned asset database.");

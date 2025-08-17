@@ -109,15 +109,15 @@ namespace ImGui
 			str->capacity() + 1,
 			flags,
 			[](ImGuiInputTextCallbackData* data)
-		{
-			if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
 			{
-				std::string* str = (std::string*) data->UserData;
-				str->resize(data->BufTextLen);
-				data->Buf = str->data();
-			}
-			return 0;
-		},
+				if (data->EventFlag == ImGuiInputTextFlags_CallbackResize)
+				{
+					std::string* str = (std::string*) data->UserData;
+					str->resize(data->BufTextLen);
+					data->Buf = str->data();
+				}
+				return 0;
+			},
 			(void*) str);
 	}
 

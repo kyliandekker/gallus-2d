@@ -7,18 +7,12 @@
 #include <rapidjson/document.h>
 
 #include "utils/file_abstractions.h"
+#include "AssetType.h"
 
 namespace gallus
 {
 	namespace editor
 	{
-		enum class AssetType;
-		enum class FileResourceType
-		{
-			Folder,
-			File,
-		};
-
 		//---------------------------------------------------------------------
 		// FileResource
 		//---------------------------------------------------------------------
@@ -35,10 +29,16 @@ namespace gallus
 			const fs::path& GetPath() const;
 
 			/// <summary>
-			/// Retrieves the type of resource (folder or file).
+			/// Retrieves the type of asset resource.
 			/// </summary>
-			/// <returns>FileResourceType containing info about whether it is a folder or file.</returns>
-			FileResourceType GetResourceType() const;
+			/// <returns>AssetType containing information about what type of asset resource it is.</returns>
+			AssetType GetAssetType() const;
+
+			/// <summary>
+			/// Sets the asset type.
+			/// </summary>
+			/// <param name="a_AssetType">The asset type it will be set to.</param>
+			void SetAssetType(AssetType a_AssetType);
 
 			/// <summary>
 			/// Retrieves the parent.
@@ -65,18 +65,6 @@ namespace gallus
 			void Delete();
 
 			/// <summary>
-			/// Retrieves the type of asset resource.
-			/// </summary>
-			/// <returns>AssetType containing information about what type of asset resource it is.</returns>
-			AssetType GetAssetType() const;
-
-			/// <summary>
-			/// Sets the asset type.
-			/// </summary>
-			/// <param name="a_AssetType">The asset type it will be set to.</param>
-			void SetAssetType(AssetType a_AssetType);
-
-			/// <summary>
 			/// Saves the metadata to its meta file.
 			/// </summary>
 			/// <param name="a_Document">The data to save.</param>
@@ -84,16 +72,15 @@ namespace gallus
 			/// <returns>True if the saving was successful, otherwise false.</returns>
 			bool SaveMetadata(rapidjson::Document& a_Document, rapidjson::Document::AllocatorType& a_Allocator) const;
 
-			std::vector<FileResource>& GetResources()
+			std::vector<FileResource>& GetChildren()
 			{
-				return m_aResources;
+				return m_aChildren;
 			}
 		protected:
-			std::vector<FileResource> m_aResources; /// Child resources (only used for folders).
+			std::vector<FileResource> m_aChildren; /// Child resources (only used for folders).
 
 			fs::path m_Path; /// The path of the resource.
-			AssetType m_AssetType; /// The asset type of the resource.
-			FileResourceType m_ResourceType = FileResourceType::Folder; /// The resource type (folder or file).
+			AssetType m_AssetType = AssetType::Folder; /// The asset type of the resource.
 			FileResource* m_Parent = nullptr; // The parent of the resource.
 		};
 	}

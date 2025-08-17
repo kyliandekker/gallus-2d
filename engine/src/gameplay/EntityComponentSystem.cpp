@@ -63,6 +63,7 @@ namespace gallus
 				}),
 				m_aEntities.end()
 			);
+
 			if (oldSize != m_aEntities.size())
 			{
 				m_eOnEntitiesUpdated();
@@ -132,12 +133,16 @@ namespace gallus
 		//---------------------------------------------------------------------
 		bool EntityComponentSystem::IsEntityValid(const EntityID& a_ID) const
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			return a_ID.IsValid();
 		}
 
 		//---------------------------------------------------------------------
 		void EntityComponentSystem::DeleteEntity(const EntityID& a_ID)
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			auto it = std::find_if(m_aEntities.begin(), m_aEntities.end(), [&](Entity& e)
 				{
 					return e.GetEntityID() == a_ID;
@@ -151,6 +156,8 @@ namespace gallus
 		//---------------------------------------------------------------------
 		const Entity* EntityComponentSystem::GetEntity(const EntityID& a_ID) const
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			auto it = std::find_if(m_aEntities.begin(), m_aEntities.end(),
 				[&](const Entity& e)
 				{
@@ -168,6 +175,8 @@ namespace gallus
 		//---------------------------------------------------------------------
 		Entity* EntityComponentSystem::GetEntity(const EntityID& a_ID)
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			auto it = std::find_if(m_aEntities.begin(), m_aEntities.end(), [&](Entity& e)
 				{
 					return e.GetEntityID() == a_ID;
@@ -182,6 +191,8 @@ namespace gallus
 		//---------------------------------------------------------------------
 		void EntityComponentSystem::Clear()
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			for (Entity& entity : m_aEntities)
 			{
 				entity.Destroy();
@@ -191,6 +202,8 @@ namespace gallus
 		//---------------------------------------------------------------------
 		std::string EntityComponentSystem::GetUniqueName(const std::string& a_sName)
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			std::string name = a_sName;
 
 			bool found = true;
@@ -217,12 +230,15 @@ namespace gallus
 		//---------------------------------------------------------------------
 		std::vector<Entity>& EntityComponentSystem::GetEntities()
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
 			return m_aEntities;
 		}
 
 		//---------------------------------------------------------------------
 		std::vector<AbstractECSSystem*> EntityComponentSystem::GetSystemsContainingEntity(const EntityID& a_ID)
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			std::vector<AbstractECSSystem*> systems;
 			for (AbstractECSSystem* system : m_aSystems)
 			{
@@ -237,12 +253,16 @@ namespace gallus
 		//---------------------------------------------------------------------
 		std::vector<AbstractECSSystem*> EntityComponentSystem::GetSystemsContainingEntity(const Entity& a_Entity)
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			return GetSystemsContainingEntity(a_Entity.GetEntityID());
 		}
 
 		//---------------------------------------------------------------------
 		std::vector<AbstractECSSystem*> EntityComponentSystem::GetSystems()
 		{
+			std::lock_guard<std::recursive_mutex> lock(m_EntityMutex);
+
 			return m_aSystems;
 		}
 	}

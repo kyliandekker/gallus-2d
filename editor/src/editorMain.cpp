@@ -13,6 +13,7 @@
 #include "graphics/imgui/windows/HierarchyWindow.h"
 #include "graphics/imgui/windows/SceneWindow.h"
 #include "graphics/imgui/windows/ExplorerWindow.h"
+#include "graphics/imgui/windows/InspectorWindow.h"
 
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
@@ -40,8 +41,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE, _In_ LPWSTR lp
 	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::HierarchyWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
 	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::SceneWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
 	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::ExplorerWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
+	gallus::core::TOOL->GetDX12().GetImGuiWindow().AddWindow(new gallus::graphics::imgui::editor::InspectorWindow(gallus::core::TOOL->GetDX12().GetImGuiWindow()));
 
 	gallus::core::TOOL->Initialize(hInstance, name);
+
+	gallus::core::TOOL->GetDX12().GetImGuiWindow().InitializeWindows();
 
 	// Load icons.
 	HICON hIconLarge = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));

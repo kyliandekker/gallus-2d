@@ -4,6 +4,7 @@
 #include "logger/Logger.h"
 
 #include "gameplay/systems/MeshSystem.h"
+#include "core/Tool.h"
 
 namespace game
 {
@@ -48,6 +49,7 @@ namespace game
 	{
 		while (m_bRunning.load())
 		{
+			gallus::core::TOOL->GetECS().Update(0.0f);
 		}
 	}
 

@@ -33,6 +33,11 @@ namespace gallus
 				return m_EntityID;
 			}
 
+			void SetName(const std::string& a_sName)
+			{
+				m_sName = a_sName;
+			}
+
 			const std::string& GetName() const
 			{
 				return m_sName;

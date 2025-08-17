@@ -60,64 +60,40 @@ namespace gallus
 		void ThreadedSystem::ThreadEntry(std::promise<bool> promise)
 		{
 			bool success = false;
-			try
+			success = InitThreadWorker();
+
 			{
-				success = InitThreadWorker();
+				std::unique_lock lock(m_ReadyMutex);
+				m_bInitialized.store(success);
+				m_ReadyCondVar.notify_one();
+			}
 
-				{
-					std::unique_lock lock(m_ReadyMutex);
-					m_bInitialized.store(success);
-					m_ReadyCondVar.notify_one();
-				}
+			promise.set_value(success);
 
-				promise.set_value(success);
+			if (!success)
+			{
+				return;
+			}
 
-				if (!success)
-				{
-					return;
-				}
+			m_bRunning.store(true);
+			std::unique_lock lock(m_RunningMutex);
 
-				m_bRunning.store(true);
-				std::unique_lock lock(m_RunningMutex);
-
-				while (m_bRunning.load())
-				{
-					m_RunningCondVar.wait(lock, [this]()
+			while (m_bRunning.load())
+			{
+				m_RunningCondVar.wait(lock, [this]()
 					{
 						return Sleep() || !m_bRunning.load();
 					});
 
-					if (!m_bRunning.load())
-					{
-						break;
-					}
-
-					Loop();
-				}
-
-				Finalize();
-			}
-			catch (const std::exception& e)
-			{
-				LOGF(LOGSEVERITY_ERROR, LOG_CATEGORY_CORE, "Thread exception: %s.", e.what());
-
-				// Fail initialization if it happens early
-				if (!m_bInitialized.load())
+				if (!m_bRunning.load())
 				{
-					m_bInitialized.store(false);
-					promise.set_value(false);
+					break;
 				}
-			}
-			catch (...)
-			{
-				LOGF(LOGSEVERITY_ERROR, LOG_CATEGORY_CORE, "Thread exception: Unknown cause.");
 
-				if (!m_bInitialized.load())
-				{
-					m_bInitialized.store(false);
-					promise.set_value(false);
-				}
+				Loop();
 			}
+
+			Finalize();
 		}
 
 		bool ThreadedSystem::Destroy()

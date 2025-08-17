@@ -56,6 +56,11 @@ namespace gallus
 			const DirectX::XMMATRIX viewMatrix = a_Camera.GetViewMatrix();
 			const DirectX::XMMATRIX& projectionMatrix = a_Camera.GetProjectionMatrix();
 
+			if (!core::TOOL->GetECS().GetEntity(a_EntityID))
+			{
+				return;
+			}
+
 			if (!core::TOOL->GetECS().GetEntity(a_EntityID)->IsActive())
 			{
 				return;
@@ -76,10 +81,9 @@ namespace gallus
 				graphics::dx12::DX12Transform transform;
 				transform.SetScale({ 128.0f, 128.0f });
 				transform.SetPosition({ 300, 300 });
-				transform.SetRotation(0.0f);
-	/*			static float rot = 0;
-				rot += 0.1f;*/
-				//transform.SetRotation(rot);
+				static float rot = 0;
+				rot += 0.1f;
+				transform.SetRotation(rot);
 				m_pMesh->Render(a_pCommandList, transform, viewMatrix, projectionMatrix);
 			}
 

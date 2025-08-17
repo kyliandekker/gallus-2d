@@ -4,8 +4,21 @@
 #include "editor/EditorSettings.h"
 #include "editor/AssetDatabase.h"
 
+#include <mutex>
+
 namespace gallus
 {
+	namespace graphics
+	{
+		namespace imgui
+		{
+			namespace editor
+			{
+				class EditorSelectable;
+				class InspectorView;
+			}
+		}
+	}
 	namespace core
 	{
 		//---------------------------------------------------------------------
@@ -49,9 +62,37 @@ namespace gallus
 			{
 				return m_AssetDatabase;
 			}
+
+			graphics::imgui::editor::EditorSelectable* GetSelectable()
+			{
+				return m_pSelectable;
+			}
+
+			void SetSelectable(graphics::imgui::editor::EditorSelectable* a_pSelectable, graphics::imgui::editor::InspectorView* a_pInspectorView)
+			{
+				std::lock_guard<std::mutex> lock(m_EditorMutex);
+
+				if (m_pInspectorView)
+				{
+					delete m_pInspectorView;
+					m_pInspectorView = nullptr;
+				}
+				m_pSelectable = a_pSelectable;
+				m_pInspectorView = a_pInspectorView;
+			}
+
+			graphics::imgui::editor::InspectorView* GetInspectorView()
+			{
+				std::lock_guard<std::mutex> lock(m_EditorMutex);
+
+				return m_pInspectorView;
+			}
+			std::mutex m_EditorMutex;
 		private:
 			editor::EditorSettings m_EditorSettings;
 			editor::AssetDatabase m_AssetDatabase;
+			graphics::imgui::editor::EditorSelectable* m_pSelectable = nullptr;
+			graphics::imgui::editor::InspectorView* m_pInspectorView = nullptr;
 		};
 		extern inline EditorTool* EDITOR_TOOL = nullptr;
 	}

@@ -11,6 +11,7 @@ namespace gallus
 		/// </summary>
 		enum class AssetType
 		{
+			Folder,
 			Scene,
 			Material,
 			Texture,
